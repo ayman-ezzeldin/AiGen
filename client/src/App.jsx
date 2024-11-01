@@ -2,17 +2,8 @@ import { Routes, Route } from 'react-router-dom'
 import AuthLayout from './components/auth/layout'
 import AuthRegister from './pages/auth/register'
 import AuthLogin from './pages/auth/login'
-import Adminlayout from './components/admin-view/layout'
 import './App.css'
-import AdminDashboard from './pages/admin-view/dashboard'
-import AdminProducts from './pages/admin-view/products'
-import AdminOrders from './pages/admin-view/orders'
-import AdminFeatures from './pages/admin-view/features'
-import ShoppingLayout from './components/shopping-view/layout'
-import ShoppingHome from './pages/shopping-view/home'
-import ShoppingAccount from './pages/shopping-view/account'
-import ShoppingListing from './pages/shopping-view/listing'
-import ShoppingCheckOut from './pages/shopping-view/checkout'
+
 import NotFound from './pages/not-found'
 import CheckAuth from './components/common/check-auth'
 import UnauthPage from './pages/unauth-page'
@@ -20,7 +11,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { checkAuth } from './store/auth-slice'
 import {Skeleton} from './components/ui/skeleton'
-import SearchProducts from './pages/shopping-view/search'
 function App() {
   
   const {user, isAuthenticated, isLoading } = useSelector((state) => state.auth)
@@ -54,7 +44,6 @@ function App() {
 
           <Route path="/admin" element={
             <CheckAuth isAuthenticated={isAuthenticated} user={user} >
-              <Adminlayout />
             </CheckAuth>
           } 
           >
@@ -63,7 +52,6 @@ function App() {
 
           <Route path="/shop" element={
             <CheckAuth isAuthenticated={isAuthenticated} user={user} >
-              <ShoppingLayout />
             </CheckAuth>
           } 
           >
