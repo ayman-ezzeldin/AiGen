@@ -16,6 +16,7 @@ import CheckAuth from './components/common/check-auth';
 import UnauthPage from './pages/unauth-page';
 import { Skeleton } from './components/ui/skeleton';
 import './App.css';
+import Simulator from './pages/admin/Simulator';
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector((state) => state.auth);
@@ -52,6 +53,7 @@ function App() {
           }
         >
           <Route path="home" element={<AdminHome />} />
+          <Route path='simulator' element={<Simulator />} />
         </Route>
 
         <Route
