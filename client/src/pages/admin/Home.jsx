@@ -1,12 +1,9 @@
-import { useDispatch } from "react-redux"
-import { logoutUser } from "../../store/auth-slice"
+import Navbar from "../../components/admin/navbar"
 const AdminHome = () => {
-  const dispatch = useDispatch()
 
   return (
     <div>
-      <h1>Admin Home</h1>
-      <button onClick={()=> dispatch(logoutUser()) } >Log out</button>
+      <Navbar />
     </div>
   )
 }

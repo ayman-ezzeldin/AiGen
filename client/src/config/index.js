@@ -45,6 +45,36 @@ export const loginFormControls = [
   },
 ]
 
+export const AdminViewHeaderMenuItems = [
+  {
+    id: "home",
+    label: "Home",
+    path: "/admin/home",
+  },
+  {
+    id: "simulator",
+    label: "Simulator",
+    path: "/admin/simulator",
+  },
+  {
+    id: "models",
+    label: "Models",
+    path: "/admin/models",
+  },
+  {
+    id: "profile",
+    label: "Profile",
+    path: "/admin/profile",
+  },
+  {
+    id: "blogs",
+    label: "Blogs",
+    path: "/admin/blogs",
+  },
+
+];
+
+
 export const addProductFormElements = [
   {
     label: "Title",
@@ -106,48 +136,6 @@ export const addProductFormElements = [
   },
 ];
 
-export const shoppingViewHeaderMenuItems = [
-  {
-    id: "home",
-    label: "Home",
-    path: "/shop/home",
-  },
-  {
-    id: "products",
-    label: "Products",
-    path: "/shop/listing",
-  },
-  {
-    id: "painRelief",
-    label: "Pain Relief",
-    path: "/shop/listing",
-  },
-  {
-    id: "coldAndAllergy",
-    label: "Cold and Allergy",
-    path: "/shop/listing",
-  },
-  {
-    id: "vitaminsAndSupplements",
-    label: "Vitamins and Supplements",
-    path: "/shop/listing",
-  },
-  {
-    id: "personalCare",
-    label: "Personal Care",
-    path: "/shop/listing",
-  },
-  {
-    id: "firstAid",
-    label: "First Aid",
-    path: "/shop/listing",
-  },
-  {
-    id: "search",
-    label: "Search",
-    path: "/shop/search",
-  },
-];
 
 export const categoryOptionsMap = {
   painRelief: "Pain Relief",
