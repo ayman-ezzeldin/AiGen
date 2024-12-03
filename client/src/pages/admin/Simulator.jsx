@@ -40,7 +40,7 @@ const categories = [
   },
 ];
 
-// دائرة
+
 
 const CircleNode = ({ data }) => (
   <div
@@ -64,7 +64,7 @@ const CircleNode = ({ data }) => (
   </div>
 );
 
-// مستطيل
+
 const RectangleNode = ({ data }) => (
   <div
     style={{
@@ -88,7 +88,7 @@ const RectangleNode = ({ data }) => (
 );
 
 
-// مكونات مخصصة أخرى
+
 const CustomButtonNode = ({ data }) => (
   <div
     style={{
@@ -125,7 +125,7 @@ const nodeTypes = {
 export default function Simulator() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const [isEditable, setIsEditable] = useState(true); // حالة التحكم في التعديل
+  const [isEditable, setIsEditable] = useState(true); 
   const [expandedCategories, setExpandedCategories] = useState({});
   const { toast } = useToast();
 
@@ -142,7 +142,7 @@ export default function Simulator() {
     }));
   };
 
-  // وظيفة لإعادة الضبط
+  
   const resetSimulator = () => {
     setNodes(initialNodes);
     setEdges(initialEdges);
@@ -162,19 +162,17 @@ export default function Simulator() {
     }
   };
 
-  // وظيفة لحفظ الحالة
   const saveSimulator = () => {
     localStorage.setItem("nodes", JSON.stringify(nodes));
     localStorage.setItem("edges", JSON.stringify(edges));
     toast({ title: "State saved!" });
   };
 
-  // تغيير حالة التعديل
   const toggleEditing = () => setIsEditable((prev) => !prev);
 
   return (
     <div className="w-[90vw] mt-10 mx-auto flex justify-between gap-4 flex-col-reverse md:flex-row ">
-      {/* قائمة العناصر */}
+
       <div className="flex flex-col gap-4 p-4 border items-center text-center border-gray-300 rounded-md w-[8vw]">
         <h3 className="text-lg font-bold">Categories</h3>
         <hr className="w-full border-gray-300" />
@@ -209,7 +207,6 @@ export default function Simulator() {
         ))}
       </div>
 
-      {/* مساحة المحاكاة */}
       <div className="border border-gray-300 md:w-[70vw] h-[70vh] rounded-lg"
         onDrop={(e) => {
           e.preventDefault();
@@ -232,13 +229,14 @@ export default function Simulator() {
           onNodesChange={isEditable ? onNodesChange : null}
           onEdgesChange={isEditable ? onEdgesChange : null}
           onConnect={isEditable ? onConnect : null}
-          nodeTypes={nodeTypes} // تسجيل العقد المخصصة
+          nodeTypes={nodeTypes} 
         >
           <Controls />
           <MiniMap />
           <Background variant="dots" gap={12} size={1} />
         </ReactFlow>
       </div>
+
       <div className="flex flex-row h-[30vh] mx-auto md:flex-col justify-around items-center z-10 gap-2 md:gap-4">
         <button
           className={`${
@@ -269,6 +267,7 @@ export default function Simulator() {
           Load
         </button>
       </div>
+      
     </div>
   );
 }
