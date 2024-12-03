@@ -11,14 +11,7 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { useToast } from "../../hooks/use-toast";
-import {
-  RectangleHorizontal,
-  Circle,
-  Hexagon,
-  Bolt,
-  Cylinder,
-  LaptopMinimal,
-} from "lucide-react";
+
 
 const initialNodes = [
   { id: '1', position: { x: 50, y: 40 }, data: { label: 'Circle' }, type: 'circle' },
@@ -43,14 +36,6 @@ const categories = [
     items: [
       { id: "button", label: "Button", type: "button" },
       { id: "slider", label: "Slider", type: "slider" },
-    ],
-  },
-  {
-    id: "custom",
-    label: "Custom Nodes",
-    items: [
-      { id: "custom-1", label: "Custom Node 1", type: "custom-1" },
-      { id: "custom-2", label: "Custom Node 2", type: "custom-2" },
     ],
   },
 ];
@@ -141,12 +126,21 @@ export default function Simulator() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [isEditable, setIsEditable] = useState(true); // حالة التحكم في التعديل
+  const [expandedCategories, setExpandedCategories] = useState({});
   const { toast } = useToast();
 
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
+
+
+  const toggleCategory = (categoryId) => {
+    setExpandedCategories((prev) => ({
+      ...prev,
+      [categoryId]: !prev[categoryId],
+    }));
+  };
 
   // وظيفة لإعادة الضبط
   const resetSimulator = () => {
@@ -183,33 +177,40 @@ export default function Simulator() {
       {/* قائمة العناصر */}
       <div className="flex flex-col gap-4 p-4 border items-center text-center border-gray-300 rounded-md w-[8vw]">
         <h3 className="text-lg font-bold">Categories</h3>
+        <hr className="w-full border-gray-300" />
         {categories.map((category) => (
-          <div key={category.id} className="mb-4">
-            <h4 className="text-md font-semibold mb-2">{category.label}</h4>
-            <div className="flex flex-col items-center gap-2">
-              {category.items.map((item) => (
-                <div
-                  key={item.id}
-                  className="bg-gray-50 text-gray-800 p-2 rounded-md shadow-md cursor-pointer hover:bg-gray-200"
-                  draggable
-                  onDragStart={(e) =>
-                    e.dataTransfer.setData(
-                      "application/reactflow",
-                      JSON.stringify(item)
-                    )
-                  }
-                >
-                  {item.label}
-                </div>
-              ))}
-            </div>
+          <div key={category.id} className="mb-4 p-2 bg-gray-50 hover:bg-gray-100 shadow-md">
+            <h4
+              className="text-md font-semibold mb-2 cursor-pointer"
+              onClick={() => toggleCategory(category.id)}
+            >
+              {category.label}
+            </h4>
+            {expandedCategories[category.id] && (
+              <div className="flex flex-col items-center gap-2">
+                {category.items.map((item) => (
+                  <div
+                    key={item.id}
+                    className="bg-gray-50 text-gray-800 p-2 rounded-md shadow-md cursor-pointer hover:bg-gray-200"
+                    draggable
+                    onDragStart={(e) =>
+                      e.dataTransfer.setData(
+                        "application/reactflow",
+                        JSON.stringify(item)
+                      )
+                    }
+                  >
+                    {item.label}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         ))}
       </div>
 
       {/* مساحة المحاكاة */}
-      <div
-        className="border border-gray-300 md:w-[70vw] h-[70vh] rounded-lg"
+      <div className="border border-gray-300 md:w-[70vw] h-[70vh] rounded-lg"
         onDrop={(e) => {
           e.preventDefault();
           const category = JSON.parse(
