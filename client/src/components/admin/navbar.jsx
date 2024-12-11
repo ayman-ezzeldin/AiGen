@@ -66,7 +66,7 @@ const ShoppingHeader = () => {
   return (
     <header className=" sticky top-0 z-40 border-b bg-background" >
       <div className=" flex h-16 items-center justify-between px-4 md:px-6" >
-        <Link to='/shop/home' className=" flex gap-2 items-center" >
+        <Link to='/admin/home' className=" flex gap-2 items-center" >
           <Activity className="h-8 w-8" />
           <span className="font-bold text-2xl tracking-wider " >AiGen</span>
         </Link>

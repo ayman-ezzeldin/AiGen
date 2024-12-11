@@ -98,7 +98,7 @@ const Community = () => {
             <img
               src={group.image}
               alt={group.title}
-              className="w-full h-40 object-cover"
+              className="w-full h-48 object-cover"
             />
             <div className="p-4">
               <h2 className="text-lg font-bold mb-2">{group.title}</h2>
