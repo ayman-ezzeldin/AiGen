@@ -67,9 +67,9 @@ export const AdminViewHeaderMenuItems = [
     path: "/admin/profile",
   },
   {
-    id: "blogs",
-    label: "Blogs",
-    path: "/admin/blogs",
+    id: "blog",
+    label: "Blog",
+    path: "/admin/blog",
   },
 
 ];

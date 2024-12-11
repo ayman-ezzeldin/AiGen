@@ -17,6 +17,7 @@ import UnauthPage from './pages/unauth-page';
 import { Skeleton } from './components/ui/skeleton';
 import './App.css';
 import Simulator from './pages/admin/Simulator';
+import Blog from './pages/admin/Blog'
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector((state) => state.auth);
@@ -54,6 +55,7 @@ function App() {
         >
           <Route path="home" element={<AdminHome />} />
           <Route path='simulator' element={<Simulator />} />
+          <Route path='blog' element={<Blog />} />
         </Route>
 
         <Route
