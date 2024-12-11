@@ -7,16 +7,57 @@ const groups = [
     id: 1,
     title: "React Enthusiasts",
     description: "A group for React developers to share tips and projects.",
-    image: "https://via.placeholder.com/150",
+    image: "https://placehold.co/400x600",
   },
   {
     id: 2,
     title: "Tailwind CSS Wizards",
     description: "Discuss and explore Tailwind CSS techniques.",
-    image: "https://via.placeholder.com/150",
+    image: "https://placehold.co/400x600",
   },
-  // Additional groups here...
-];
+  {
+    id: 3,
+    title: "JavaScript Masters",
+    description: "JavaScript discussions and resources for all levels.",
+    image: "https://placehold.co/400x600",
+  },
+  {
+    id: 4,
+    title: "Web Design Pros",
+    description: "A place to showcase and learn web design skills.",
+    image: "https://placehold.co/400x600",
+  },
+  {
+    id: 5,
+    title: "Node.js Developers",
+    description: "Node.js discussions and backend development tips.",
+    image: "https://placehold.co/400x600",
+  },
+  {
+    id: 6,
+    title: "Frontend Gurus",
+    description: "Everything about frontend technologies and tools.",
+    image: "https://placehold.co/400x600",
+  },
+  {
+    id: 7,
+    title: "Fullstack Devs",
+    description: "Connecting fullstack developers worldwide.",
+    image: "https://placehold.co/400x600",
+  },
+  {
+    id: 8,
+    title: "UX/UI Designers",
+    description: "Discussions on UX/UI best practices and trends.",
+    image: "https://placehold.co/400x600",
+  },
+  {
+    id: 9,
+    title: "AI and ML Experts",
+    description: "Talk about AI and machine learning breakthroughs.",
+    image: "https://placehold.co/400x600",
+  },
+]
 
 const CommunityGroup = () => {
   let { id } = useParams();
@@ -29,7 +70,7 @@ const CommunityGroup = () => {
 
     const groupData = {
       ...groups[groupId],
-      image: groups[groupId].image || "https://via.placeholder.com/300",
+      image: groups[groupId].image || "https://placehold.co/400x600",
     };
 
     const groupPosts = [
@@ -37,7 +78,7 @@ const CommunityGroup = () => {
         id: 1,
         content: "Welcome to the group!",
         user: "John Doe",
-        image: "https://via.placeholder.com/400",
+        image: "https://placehold.co/400x600",
         likes: 5,
         comments: 1,
         votes: 0,
@@ -46,7 +87,7 @@ const CommunityGroup = () => {
         id: 2,
         content: "Excited to share knowledge here!",
         user: "Jane Smith",
-        image: "https://via.placeholder.com/400",
+        image: "https://placehold.co/400x600",
         likes: 10,
         comments: 3,
         votes: 0,

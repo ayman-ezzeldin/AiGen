@@ -46,7 +46,7 @@ export const HeaderRightContent = () => {
         <DropdownMenuContent side="right" className=" w-48 mt-10 bg-white" >
           <DropdownMenuLabel>Logged in {user?.username} </DropdownMenuLabel>
           <DropdownMenuSeparator/>
-          <DropdownMenuItem className=" cursor-pointer" onClick={()=> navigate('/shop/account')} >
+          <DropdownMenuItem className=" cursor-pointer" onClick={()=> navigate('/admin/account')} >
             <UserCog className="mr-2 h-4 w-4" />
             Account
           </DropdownMenuItem>
@@ -60,7 +60,7 @@ export const HeaderRightContent = () => {
   )
 }
 
-const ShoppingHeader = () => {
+const AdminHeader = () => {
   const [open, setOpen] = useState(false)
   
   return (
@@ -93,4 +93,4 @@ const ShoppingHeader = () => {
   )
 }
 
-export default ShoppingHeader
+export default AdminHeader
