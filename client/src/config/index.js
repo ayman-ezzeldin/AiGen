@@ -62,9 +62,9 @@ export const AdminViewHeaderMenuItems = [
     path: "/admin/models",
   },
   {
-    id: "profile",
-    label: "Profile",
-    path: "/admin/profile",
+    id: "community",
+    label: "Community",
+    path: "/admin/community",
   },
   {
     id: "blog",

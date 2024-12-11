@@ -18,6 +18,7 @@ import { Skeleton } from './components/ui/skeleton';
 import './App.css';
 import Simulator from './pages/admin/Simulator';
 import Blog from './pages/admin/Blog'
+import BlogPost from './pages/admin/BlogPost';
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector((state) => state.auth);
@@ -56,6 +57,7 @@ function App() {
           <Route path="home" element={<AdminHome />} />
           <Route path='simulator' element={<Simulator />} />
           <Route path='blog' element={<Blog />} />
+          <Route path='blog/:id' element={<BlogPost />} />
         </Route>
 
         <Route

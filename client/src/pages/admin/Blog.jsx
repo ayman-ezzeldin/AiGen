@@ -32,7 +32,7 @@ const Blog = () => {
           placeholder="Search for blogs..."
           value={search}
           onChange={handleSearchChange}
-          className="border border-gray-600 bg-white text-gray-400 px-4 py-2 rounded-lg shadow-lg w-3/4 md:w-1/2 transition-all focus:outline-none focus:ring-2 focus:ring-gray-500"
+          className=" bg-white text-gray-800 font-semibold px-4 py-2 rounded-lg shadow-md w-3/4 md:w-1/2 transition-all border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200"
         />
       </div>
 
@@ -41,12 +41,12 @@ const Blog = () => {
         {filteredPosts.map((post) => (
           <div
             key={post.id}
-            onClick={() => navigate(`/blog/${post.id}`)}
+            onClick={() => navigate(`/admin/blog/${post.id}`)}
             className="transition-transform transform hover:scale-105 bg-white shadow-lg rounded-lg p-4 cursor-pointer hover:shadow-2xl"
           >
-            <h2 className="text-lg font-bold mb-2 text-gray-400">{post.title}</h2>
-            <p className="text-sm text-gray-500 mb-2">{post.date}</p>
-            <p className="text-sm text-gray-600">{post.summary}</p>
+            <h2 className="text-lg font-bold mb-2 text-gray-800">{post.title}</h2>
+            <p className="text-sm text-gray-600 mb-2">{post.date}</p>
+            <p className="text-sm text-gray-700">{post.summary}</p>
           </div>
         ))}
       </div>

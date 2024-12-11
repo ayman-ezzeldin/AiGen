@@ -1,7 +1,5 @@
-import React from "react";
 import { useParams } from "react-router-dom";
-import NotFound from "./NotFound";
-
+import NotFound from "../not-found";
 const blogPosts = [
   { id: 1, title: "Understanding Web Performance", date: "Dec 10, 2024", content: "Learn the metrics like LCP, CLS, and optimize website performance by lazy loading and other techniques." },
   { id: 2, title: "React Router Guide", date: "Dec 8, 2024", content: "React Router allows navigation without refreshing the app. Learn the core concepts of its implementation." },
@@ -17,7 +15,7 @@ const BlogPost = () => {
 
   return (
     <div className=" min-h-screen p-8">
-      <div className="max-w-4xl mx-auto bg-gray-200 shadow-lg p-6 rounded-lg">
+      <div className="max-w-4xl mx-auto border shadow-xl p-6 rounded-lg">
         <h1 className="text-4xl font-bold mb-2 text-gray-900">{post.title}</h1>
         <p className="text-sm text-gray-500 mb-4">{post.date}</p>
         <div className="text-lg leading-relaxed text-gray-700 mb-4">
