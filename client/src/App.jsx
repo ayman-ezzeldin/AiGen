@@ -19,6 +19,8 @@ import './App.css';
 import Simulator from './pages/admin/Simulator';
 import Blog from './pages/admin/Blog'
 import BlogPost from './pages/admin/BlogPost';
+import Community from './pages/admin/Community';
+import CommunityGroup from './pages/admin/CommunityGroup';
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector((state) => state.auth);
@@ -58,6 +60,8 @@ function App() {
           <Route path='simulator' element={<Simulator />} />
           <Route path='blog' element={<Blog />} />
           <Route path='blog/:id' element={<BlogPost />} />
+          <Route path='community' element={<Community />} />
+          <Route path='community/:id' element={<CommunityGroup />} />
         </Route>
 
         <Route
