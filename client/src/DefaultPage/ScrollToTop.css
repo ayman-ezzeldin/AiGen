@@ -1,0 +1,132 @@
+/* CSS الخاص بسهم الرجوع للأعلى مع أنيميشن */
+.scroll-to-top {
+    position: fixed;
+    bottom: 20px; /* بعد 20px من الأسفل */
+    right: 20px; /* بعد 20px من اليمين */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0; /* يبدأ السهم بشكل مخفي */
+    transform: translateY(50px); /* السهم يبدأ من أسفل */
+    animation: fadeIn 0.5s forwards; /* أنيميشن ظهور السهم */
+    transition: opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* تأثير الأنيميشن لظهور السهم */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(50px); /* السهم يبدأ من أسفل */
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0); /* السهم يعود إلى مكانه الطبيعي */
+    }
+}
+
+/* تأثير الأنيميشن لاختفاء السهم */
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+        transform: translateY(0); /* السهم في مكانه الطبيعي */
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(50px); /* السهم يتحرك للأسفل ليختفي */
+    }
+}
+
+/* عند التمرير في الصفحة، يكون السهم مرئيًا */
+.scroll-to-top.hide {
+    animation: fadeOut 0.5s forwards;
+}
+
+/* تأثير hover على السهم */
+.scroll-to-top:hover {
+    transform: translateY(0) scale(1.2); /* تكبير السهم عند التمرير */
+    background-color: #ff7f50; /* تغيير اللون إلى البرتقالي عند hover */
+    box-shadow: 0px 8px 20px rgba(0, 123, 255, 0.6); /* إضافة ظل خفيف حول السهم */
+    transition: all 0.3s ease; /* تأثير سلس عند التغيير */
+}
+
+/* تأثير الظلال عند hover */
+.scroll-to-top:focus {
+    outline: none; /* إزالة الإطار الافتراضي عند التمرير عليه */
+    box-shadow: 0px 8px 15px rgba(255, 127, 80, 0.8); /* إضافة ظل مع ألوان مختلفة عند الضغط */
+}
+
+/* تأثير عند النقر عليه (مثل ظهور الورود) */
+@keyframes clickEffect {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.5);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+/* تأثير الأنيميشن لظهور الورود (النقاط) */
+@keyframes rippleEffect {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.5);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(3);
+        opacity: 0;
+    }
+}
+
+/* تطبيق تأثير الورود عند الضغط على السهم */
+.scroll-to-top.clicked::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    background-color: #ff7f50;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: rippleEffect 1s ease-out forwards;
+    opacity: 1;
+}
+
+/* إضافة بعض التأثيرات لتكرار الورود */
+.scroll-to-top.clicked::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 30px;
+    height: 30px;
+    background-color: #ff7f50;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: rippleEffect 1s ease-out 0.3s forwards;
+    opacity: 0.8;
+}
+
+/* تأثير الورود المنتشر عند الضغط */
+.scroll-to-top.clicked .ripple {
+    animation: rippleEffect 0.8s ease-out forwards;
+}

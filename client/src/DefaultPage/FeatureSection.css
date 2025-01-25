@@ -1,0 +1,124 @@
+.feature-cards {
+    margin-top: 110px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 50px;
+}
+
+.feature-card {
+    background-color: #e8f4ff;
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 300px;
+    flex: 1;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transition: all ease 0.5s;
+    transform: translateY(30px); /* بدأ الأنيميشن من الأسفل */
+    animation: fadeIn 0.8s ease-out forwards;
+    animation-delay: 1s; /* تأخير ظهور الكارد */
+}
+
+.feature-card:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(255, 0, 0, 0.3); /* تأثير الظل عند التمرير */
+    border: 1.5px solid rgba(255, 0, 0, 0.3);
+}
+
+.feature-card p {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.feature-title{
+    font-size: 30px;
+    font-weight: bold;
+}
+.feature-subtitle{
+    font-weight: 600;
+    color: #555;
+}
+
+
+.feature-card:nth-child(3) p,
+.feature-card:nth-child(2) p {
+    margin-top: 40px;
+}
+
+.feature-card:nth-child(3) h3,
+.feature-card:nth-child(2) h3 {
+    margin-top: 10px;
+}
+
+.feature-link {
+    background-color: transparent;
+    margin-top: 20px;
+    text-decoration: none;
+    color: #007bff;
+    font-weight: 600;
+}
+
+.feature-link:hover {
+    text-decoration: underline;
+}
+.feature-icon {
+    width: 80px; /* ضبط عرض الصورة */
+    height: 80px; /* ضبط ارتفاع الصورة */
+    margin-bottom: 20px; /* إضافة مسافة بين الصورة والعنوان */
+    object-fit: contain; /* التأكد من الحفاظ على تناسب الصورة داخل المساحة المخصصة لها */
+}
+
+.feature-card img {
+    max-width: 100%; /* التأكد من أن الصورة لا تتجاوز عرض الكارد */
+    height: auto; /* الحفاظ على ارتفاع الصورة تلقائيًا حسب العرض */
+}
+
+
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(30px); /* إظهار الكارد من أسفل */
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* استعلام الوسائط: تخصيص الكروت في الشاشات الصغيرة */
+@media (max-width: 768px) {
+    .feature-cards {
+        flex-direction: column; /* جعل الكروت تظهر تحت بعضها */
+        gap: 10px; /* تقليل الفجوة بين الكروت */
+        justify-content: center;
+    }
+
+    .feature-card {
+        max-width: 90%; /* جعل الكروت تشغل عرض أكبر على الشاشات الصغيرة */
+        margin-bottom: 20px; /* إضافة هامش سفلي لكل كارد */
+    }
+}
+
+/* استعلام الوسائط: تخصيص الكروت في الشاشات المتوسطة */
+@media (max-width: 480px) {
+    .feature-card {
+        padding: 20px; /* تقليل الحشو في الكروت على الشاشات الصغيرة جداً */
+        max-width: 100%; /* جعل الكروت تشغل العرض الكامل */
+    }
+
+    .feature-link {
+        font-size: 0.9rem; /* تقليل حجم الخط للرابط */
+    }
+
+    .feature-title {
+        font-size: 1.5rem; /* تقليل حجم العنوان */
+    }
+
+    .feature-subtitle {
+        font-size: 1rem; /* تقليل حجم العنوان الفرعي */
+    }
+}

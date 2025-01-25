@@ -1,0 +1,121 @@
+/* تخصيص قسم الـ Export */
+.export-section {
+  text-align: center;
+  background-color: var(--secondary-color);
+  padding: 2rem;
+  opacity: 0; /* بداية مخفية */
+  transform: translateY(50px); /* بداية العنصر بعيداً عن الشاشة */
+  transition: opacity 1s ease-out, transform 1s ease-out; /* التأثير مع تأخير */
+  animation: slideUp 1s ease-out 7s forwards; /* إضافة الحركة بعد 5 ثواني */
+}
+
+/* إضافة حركة العنصر من أسفل إلى أعلى */
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(50px); /* العنصر بعيد عن الشاشة */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0); /* العودة إلى المكان الأصلي */
+  }
+}
+
+/* تخصيص عنوان الـ Export */
+.export-section h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+/* تخصيص النص أسفل العنوان */
+.export-section p {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+/* تخصيص الحاوية التي تحتوي على الكروت */
+.platforms {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  justify-content: center;
+}
+
+/* تخصيص الكروت في شاشات الهواتف */
+@media (max-width: 768px) {
+  .platforms {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* تخصيص الكارد */
+.platform-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  border: 2px solid;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  position: relative;
+  transition: transform 0.3s ease-in-out, border 0.3s ease-in-out; /* التأثير السلس عند التفاعل */
+}
+
+/* تأثير عند التفاعل مع الكارد */
+.platform-card:hover {
+  transform: scale(1.05); /* تكبير الكارد عند التفاعل */
+  cursor: pointer;
+  border: 2px solid aqua; /* تغيير الحدود عند التفاعل */
+}
+
+/* تخصيص الأيقونة */
+.platform-card .icon {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 1rem;
+}
+
+/* تخصيص العنوان داخل الكارد */
+.platform-card h2 {
+  font-size: 1.9rem;
+  margin: 0;
+  font-weight: bold;
+}
+
+/* تخصيص النص داخل الكارد */
+.platform-card p {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  color: #666;
+  padding: 0 10px;
+}
+
+/* تخصيص النصوص لكل عنصر */
+.tensorflow-lite {
+  color: #ffa500 !important;
+  font-size: 1rem;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.tensorflow {
+  color: #ffa500 !important;
+  font-size: 1rem;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.python {
+  color: #4682b4 !important;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.jupyter-notebook {
+  font-style: italic;
+  color: #d2691e !important;
+  font-weight: bold;
+}

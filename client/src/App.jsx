@@ -10,7 +10,6 @@ import AdminHome from './pages/admin/Home';
 import UserHome from './pages/user/Home';
 import AdminLayout from './components/admin/layout';
 import UserLayout from './components/user/layout';
-import Home from './pages/default/Home';
 import NotFound from './pages/not-found';
 import CheckAuth from './components/common/check-auth';
 import UnauthPage from './pages/unauth-page';
@@ -21,6 +20,8 @@ import Blog from './pages/admin/Blog'
 import BlogPost from './pages/admin/BlogPost';
 import Community from './pages/admin/Community';
 import CommunityGroup from './pages/admin/CommunityGroup';
+import Default from './DefaultPage/Default';
+
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector((state) => state.auth);
@@ -35,7 +36,7 @@ function App() {
   return (
     <div className="flex flex-col overflow-hidden bg-white">
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Default />} />
         <Route
           path="/auth"
           element={
