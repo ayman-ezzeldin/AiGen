@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback } from '../ui/avatar'
 import { logoutUser } from "@/store/auth-slice";
 import { useState } from "react"
 
-
+// eslint-disable-next-line react/prop-types
 const MenuItems = ({ setOpen }) => {
 
   return (

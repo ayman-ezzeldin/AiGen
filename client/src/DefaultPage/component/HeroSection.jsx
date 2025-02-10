@@ -1,8 +1,9 @@
 // (management state بتاعتي) علشان اقدر  (react) بستورد مكتبة 
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 //  (css) بستورد ملف 
 import '../HeroSection.css';
+import { Link } from 'react-router-dom';
 
 
 function HeroSection() {
@@ -60,7 +61,7 @@ function HeroSection() {
         
         {/* زراير تسجيل الدخول والتحميل */}
         <div className="hero-buttons">
-          <button className="login-btn">Sign Up / Log In</button>
+          <Link to="/auth/register" className="login-btn">Sign Up / Log In</Link>
           <button className="download-btn">Download</button>
         </div>
         

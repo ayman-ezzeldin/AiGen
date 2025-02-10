@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import '../Navbar.css';
-import logo from '../Screenshot 2024-11-04 193746.png';
 import { BsList, BsX } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
+import { Activity } from 'lucide-react';
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);  //حالة فتح القايمة 
@@ -14,8 +14,10 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="logo">
-        <img src={logo} alt="Logo" className="logo-image" />
-        <span>Model Craft</span>
+      <Link to='/admin/home' className=" flex gap-2 items-center" >
+          <Activity className="h-8 w-8" />
+          <span className="font-bold text-2xl tracking-wider " >AiGen</span>
+        </Link>
       </div>
 
       {/* زرار القايمة في الشاشات الصغيرة */}
