@@ -21,6 +21,9 @@ import BlogPost from './pages/admin/BlogPost';
 import Community from './pages/admin/Community';
 import CommunityGroup from './pages/admin/CommunityGroup';
 import Default from './DefaultPage/Default';
+import LearnPage from './pages/user/Components/LearnPage/LearnPage';
+import { DatasetPage } from './pages/user/Components/DatasetPage/DatasetPage';
+import ModelPage from './pages/user/Components/ModelPage/ModelPage';
 
 
 function App() {
@@ -74,6 +77,10 @@ function App() {
           }
         >
           <Route path="home" element={<UserHome />} />
+          <Route path="docs" element={<NotFound />} />
+          <Route path="dataset" element={<DatasetPage />} />
+          <Route path="models" element={<ModelPage />} />
+          <Route path="learn" element={<LearnPage />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />
