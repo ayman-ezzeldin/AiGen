@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "../Footer.css";
-import logo from "../Screenshot 2024-11-04 193746.png";
+import logo from "../assets/Images/Screenshot 2024-11-04 193746.png"
 import appleIcon from "../assets/Icons/mac-os-logo.png";
 import windowsIcon from "../assets/Icons/menu.png";
 

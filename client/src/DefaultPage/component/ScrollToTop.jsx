@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import '../ScrollToTop.css'; // ده ملف CSS الخاص بتنسيق السهم اللي بيطلع فوق
 
 function ScrollToTop() {

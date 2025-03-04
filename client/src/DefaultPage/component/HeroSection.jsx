@@ -1,89 +1,59 @@
-// (management state بتاعتي) علشان اقدر  (react) بستورد مكتبة 
-import { useState, useEffect, useMemo } from 'react';
+import { motion } from "framer-motion";
+import white from '../assets/Icons/puzzle.png';
+import black from '../assets/Icons/performance.png'
 
-//  (css) بستورد ملف 
-import '../HeroSection.css';
-import { Link } from 'react-router-dom';
-
-
-function HeroSection() {
-  // بعرف في الاول الحالة بتاعتي عشان اتحكم في ظهور الصورة والنص
-  const [visible, setVisible] = useState(true);
-  
-  // بعرف اللون الافتراضي 
-  const [color, setColor] = useState('#007bff');
-  
-  //  (train) بعرف حالة اني اتتبع الكلمة بتاعتي عشان 
-  //  يعني يعتبر هي مصفوفة فيها الكلمات اللي هتتعرض بالتتابع(words) دة بيمثل زي مؤشر كدة للكلمة اللي موجودة دلوقتي من قايمة wordIndex
-  const [wordIndex, setWordIndex] = useState(0);
-  
-  // قايمة الكلمات اللي هتتغير 
-  const words = ['Train', 'Deploy', 'Build'];
-
-  //  علشان اخزن فيهاالالوان بتاعتي وتفضل موجودة بشكل دايم (useMemo) استخدمت 
-  const colors = useMemo(() => ['#007bff', '#ff6347', '#28a745'], []);
-
-  //علشان اتحكم في ان الاوان متتابعة مظبوطة والكلام برضه يعني بستخدمه عشان اظبط وقت الظهور
-  useEffect(() => {
-    //تتكرر العملية كل 4 ثواني
-    const interval = setInterval(() => {
-      setVisible(false); // بخفي العنصر ف الاول
-
-      setTimeout(() => {
-        //تغيير اللون والكلمة مع بعض
-        setColor((prevColor) => {
-          const currentIndex = colors.indexOf(prevColor);
-          return colors[(currentIndex + 1) % colors.length];
-        });
-        
-        setWordIndex((prevIndex) => (prevIndex + 1) % words.length);
-        setVisible(true); // بظهر العنصر تاني عادي
-      }, 1000); // بخفي العنصر لمدة ثانية
-    }, 4000); // مدة ظهور العنصر   4 ثوان
-
-    // بعمل ريسيت للمؤقت
-
-    return () => clearInterval(interval);
-  }, [colors, words.length]);
-
+const HeroSection = () => {
   return (
-    <section className="hero-section">
-      {/* دة المحتوي الرئيسي  - فيه  الكلام والزراير  */}
-      <div className="hero-content fade-in">
-        <h1>
-          {/* بظهر الكلمة اللي عليها الدور باللون اللي عليه الدور*/}
-          <span style={{ color: color }}>{words[wordIndex]}</span> <br /> AI models with ease
-        </h1>
-        
-        <p>
-          A powerful, user-friendly IDE designed to simplify, accelerate, and reduce the cost of AI model development.
-        </p>
-        
-        {/* زراير تسجيل الدخول والتحميل */}
-        <div className="hero-buttons">
-          <Link to="/auth/register" className="login-btn">Sign Up / Log In</Link>
-          <button className="download-btn">Download</button>
+    <section className="flex flex-col-reverse lg:flex-row items-center justify-between px-4 py-16 md:px-16 lg:px-32 bg-gray-100 min-h-[70vh]">
+      {/* Left Section (Text and Buttons) */}
+      <motion.div
+        className="w-full lg:w-1/2 text-center lg:text-left mb-10 lg:mb-0"
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
+        {/* Text Section */}
+        <div>
+          <h1 className="text-blue-600 text-3xl md:text-4xl font-bold">Build</h1>
+          <h2 className="text-gray-800 text-3xl md:text-4xl font-semibold mt-2">
+            AI models with ease
+          </h2>
+          <p className="text-gray-500 mt-4 text-base md:text-lg leading-relaxed">
+            A powerful, user-friendly IDE designed to simplify, accelerate, and
+            reduce the cost of AI model development.
+          </p>
         </div>
-        
 
-        <div className="demo-link"> 
-          <a href="https://youtu.be/ytDBZW-1K50?si=1L-kpbDGe-IRhGzy" target="_blank" rel="noopener noreferrer">
-            Watch demo &#8594;
+        {/* Buttons Section */}
+        <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mt-6 lg:ml-32">
+          <button className="bg-black text-white px-4 py-2 rounded flex items-center gap-2 w-full sm:w-auto justify-center">
+            <img src={white} alt="App Store" className="w-5" />
+            <span>Download in the App Store</span>
+          </button>
+          <button className="bg-black text-white px-4 py-2 rounded flex items-center gap-2 w-full sm:w-auto justify-center">
+            <img src={black} alt="Microsoft" className="w-5" />
+            <span>Download in the Microsoft</span>
+          </button>
+          <a
+            href="https://youtu.be/O8OntvmrULo?si=FSlybOiHfPy40f5F"
+            target="_blank"
+            rel="noreferrer" // إضافة rel="noreferrer" لإصلاح التحذير
+            className="text-blue-500 text-base md:text-lg font-medium hover:underline flex items-center"
+          >
+            Watch demo
           </a>
         </div>
-      </div>
-      
-      {/* جزء الصورة - تغيير لون الخلفية  */}
-      <div 
-        className={`hero-image slide-in`} 
-        style={{
-          backgroundColor: color, // ظبط لون الخلفية
-          opacity: visible ? 1 : 0, // بتحكم في ظهور واختفاء الصورة
-          transition: 'opacity 1s ease' 
-        }}
-      ></div>
+      </motion.div>
+
+      {/* Right Section (Vertical Image Placeholder) */}
+      <motion.div
+        className="w-full sm:w-3/4 md:w-1/2 lg:w-1/4 h-64 sm:h-80 md:h-96 bg-blue-300 rounded-lg mx-auto lg:mx-0 mb-10 lg:mb-0"
+        initial={{ x: 150, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+      ></motion.div>
     </section>
   );
-}
+};
 
 export default HeroSection;
