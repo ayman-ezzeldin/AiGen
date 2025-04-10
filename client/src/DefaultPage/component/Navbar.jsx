@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Activity } from 'lucide-react';
 import { BsList, BsX } from 'react-icons/bs';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -14,10 +14,10 @@ function Navbar() {
     <nav className="fixed top-0 left-0 z-[999] w-full bg-white shadow-md border-b border-gray-200 px-4 py-2.5">
       <div className="flex justify-between items-center w-full mx-auto max-w-screen-xl">
         {/* Logo */}
-        <div className="flex items-center">
+        <Link to="/" className="flex items-center">
           <Activity className=' h-8 w-8' />
           <span className="text-2xl font-bold">Ai Gen</span>
-        </div>
+        </Link>
 
         {/* Hamburger Button */}
         <button

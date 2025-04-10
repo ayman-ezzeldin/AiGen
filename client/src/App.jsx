@@ -24,6 +24,7 @@ import Default from './DefaultPage/Default';
 import LearnPage from './pages/user/Components/LearnPage/LearnPage';
 import { DatasetPage } from './pages/user/Components/DatasetPage/DatasetPage';
 import ModelPage from './pages/user/Components/ModelPage/ModelPage';
+import ChatPage from './DefaultPage/ChatPage';
 
 
 function App() {
@@ -81,6 +82,7 @@ function App() {
           <Route path="dataset" element={<DatasetPage />} />
           <Route path="models" element={<ModelPage />} />
           <Route path="learn" element={<LearnPage />} />
+          <Route path="chat" element={<ChatPage />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

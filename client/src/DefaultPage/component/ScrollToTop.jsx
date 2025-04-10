@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import '../ScrollToTop.css'; // ده ملف CSS الخاص بتنسيق السهم اللي بيطلع فوق
+import { ArrowBigUpDash } from 'lucide-react';
 
 function ScrollToTop() {
   const [showButton, setShowButton] = useState(false); // هنا بنحفظ إذا كان السهم هيظهر ولا لأ
@@ -42,7 +43,7 @@ function ScrollToTop() {
           onClick={scrollToTop}
         >
           {/* أيقونة السهم */}
-          <i className="fa-solid fa-arrow-up"></i>
+          <ArrowBigUpDash />
         </button>
       )}
     </div>
