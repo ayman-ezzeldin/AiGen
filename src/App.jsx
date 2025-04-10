@@ -5,7 +5,7 @@ import { checkAuth } from './store/auth-slice';
 
 import AuthLayout from './components/auth/layout';
 import AuthRegister from './pages/auth/register';
-import VerifyMailPage from './pages/auth/Verifymail';
+import VerifyMailPage from './pages/auth/VerifyMail';
 import AuthLogin from './pages/auth/login';
 import AdminHome from './pages/admin/Home';
 import UserHome from './pages/user/Home';
