@@ -5,6 +5,7 @@ import { checkAuth } from './store/auth-slice';
 
 import AuthLayout from './components/auth/layout';
 import AuthRegister from './pages/auth/register';
+import VerifyMailPage from './pages/auth/Verifymail';
 import AuthLogin from './pages/auth/login';
 import AdminHome from './pages/admin/Home';
 import UserHome from './pages/user/Home';
@@ -51,6 +52,7 @@ function App() {
         >
           <Route path="login" element={<AuthLogin />} />
           <Route path="register" element={<AuthRegister />} />
+          <Route path="verify" element={<VerifyMailPage />} />
         </Route>
 
         <Route

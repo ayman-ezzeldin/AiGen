@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AdminViewHeaderMenuItems } from "../../config"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuTrigger,DropdownMenuItem, DropdownMenuSeparator } from '../ui/dropdown-menu'
 import { Avatar, AvatarFallback } from '../ui/avatar'
-import { logoutUser } from "@/store/auth-slice";
+import { logout } from "@/store/auth-slice";
 import { useState } from "react"
 
 // eslint-disable-next-line react/prop-types
@@ -51,7 +51,7 @@ export const HeaderRightContent = () => {
             Account
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className=" cursor-pointer" onClick={() => dispatch(logoutUser())} >
+          <DropdownMenuItem className=" cursor-pointer" onClick={() => dispatch(logout())} >
             <LogOut className="mr-2 h-4 w-4" />
             Log out
           </DropdownMenuItem>

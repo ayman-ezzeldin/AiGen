@@ -65,10 +65,10 @@ function Navbar() {
         </ul>
 
         {/* Action Buttons */}
-        <div className="hidden lg:flex gap-2.5 lg:mt-2">
-          <button className="signup-btn">
+        <div className="hidden lg:flex gap-2.5 lg:mt-2 items-center">
+          <Link to="/auth/login" className="signup-btn ">
             Sign Up / Log In
-          </button>
+          </Link>
           <button className="bg-blue-500 text-white rounded-md py-2 px-3 hover:bg-blue-600 transition-all duration-300">
             Download
           </button>
