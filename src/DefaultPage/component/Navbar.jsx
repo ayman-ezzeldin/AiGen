@@ -2,9 +2,14 @@ import { useState } from 'react';
 import { Activity } from 'lucide-react';
 import { BsList, BsX } from 'react-icons/bs';
 import { Link, NavLink } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../store/auth-slice';
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  const dispatch = useDispatch()
+
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -14,7 +19,7 @@ function Navbar() {
     <nav className="fixed top-0 left-0 z-[999] w-full bg-white shadow-md border-b border-gray-200 px-4 py-2.5">
       <div className="flex justify-between items-center w-full mx-auto max-w-screen-xl">
         {/* Logo */}
-        <Link to="/" className="flex items-center">
+        <Link to={ isAuthenticated ? '/user/home' : '/' }className="flex items-center">
           <Activity className=' h-8 w-8' />
           <span className="text-2xl font-bold">Ai Gen</span>
         </Link>
@@ -66,9 +71,15 @@ function Navbar() {
 
         {/* Action Buttons */}
         <div className="hidden lg:flex gap-2.5 lg:mt-2 items-center">
-          <Link to="/auth/login" className="signup-btn ">
-            Sign Up / Log In
-          </Link>
+          {
+            !isAuthenticated ?
+              <Link to="/auth/login" className="signup-btn ">
+                Sign Up / Log In
+              </Link>
+              : <button onClick={() => dispatch(logout())} className="signup-btn">
+                Log Out
+              </button>
+          }
           <button className="bg-blue-500 text-white rounded-md py-2 px-3 hover:bg-blue-600 transition-all duration-300">
             Download
           </button>

@@ -41,7 +41,7 @@ const Blog = () => {
         {filteredPosts.map((post) => (
           <div
             key={post.id}
-            onClick={() => navigate(`/admin/blog/${post.id}`)}
+            onClick={() => navigate(`/user/blog/${post.id}`)}
             className="transition-transform transform hover:scale-105 bg-white shadow-lg rounded-lg p-4 cursor-pointer hover:shadow-2xl"
           >
             <h2 className="text-lg font-bold mb-2 text-gray-800">{post.title}</h2>

@@ -26,7 +26,7 @@ const AuthLogin = () => {
       })).unwrap(); // unwrap() throws error if thunk fails
       
       if (result) {
-          navigate('/');
+          navigate('/user/home');
       }
     } catch (error) {
       console.error('Login error:', error);

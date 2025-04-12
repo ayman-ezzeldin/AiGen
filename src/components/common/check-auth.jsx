@@ -2,7 +2,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 
 const CheckAuth = ({ isAuthenticated, user, children }) => {
   const location = useLocation();
-  const isAdmin = user?.role === 'admin';
+  // const isAdmin = user?.role === 'admin';
 
   // Allow access to the Home page without authentication
   if (location.pathname === '/') {
@@ -19,18 +19,18 @@ const CheckAuth = ({ isAuthenticated, user, children }) => {
   else {
     // Redirect authenticated users to their appropriate home based on role when accessing login or register pages
     if (location.pathname.includes('login') || location.pathname.includes('register')) {
-      return <Navigate to={isAdmin ? "/admin/home" : "/user/home"} />;
+      return <Navigate to= "/user/home" />;
     }
 
     // Prevent non-admin users from accessing admin pages
-    if (location.pathname.includes('admin') && !isAdmin) {
-      return <Navigate to="/unauth-page" />;
-    }
+    // if (location.pathname.includes('admin') && !isAdmin) {
+    //   return <Navigate to="/unauth-page" />;
+    // }
 
     // Prevent admin users from accessing user-specific pages
-    if (location.pathname.includes('user') && isAdmin) {
-      return <Navigate to="/admin/home" />;
-    }
+    // if (location.pathname.includes('user') && isAdmin) {
+    //   return <Navigate to="/admin/home" />;
+    // }
   }
 
   return <>{children}</>;

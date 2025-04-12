@@ -55,7 +55,7 @@ function App() {
           <Route path="verify" element={<VerifyMailPage />} />
         </Route>
 
-        <Route
+        {/* <Route
           path="/admin"
           element={
             <CheckAuth isAuthenticated={isAuthenticated} user={user}>
@@ -69,7 +69,7 @@ function App() {
           <Route path='blog/:id' element={<BlogPost />} />
           <Route path='community' element={<Community />} />
           <Route path='community/:id' element={<CommunityGroup />} />
-        </Route>
+        </Route> */}
 
         <Route
           path="/user"
@@ -85,6 +85,11 @@ function App() {
           <Route path="models" element={<ModelPage />} />
           <Route path="learn" element={<LearnPage />} />
           <Route path="chat" element={<ChatPage />} />
+          <Route path='simulator' element={<Simulator />} />
+          <Route path='blog' element={<Blog />} />
+          <Route path='blog/:id' element={<BlogPost />} />
+          <Route path='community' element={<Community />} />
+          <Route path='community/:id' element={<CommunityGroup />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

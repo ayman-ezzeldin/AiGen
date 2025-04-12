@@ -93,7 +93,7 @@ const Community = () => {
           <div
             key={group.id}
             className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
-            onClick={() => navigate(`/admin/community/${group.id}`)}
+            onClick={() => navigate(`/user/community/${group.id}`)}
           >
             <img
               src={group.image}
