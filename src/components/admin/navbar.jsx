@@ -133,8 +133,6 @@ const MenuItems = ({open, setOpen }) => {
   );
 };
 
-
-
 export const HeaderRightContent = ({open}) => {
   const dispatch = useDispatch();
 
@@ -174,7 +172,7 @@ const Navbar = () => {
           </SheetContent>
         </Sheet>
         <div className="hidden lg:block">
-          <MenuItems />
+          <MenuItems open={open} setOpen={setOpen} />
         </div>
         <div className="hidden lg:block">
           <HeaderRightContent />
