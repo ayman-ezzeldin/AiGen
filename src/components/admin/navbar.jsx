@@ -67,7 +67,7 @@ const MenuItemsVariables = [
 ];
 
 
-const MenuItems = ({ setOpen }) => {
+const MenuItems = ({open, setOpen }) => {
   const [dropdownOpenId, setDropdownOpenId] = useState(null);
   const dropdownRef = useRef(null);
 
@@ -87,7 +87,7 @@ const MenuItems = ({ setOpen }) => {
   }, [setOpen]);
 
   return (
-    <div className="flex gap-7 items-center" ref={dropdownRef}>
+    <div className={`${open ? "flex-col": "flex-row"} flex  gap-5  `} ref={dropdownRef}>
       {MenuItemsVariables.map((item) => (
         <DropdownMenu
           key={item.id}
@@ -135,11 +135,11 @@ const MenuItems = ({ setOpen }) => {
 
 
 
-export const HeaderRightContent = () => {
+export const HeaderRightContent = ({open}) => {
   const dispatch = useDispatch();
 
   return (
-    <div className=" flex gap-4 items-center">
+    <div className={` ${open ? "flex-col mr-6": "flex-row"} flex gap-4 items-center`}>
       <h3 className=" cursor-pointer" onClick={() => dispatch(logout())}>
         LogOut
       </h3>
@@ -168,9 +168,9 @@ const Navbar = () => {
               <span className="sr-only">Toggle header menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-full max-w-xs bg-white">
-            <MenuItems setOpen={setOpen} />
-            <HeaderRightContent />
+          <SheetContent side="left" className="w-full max-w-xs flex flex-col items-center pt-32 bg-white">
+            <MenuItems open={open} setOpen={setOpen} />
+            <HeaderRightContent open={open} />
           </SheetContent>
         </Sheet>
         <div className="hidden lg:block">
