@@ -1,11 +1,9 @@
-import { Link, useNavigate } from "react-router-dom"
-import { Activity, LogOut, Menu, UserCog } from 'lucide-react'
+import { Link} from "react-router-dom"
+import { Activity, Menu } from 'lucide-react'
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet"
 import {Button} from '../ui/button'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { AdminViewHeaderMenuItems } from "../../config"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuTrigger,DropdownMenuItem, DropdownMenuSeparator } from '../ui/dropdown-menu'
-import { Avatar, AvatarFallback } from '../ui/avatar'
 import { logout } from "@/store/auth-slice";
 import { useState } from "react"
 
@@ -30,42 +28,22 @@ const MenuItems = ({ setOpen }) => {
 }
 
 export const HeaderRightContent = () => {
-  const {user} = useSelector(state => state.auth)
-  const navigate = useNavigate()
   const dispatch = useDispatch()
 
   return (
-      <DropdownMenu >
-        <DropdownMenuTrigger asChild>
-          <Avatar className=" bg-black cursor-pointer" >
-            <AvatarFallback className=" bg-black text-white font-extrabold" >
-              {user?.username?.slice(0,2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent side="right" className=" w-48 mt-10 bg-white" >
-          <DropdownMenuLabel>Logged in {user?.username} </DropdownMenuLabel>
-          <DropdownMenuSeparator/>
-          <DropdownMenuItem className=" cursor-pointer" onClick={()=> navigate('/admin/account')} >
-            <UserCog className="mr-2 h-4 w-4" />
-            Account
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem className=" cursor-pointer" onClick={() => dispatch(logout())} >
-            <LogOut className="mr-2 h-4 w-4" />
-            Log out
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <div className=" flex gap-4 items-center" >
+        <h3 className=" cursor-pointer" onClick={() => dispatch(logout())} >LogOut</h3>
+        <h3 className=" cursor-pointer bg-blue-600 text-white px-3 py-2 rounded-xl " >DownLoad</h3>
+      </div>
   )
 }
 
-const AdminHeader = () => {
+const Navbar = () => {
   const [open, setOpen] = useState(false)
   
   return (
-    <header className=" sticky top-0 z-40 border-b bg-background" >
-      <div className=" flex h-16 items-center justify-between px-4 md:px-6" >
+    <header className=" sticky  w-full top-0 z-40 border-b bg-white" >
+      <div className=" flex max-w-7xl mx-auto h-20 items-center justify-between px-4" >
         <Link to='/admin/home' className=" flex gap-2 items-center" >
           <Activity className="h-8 w-8" />
           <span className="font-bold text-2xl tracking-wider " >AiGen</span>
@@ -93,4 +71,4 @@ const AdminHeader = () => {
   )
 }
 
-export default AdminHeader
+export default Navbar

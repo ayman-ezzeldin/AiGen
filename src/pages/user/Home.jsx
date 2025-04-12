@@ -5,18 +5,23 @@ import Solutions from "../../DefaultPage/component/Solutions";
 import FeatureSection from "../../DefaultPage/component/FeatureSection";
 import ExportSection from "../../DefaultPage/component/ExportSection";
 import TestimonialsSection from "../../DefaultPage/component/TestimonialsSection";
+import Footer from "../../DefaultPage/component/Footer";
+import WhatsAppButton from "../../DefaultPage/component/WhatsAppButton";
+import Chatbot from "../../DefaultPage/component/ChatBot";
 
 const UserHome = () => {
   return (
-    <div className=" mt-[-60px]" >
+    <div>
       <HeroSection />
       <ScrollToTop />
       <ChallengesSection />
       <Solutions />
-
       <FeatureSection />
       <ExportSection />
       <TestimonialsSection />
+      <WhatsAppButton />
+      <Chatbot />
+      <Footer />
     </div>
   );
 };

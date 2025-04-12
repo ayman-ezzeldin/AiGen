@@ -7,13 +7,10 @@ import AuthLayout from './components/auth/layout';
 import AuthRegister from './pages/auth/register';
 import VerifyMailPage from './pages/auth/VerifyMail';
 import AuthLogin from './pages/auth/login';
-import AdminHome from './pages/admin/Home';
 import UserHome from './pages/user/Home';
-import AdminLayout from './components/admin/layout';
 import UserLayout from './components/user/layout';
 import NotFound from './pages/not-found';
 import CheckAuth from './components/common/check-auth';
-import UnauthPage from './pages/unauth-page';
 import { Skeleton } from './components/ui/skeleton';
 import './App.css';
 import Simulator from './pages/admin/Simulator';
@@ -55,21 +52,6 @@ function App() {
           <Route path="verify" element={<VerifyMailPage />} />
         </Route>
 
-        {/* <Route
-          path="/admin"
-          element={
-            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
-              <AdminLayout />
-            </CheckAuth>
-          }
-        >
-          <Route path="home" element={<AdminHome />} />
-          <Route path='simulator' element={<Simulator />} />
-          <Route path='blog' element={<Blog />} />
-          <Route path='blog/:id' element={<BlogPost />} />
-          <Route path='community' element={<Community />} />
-          <Route path='community/:id' element={<CommunityGroup />} />
-        </Route> */}
 
         <Route
           path="/user"
@@ -93,7 +75,6 @@ function App() {
         </Route>
 
         <Route path="*" element={<NotFound />} />
-        <Route path="/unauth-page" element={<UnauthPage />} />
       </Routes>
     </div>
   );
