@@ -1,10 +1,9 @@
 import { motion } from "framer-motion";
 import white from '../assets/Icons/puzzle.png';
-import black from '../assets/Icons/performance.png'
 
 const HeroSection = () => {
   return (
-    <section className="flex flex-col-reverse lg:flex-row items-center justify-between px-4 py-16 md:px-16 lg:px-32 bg-gray-100 min-h-[70vh]">
+    <section className="flex flex-col-reverse lg:flex-row items-center justify-between px-4 py-16 md:px-16 lg:px-32 bg-gray-50 min-h-[70vh]">
       {/* Left Section (Text and Buttons) */}
       <motion.div
         className="w-full lg:w-1/2 text-center lg:text-left mb-10 lg:mb-0"
@@ -18,27 +17,23 @@ const HeroSection = () => {
           <h2 className="text-gray-800 text-3xl md:text-4xl font-semibold mt-2">
             AI models with ease
           </h2>
-          <p className="text-gray-500 mt-4 text-base md:text-lg leading-relaxed">
+          <p className="text-gray-500 mt-4 text-base md:text-lg leading-relaxed w-[80%]">
             A powerful, user-friendly IDE designed to simplify, accelerate, and
             reduce the cost of AI model development.
           </p>
         </div>
 
         {/* Buttons Section */}
-        <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mt-6 lg:ml-32">
-          <button className="bg-black text-white px-4 py-2 rounded flex items-center gap-2 w-full sm:w-auto justify-center">
+        <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mt-6">
+          <button className="bg-gradient-to-r from-blue-800 via-blue-600 to-blue-500 rounded-3xl shadow-2xl font-sans font-semibold text-white px-4 py-3 flex items-center gap-2 w-full sm:w-auto justify-center">
             <img src={white} alt="App Store" className="w-5" />
-            <span>Download in the App Store</span>
-          </button>
-          <button className="bg-black text-white px-4 py-2 rounded flex items-center gap-2 w-full sm:w-auto justify-center">
-            <img src={black} alt="Microsoft" className="w-5" />
-            <span>Download in the Microsoft</span>
+            <span>Download from App Store </span>
           </button>
           <a
+            className="text-blue-500 font-semibold md:text-lg hover:underline flex items-center"
             href="https://youtu.be/O8OntvmrULo?si=FSlybOiHfPy40f5F"
             target="_blank"
             rel="noreferrer" // إضافة rel="noreferrer" لإصلاح التحذير
-            className="text-blue-500 text-base md:text-lg font-medium hover:underline flex items-center"
           >
             Watch demo
           </a>
