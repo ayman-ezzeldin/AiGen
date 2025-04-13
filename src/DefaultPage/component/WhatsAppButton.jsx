@@ -9,47 +9,50 @@ const WhatsAppButton = () => {
 
   return (
     <>
-      <style jsx global>{`
-        @keyframes whatsappFadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        @keyframes whatsappSlideUp {
-          from { transform: translateY(20px); opacity: 0; }
-          to { transform: translateY(0); opacity: 1; }
-        }
-        @keyframes rippleEffect {
-          0% { transform: scale(0); opacity: 0.8; }
-          50% { transform: scale(2); opacity: 0.4; }
-          100% { transform: scale(4); opacity: 0; }
-        }
-        .whatsapp-button.clicked::before {
-          content: "";
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          width: 15px;
-          height: 15px;
-          background-color: #ff7f50;
-          border-radius: 50%;
-          transform: translate(-50%, -50%);
-          animation: rippleEffect 0.8s ease-out forwards;
-          opacity: 0.8;
-        }
-        .whatsapp-button.clicked::after {
-          content: "";
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          width: 25px;
-          height: 25px;
-          background-color: #ff7f50;
-          border-radius: 50%;
-          transform: translate(-50%, -50%);
-          animation: rippleEffect 0.8s ease-out 0.2s forwards;
-          opacity: 0.6;
-        }
-      `}</style>
+  <style>
+    {`
+      @keyframes whatsappFadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      @keyframes whatsappSlideUp {
+        from { transform: translateY(20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+      }
+      @keyframes rippleEffect {
+        0% { transform: scale(0); opacity: 0.8; }
+        50% { transform: scale(2); opacity: 0.4; }
+        100% { transform: scale(4); opacity: 0; }
+      }
+      .whatsapp-button.clicked::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 15px;
+        height: 15px;
+        background-color: #ff7f50;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        animation: rippleEffect 0.8s ease-out forwards;
+        opacity: 0.8;
+      }
+      .whatsapp-button.clicked::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 25px;
+        height: 25px;
+        background-color: #ff7f50;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        animation: rippleEffect 0.8s ease-out 0.2s forwards;
+        opacity: 0.6;
+      }
+    `}
+  </style>
+
 
       <div>
         {/* زر واتساب */}

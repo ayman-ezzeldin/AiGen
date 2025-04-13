@@ -6,7 +6,7 @@ const Chatbot = () => {
   const navigate = useNavigate(); // استخدام useNavigate للتنقل
 
   const openChatPage = () => {
-    navigate("/user/chat"); // التنقل لصفحة الشات
+    navigate("/user/chatbot"); // التنقل لصفحة الشات
   };
 
   // إظهار الرسالة الترحيبية لمدة 10 ثواني عند تحميل المكون

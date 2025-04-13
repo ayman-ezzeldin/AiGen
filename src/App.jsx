@@ -12,17 +12,17 @@ import UserLayout from './components/user/layout';
 import NotFound from './pages/not-found';
 import CheckAuth from './components/common/check-auth';
 import { Skeleton } from './components/ui/skeleton';
-import './App.css';
-import Simulator from './pages/admin/Simulator';
-import Blog from './pages/admin/Blog'
-import BlogPost from './pages/admin/BlogPost';
-import Community from './pages/admin/Community';
-import CommunityGroup from './pages/admin/CommunityGroup';
+import Simulator from './pages/user/Simulator';
+import Blog from './pages/user/Blog'
+import BlogPost from './pages/user/BlogPost';
+import Community from './pages/user/Community';
+import CommunityGroup from './pages/user/CommunityGroup';
 import Default from './DefaultPage/Default';
 import LearnPage from './pages/user/Components/LearnPage/LearnPage';
 import { DatasetPage } from './pages/user/Components/DatasetPage/DatasetPage';
 import ModelPage from './pages/user/Components/ModelPage/ModelPage';
-import ChatPage from './DefaultPage/ChatPage';
+import ChatBotpage from './DefaultPage/ChatPage';
+import ChatRoom from './pages/user/ChatRoom';
 
 
 function App() {
@@ -66,13 +66,14 @@ function App() {
           <Route path="dataset" element={<DatasetPage />} />
           <Route path="models" element={<ModelPage />} />
           <Route path="learn" element={<LearnPage />} />
-          <Route path="chat" element={<ChatPage />} />
+          <Route path="chatbot" element={<ChatBotpage />} />
           <Route path='simulator' element={<Simulator />} />
-          <Route path='blog' element={<Blog />} />
-          <Route path='blog/:id' element={<BlogPost />} />
           <Route path='community' element={<Community />} />
           <Route path='community/:id' element={<CommunityGroup />} />
+          <Route path='blog' element={<Blog />} />
+          <Route path='blog/:id' element={<BlogPost />} />
         </Route>
+          <Route path='chat' element={<ChatRoom />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
