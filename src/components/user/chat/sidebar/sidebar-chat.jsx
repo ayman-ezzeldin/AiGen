@@ -48,7 +48,7 @@ const Sidebar = () => {
             className=" w-12 h-12 rounded-full object-cover"
           />
           <div className="text-lg font-semibold  transition">
-            {room.room_name}
+            {room.id}-{room.room_name}
           </div>
         </div>
         

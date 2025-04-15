@@ -1,40 +1,36 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setSocket, closeSocket } from "@/store/chat/socketSlice";
 import { addMessage } from "@/store/chat/messagesSlice";
 import MessageInput from "./MessageInput";
 import Messages from "./Messages";
+import useWebSocket from "react-use-websocket";
 
 const MessageContainer = () => {
   const dispatch = useDispatch();
   const { selectedRoom } = useSelector((state) => state.messages);
   const { accessToken } = useSelector((state) => state.auth);
 
+  const socketUrl = selectedRoom && accessToken
+    ? `ws://127.0.0.1:8000/ws/chat/${selectedRoom}/?token=${accessToken}`
+    : null;
+
+  const {
+    sendJsonMessage,
+    lastJsonMessage,
+    readyState,
+  } = useWebSocket(socketUrl, {
+    shouldReconnect: () => true, // إعادة الاتصال تلقائيًا
+    retryOnError: true,
+    onOpen: () => console.log("🟢 WebSocket connected."),
+    onError: (e) => console.error("❌ WebSocket error", e),
+  });
+
   useEffect(() => {
-    if (!selectedRoom || !accessToken) return;
-  
-    const socket = new WebSocket(
-      `ws://127.0.0.1:8000/ws/chat/${selectedRoom}/?token=${accessToken}`
-    );
-  
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      const messageData = data.data;
-      console.log("📩 Received message:", messageData);
-      dispatch(addMessage(messageData));
-    };
-  
-    socket.onerror = (err) => {
-      console.error("WebSocket error:", err);
-    };
-  
-    dispatch(setSocket(socket));
-  
-    return () => {
-      dispatch(closeSocket());
-    };
-  }, [selectedRoom, accessToken]);
-  
+    if (lastJsonMessage) {
+      console.log("📩 WebSocket message received:", lastJsonMessage);
+        dispatch(addMessage(lastJsonMessage));
+    }
+  }, [lastJsonMessage, dispatch]);
 
   return (
     <div className="flex-1 flex flex-col">
@@ -44,7 +40,10 @@ const MessageContainer = () => {
         </h2>
       </div>
       <Messages />
-      <MessageInput />
+      <MessageInput
+        sendJsonMessage={sendJsonMessage}
+        readyState={readyState}
+      />
     </div>
   );
 };

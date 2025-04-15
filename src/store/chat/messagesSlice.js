@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Fetch messages for a specific room
 export const fetchMessages = createAsyncThunk(
   "messages/fetchMessages",
   async (roomName, thunkAPI) => {
@@ -29,6 +28,7 @@ const messagesSlice = createSlice({
   },
   reducers: {
     addMessage(state, action) {
+      console.log("Adding message:", action.payload);
       state.messages.push(action.payload);
     },
     setSelectedRoom(state, action) {
