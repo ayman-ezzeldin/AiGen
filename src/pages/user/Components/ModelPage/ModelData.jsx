@@ -7,7 +7,7 @@ const SectionData = [
         fileSize: "12 Notebooks",
         numFiles: "A New Family Of Multimodel Fr",
         upvotes: 35,
-        profilePic: "../../public/Avatar.png", // Add profile picture URL here
+        profilePic: "./Avatar.png", // Add profile picture URL here
     },
     {
         title: "Gemini 1.5 Flash API",
@@ -17,7 +17,7 @@ const SectionData = [
         fileSize: "12 Notebooks",
         numFiles: "A New Family Of Multimodel Fr",
         upvotes: 35,
-        profilePic: "../../public/Avatar.png", // Add profile picture URL here
+        profilePic: "./Avatar.png", // Add profile picture URL here
     },
     {
         title: "Gemini 1.5 Flash API",
@@ -27,7 +27,7 @@ const SectionData = [
         fileSize: "12 Notebooks",
         numFiles: "A New Family Of Multimodel Fr",
         upvotes: 35,
-        profilePic: "../../public/Avatar.png", // Add profile picture URL here
+        profilePic: "./Avatar.png", // Add profile picture URL here
     },
     {
         title: "Gemini 1.5 Flash API",
@@ -37,7 +37,7 @@ const SectionData = [
         fileSize: "12 Notebooks",
         numFiles: "A New Family Of Multimodel Fr",
         upvotes: 35,
-        profilePic: "../../public/Avatar.png", // Add profile picture URL here
+        profilePic: "./Avatar.png", // Add profile picture URL here
     },
 ];
 

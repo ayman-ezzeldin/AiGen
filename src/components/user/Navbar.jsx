@@ -64,7 +64,7 @@ const MenuItemsVariables = [
       {
         id: "chat",
         label: "Chat Room",
-        path: "/chat",
+        path: "/user/chat",
       },
   ]
   },
