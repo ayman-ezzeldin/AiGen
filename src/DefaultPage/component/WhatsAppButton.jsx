@@ -57,7 +57,7 @@ const WhatsAppButton = () => {
       <div>
         {/* زر واتساب */}
         <button
-          className={`whatsapp-button fixed bottom-20 right-5 w-[50px] h-[50px] bg-[#25d366] text-white rounded-full text-3xl flex items-center justify-center shadow-[0_4px_10px_rgba(0,0,0,0.3)] cursor-pointer transition-all duration-200 ease-in-out hover:scale-110 hover:shadow-[0_6px_12px_rgba(0,0,0,0.4)] z-[9999] 
+          className={`whatsapp-button fixed bottom-20 right-5 w-[50px] h-[50px] bg-[#25d366] text-white rounded-full text-3xl flex items-center justify-center shadow-[0_4px_10px_rgba(0,0,0,0.3)] cursor-pointer transition-all duration-200 ease-in-out hover:scale-110 hover:shadow-[0_6px_12px_rgba(0,0,0,0.4)] z-[20] 
             ${isPopupOpen ? 'animate-[rippleEffect_0.5s_ease]' : ''}`}
           onClick={openPopup}
         >

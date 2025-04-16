@@ -33,10 +33,10 @@ const MessageContainer = () => {
   }, [lastJsonMessage, dispatch]);
 
   return (
-    <div className="flex-1 flex flex-col">
+    <div className="flex-1 flex flex-col overflow-hidden">
       <div className="p-4 border-b border-gray-400 shadow-sm">
-        <h2 className="text-xl font-semibold">
-          Chat with {selectedRoom || "User"}
+        <h2 className="text-xl font-semibold text-white">
+          Chat with {selectedRoom || "User"} Room
         </h2>
       </div>
       <Messages />

@@ -72,7 +72,6 @@ function App() {
           <Route path='community/:id' element={<CommunityGroup />} />
           <Route path='blog' element={<Blog />} />
           <Route path='blog/:id' element={<BlogPost />} />
-          <Route path='chat' element={<ChatRoom />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

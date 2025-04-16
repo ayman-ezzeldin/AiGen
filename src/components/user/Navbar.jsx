@@ -14,6 +14,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import ChatRoom from "../../pages/user/ChatRoom";
 
 const MenuItemsVariables = [
   {
@@ -60,11 +66,6 @@ const MenuItemsVariables = [
         id: "blog",
         label: "Blog",
         path: "/user/blog",
-      },
-      {
-        id: "chat",
-        label: "Chat Room",
-        path: "/user/chat",
       },
   ]
   },
@@ -134,6 +135,16 @@ const MenuItems = ({open, setOpen }) => {
           )}
         </DropdownMenu>
       ))}
+      <Dialog>
+      <DialogTrigger asChild>
+        <Button className=" text-lg pb-4" >Chat</Button>
+      </DialogTrigger>
+      <DialogContent className=" chat-room  border-none rounded-xl ">
+        <div className="w-[510px] rounded-2xl"> 
+          <ChatRoom />
+        </div>
+      </DialogContent>
+    </Dialog>
     </div>
   );
 };
