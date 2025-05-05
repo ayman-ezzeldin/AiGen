@@ -54,10 +54,10 @@ const WhatsAppButton = () => {
   </style>
 
 
-      <div>
+  <div>
         {/* زر واتساب */}
         <button
-          className={`whatsapp-button fixed bottom-20 right-5 w-[50px] h-[50px] bg-[#25d366] text-white rounded-full text-3xl flex items-center justify-center shadow-[0_4px_10px_rgba(0,0,0,0.3)] cursor-pointer transition-all duration-200 ease-in-out hover:scale-110 hover:shadow-[0_6px_12px_rgba(0,0,0,0.4)] z-[20] 
+          className={`whatsapp-button fixed bottom-20 right-5 w-[50px] h-[50px] bg-[#25d366] text-white rounded-full text-3xl flex items-center justify-center shadow-[0_4px_10px_rgba(0,0,0,0.3)] cursor-pointer transition-all duration-200 ease-in-out hover:scale-110 hover:shadow-[0_6px_12px_rgba(0,0,0,0.4)] z-[9999] 
             ${isPopupOpen ? 'animate-[rippleEffect_0.5s_ease]' : ''}`}
           onClick={openPopup}
         >
@@ -71,25 +71,28 @@ const WhatsAppButton = () => {
             onClick={closePopup}
           >
             <div
-              className="bg-white p-6 rounded-2xl w-96 max-w-[90%] text-center shadow-[0_10px_25px_rgba(0,0,0,0.3)] animate-[whatsappSlideUp_0.3s_ease-in-out]"
+              className="bg-gradient-to-b from-white to-gray-50 p-8 rounded-2xl w-full max-w-md mx-4 text-center shadow-2xl animate-[whatsappSlideUp_0.3s_ease-in-out]"
               onClick={(e) => e.stopPropagation()}
             >
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">WhatsApp Chat</h2>
-              <p className="text-gray-600 mb-6 text-sm">Click below to start chatting with us!</p>
-              <div className="flex justify-between gap-4">
+              <div className="flex justify-center mb-4">
+                <FaWhatsapp className="text-4xl text-green-500" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-800 mb-3">تواصل معنا</h2>
+              <p className="text-gray-600 mb-6 text-base">ابدأ محادثة على واتساب الآن!</p>
+              <div className="flex gap-4">
                 <a
                   href="https://wa.me/201550019832"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 px-4 py-3 bg-[#25d366] text-white rounded-lg font-semibold transition-all duration-300 ease-in-out hover:bg-[#20b356] hover:shadow-[0_4px_15px_rgba(37,211,102,0.5)] hover:scale-105 active:scale-95"
+                  className="flex-1 px-4 py-3 bg-green-500 text-white rounded-lg font-semibold transition-all duration-300 ease-in-out hover:bg-green-600 hover:shadow-lg hover:scale-105 active:scale-95"
                 >
-                  Open WhatsApp
+                  فتح واتساب
                 </a>
                 <button
-                  className="flex-1 px-4 py-3 bg-red-500 text-white rounded-lg font-semibold transition-all duration-300 ease-in-out hover:bg-red-600 hover:shadow-[0_4px_15px_rgba(255,95,95,0.5)] hover:scale-105 active:scale-95"
+                  className="flex-1 px-4 py-3 bg-red-500 text-white rounded-lg font-semibold transition-all duration-300 ease-in-out hover:bg-red-600 hover:shadow-lg hover:scale-105 active:scale-95"
                   onClick={closePopup}
                 >
-                  Close
+                  إغلاق
                 </button>
               </div>
             </div>
