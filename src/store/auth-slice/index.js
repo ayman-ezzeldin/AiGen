@@ -3,17 +3,20 @@ import axios from 'axios';
 
 // const API_URL = 'https://lucky0wl.pythonanywhere.com/';
 
+// ✅ Your backend base URL
 const API_URL = 'http://127.0.0.1:8000/';
 
-
-// Helper function to decode JWT token
+// ✅ Helper: Decode JWT token
 const decodeToken = (token) => {
   try {
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
     return JSON.parse(jsonPayload);
   } catch (error) {
     console.error('Error decoding token:', error);
@@ -31,69 +34,68 @@ const initialState = {
   isLoading: false,
 };
 
-export const registerUser = createAsyncThunk("auth/register",
-  async (userData, { rejectWithValue }) => {
-    try {
-      const response = await axios.post(`${API_URL}register/`, userData);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
+// ============ 🔐 Thunks ============
 
-export const loginUser = createAsyncThunk("auth/login",
-  async (userData, { rejectWithValue }) => {
-    try {
-      const response = await axios.post(`${API_URL}login/`, userData);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
-
-export const verifyMail = createAsyncThunk("auth/verify-email",
-  async (userData, { getState, rejectWithValue }) => {
-    try {
-      const state = getState();
-      const token = state.auth.accessToken || localStorage.getItem('accessToken');
-
-      if (!token) {
-        throw new Error('No access token available');
-      }
-
-      const response = await axios.post(`${API_URL}verify-email/`, userData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error("Verification error:", error.response?.data || error.message);
-      return rejectWithValue(error.response?.data || { message: error.message });
-    }
-  }
-);
-
-export const checkAuth = createAsyncThunk(
-  "/auth/checkauth",
-
-  async () => {
-    const response = await axios.get(
-      `/api/auth/check-auth`,
-      {
-        withCredentials: true,
-        headers: {
-          "Cache-Control":
-            "no-store, no-cache, must-revalidate, proxy-revalidate",
-        },
-      }
-    );
-
+export const registerUser = createAsyncThunk('auth/register', async (userData, { rejectWithValue }) => {
+  try {
+    const response = await axios.post(`${API_URL}register/`, userData);
     return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response.data);
   }
-);
+});
+
+export const loginUser = createAsyncThunk('auth/login', async (userData, { rejectWithValue }) => {
+  try {
+    const response = await axios.post(`${API_URL}login/`, userData);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response.data);
+  }
+});
+
+export const verifyMail = createAsyncThunk('auth/verify-email', async (userData, { getState, rejectWithValue }) => {
+  try {
+    const state = getState();
+    const token = state.auth.accessToken || localStorage.getItem('accessToken');
+
+    if (!token) {
+      throw new Error('No access token available');
+    }
+
+    const response = await axios.post(`${API_URL}verify-email/`, userData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Verification error:', error.response?.data || error.message);
+    return rejectWithValue(error.response?.data || { message: error.message });
+  }
+});
+
+// ✅✅ ✅ UPDATED checkAuth: uses token from localStorage
+export const checkAuth = createAsyncThunk('auth/checkauth', async (_, { rejectWithValue }) => {
+  try {
+    const token = localStorage.getItem('accessToken');
+    if (!token) throw new Error('No token in localStorage');
+
+    const response = await axios.get(`${API_URL}check-auth/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+      },
+    });
+
+    return { success: true, user: response.data };
+  } catch (error) {
+    console.error('checkAuth error:', error);
+    return rejectWithValue({ success: false });
+  }
+});
+
+// ============ 🧠 Slice ============
 
 const authSlice = createSlice({
   name: 'auth',
@@ -185,24 +187,67 @@ const authSlice = createSlice({
       })
       .addCase(verifyMail.fulfilled, (state) => {
         state.isVerified = true;
-        state.user = { ...state.user, isVerified: true }; // Update existing user
+        state.user = { ...state.user, isVerified: true };
       })
       .addCase(verifyMail.rejected, (state, action) => {
         state.verificationError = action.payload?.detail || action.payload?.message || 'Verification failed';
       })
+      // ✅ ✅ FIXED checkAuth response handling
       .addCase(checkAuth.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(checkAuth.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.user = action.payload.success ? action.payload.user : null;
-        state.isAuthenticated = action.payload.success;
-      })
+  state.isLoading = false;
+
+  if (action.payload?.user) {
+    state.user = action.payload.user;
+    state.isAuthenticated = true;
+    state.isVerified = action.payload.user.verified || false;
+  } else {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      const decoded = decodeToken(token);
+      state.user = {
+        user_id: decoded.user_id,
+        username: decoded.username,
+        email: decoded.email,
+        full_name: decoded.full_name,
+        bio: decoded.bio,
+        image: decoded.image,
+      };
+      state.isAuthenticated = true;
+      state.isVerified = decoded.verified || false;
+    } else {
+      state.user = null;
+      state.isAuthenticated = false;
+      state.isVerified = false;
+    }
+  }
+})
+
       .addCase(checkAuth.rejected, (state) => {
-        state.isLoading = false;
-        state.user = null;
-        state.isAuthenticated = false;
-      })
+  state.isLoading = false;
+
+  const token = localStorage.getItem('accessToken');
+  if (token) {
+    const decoded = decodeToken(token);
+    state.user = {
+      user_id: decoded.user_id,
+      username: decoded.username,
+      email: decoded.email,
+      full_name: decoded.full_name,
+      bio: decoded.bio,
+      image: decoded.image,
+    };
+    state.isAuthenticated = true;
+    state.isVerified = decoded.verified || false;
+  } else {
+    state.user = null;
+    state.isAuthenticated = false;
+    state.isVerified = false;
+  }
+})
+
   },
 });
 

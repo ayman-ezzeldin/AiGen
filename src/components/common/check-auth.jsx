@@ -1,6 +1,6 @@
 import { Navigate, useLocation } from 'react-router-dom';
 
-const CheckAuth = ({ isAuthenticated, user, children }) => {
+const CheckAuth = ({ isAuthenticated, children }) => {
   const location = useLocation();
   // const isAdmin = user?.role === 'admin';
 

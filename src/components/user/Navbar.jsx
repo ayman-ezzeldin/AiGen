@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@/store/auth-slice";
 import { useEffect, useRef, useState } from "react";
-import logo from "../../DefaultPage/assets/Icons/icon_aino.png" 
+import logo from "../../DefaultPage/assets/Icons/icon_aino.png";
 
 import {
   DropdownMenu,
@@ -15,11 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import ChatRoom from "../../pages/user/ChatRoom";
 
 const MenuItemsVariables = [
@@ -36,28 +32,28 @@ const MenuItemsVariables = [
   {
     id: "data",
     label: "Data",
-    childs : [
+    childs: [
       {
         id: "models",
         label: "Models",
         path: "/user/models",
-    },
-    {
+      },
+      {
         id: "dataset",
         label: "Dataset",
         path: "/user/dataset",
-    },
-    {
+      },
+      {
         id: "learn",
         label: "Learn",
         path: "/user/learn",
-    },
-  ]
+      },
+    ],
   },
   {
     id: "social",
     label: "Social",
-    childs : [
+    childs: [
       {
         id: "community",
         label: "Community",
@@ -68,24 +64,20 @@ const MenuItemsVariables = [
         label: "Blog",
         path: "/user/blog",
       },
-  ]
+    ],
   },
-
 ];
 
-
-const MenuItems = ({open, setOpen }) => {
+const MenuItems = ({ open, setOpen, user }) => {
   const [dropdownOpenId, setDropdownOpenId] = useState(null);
+
   const dropdownRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdownOpenId(null);
-        setOpen(false); 
+        setOpen(false);
       }
     };
 
@@ -94,25 +86,27 @@ const MenuItems = ({open, setOpen }) => {
   }, [setOpen]);
 
   return (
-    <div className={`${open ? "flex-col": "flex-row"} flex items-center gap-5`} ref={dropdownRef}>
+    <div
+      className={`${open ? "flex-col" : "flex-row"} flex items-center gap-5`}
+      ref={dropdownRef}
+    >
       {MenuItemsVariables.map((item) => (
         <DropdownMenu
           key={item.id}
           open={dropdownOpenId === item.id}
-          onOpenChange={(isOpen) =>
-            setDropdownOpenId(isOpen ? item.id : null)
-          }
+          onOpenChange={(isOpen) => setDropdownOpenId(isOpen ? item.id : null)}
         >
           <DropdownMenuTrigger asChild>
             <Link
               to={item.path}
               onClick={() => {
                 if (item.path) {
-                  setOpen(false); 
+                  setOpen(false);
                   setDropdownOpenId(null);
                 }
               }}
-              className="text-md md:text-lg font-medium cursor-pointer focus:outline-none focus:ring-0 focus-visible:ring-0"            >
+              className="text-md md:text-lg font-medium cursor-pointer focus:outline-none focus:ring-0 focus-visible:ring-0"
+            >
               {item.label}
             </Link>
           </DropdownMenuTrigger>
@@ -125,54 +119,89 @@ const MenuItems = ({open, setOpen }) => {
                 <DropdownMenuItem
                   key={child.id}
                   onClick={() => {
-                    setDropdownOpenId(null); 
-                    setOpen(false); 
+                    setDropdownOpenId(null);
+                    setOpen(false);
                   }}
                 >
-                  <Link className=" cursor-pointer w-full hover:bg-gray-50 " to={child.path}>{child.label}</Link>
+                  <Link
+                    className=" cursor-pointer w-full hover:bg-gray-50 "
+                    to={child.path}
+                  >
+                    {child.label}
+                  </Link>
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
           )}
         </DropdownMenu>
       ))}
-      <Dialog>
-      <DialogTrigger asChild>
-        <Button className=" text-lg" >Chat</Button>
-      </DialogTrigger>
-      <DialogContent className=" chat-room  border-none rounded-xl ">
-        <div className="w-[510px] rounded-2xl"> 
-          <ChatRoom />
-        </div>
-      </DialogContent>
-    </Dialog>
+      { user && (
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className=" text-lg">Chat</Button>
+          </DialogTrigger>
+          <DialogContent className=" chat-room  border-none rounded-xl ">
+            <div className="w-[510px] rounded-2xl">
+              <ChatRoom />
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 };
 
-export const HeaderRightContent = ({open}) => {
+export const HeaderRightContent = ({ open, user }) => {
   const dispatch = useDispatch();
 
   return (
-    <div className={` ${open ? "flex-col mr-6": "flex-row"} w-full flex gap-4 items-center ml-7 `}>
-      <h3 className=" cursor-pointer" onClick={() => dispatch(logout())}>
-        LogOut
-      </h3>
-      <h3 className=" cursor-pointer bg-blue-600 text-white px-3 py-2 rounded-xl ">
-        DownLoad
-      </h3>
+    <div
+      className={` ${
+        open ? "flex-col mr-6" : "flex-row"
+      } w-full flex gap-4 items-center ml-7 `}
+    >
+      {user ? (
+        <>
+          <h3 className=" cursor-pointer" onClick={() => dispatch(logout())}>
+            LogOut
+          </h3>
+          <Link
+            to="/user/settings/profile"
+            className="px-3 py-2 bg-blue-600 text-white cursor-pointer rounded-xl shadow-xl"
+          >
+            {/* {user.full_name.split(" ")[0][0].toUpperCase() +
+              user.full_name.split(" ")[1][0].toUpperCase()} */}
+            {user.full_name.split(" ")[0]}
+          </Link>
+        </>
+      ) : (
+        <>
+          <Link
+            to="/auth/login"
+            className="px-3 py-2 bg-blue-600 text-white cursor-pointer rounded-xl shadow-xl"
+          >
+            Login
+          </Link>
+          <h3 className=" cursor-pointer bg-blue-600 text-white px-3 py-2 rounded-xl ">
+            DownLoad
+          </h3>
+        </>
+      )}
     </div>
   );
 };
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
 
   return (
     <header className=" sticky  w-full top-0 z-40 border-b bg-white">
       <div className=" flex max-w-7xl mx-auto h-20 items-center justify-between px-4">
-        <Link to={isAuthenticated ? "/user/home" : "/"} className=" flex gap-2 items-center">
+        <Link
+          to={isAuthenticated ? "/user/home" : "/"}
+          className=" flex gap-2 items-center"
+        >
           <img src={logo} alt="logo" className="h-10 w-10" />
           <span className="font-bold text-2xl tracking-wider ">AINO</span>
         </Link>
@@ -183,16 +212,19 @@ const Navbar = () => {
               <span className="sr-only">Toggle header menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-full max-w-xs flex flex-col items-center pt-32 bg-white">
-            <MenuItems open={open} setOpen={setOpen} />
+          <SheetContent
+            side="left"
+            className="w-full max-w-xs flex flex-col items-center pt-32 bg-white"
+          >
+            <MenuItems open={open} setOpen={setOpen} user={user} />
             <HeaderRightContent open={open} />
           </SheetContent>
         </Sheet>
         <div className="hidden lg:block">
-          <MenuItems open={open} setOpen={setOpen} />
+          <MenuItems open={open} setOpen={setOpen} user={user} />
         </div>
         <div className="hidden lg:block">
-          <HeaderRightContent />
+          <HeaderRightContent user={user} />
         </div>
       </div>
     </header>
