@@ -3,8 +3,7 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
 import Modal from "react-modal";
 import white from '../assets/Icons/white.png';
 import black from '../assets/Icons/black.png';
-import heroImage from '../assets/Images/emotional-young-sportsman-make-sport-exercises-looking-aside_171337-15401.avif';
-
+import heroImage from '../assets/Images/ai-nuclear-energy-future-innovation-disruptive-technology.jpg';
 // ربط Modal بـ root لتجنب مشاكل الوصول
 Modal.setAppElement('#root');
 
@@ -133,15 +132,14 @@ const HeroSection = () => {
       >
         {/* Text Section */}
         <div className="space-y-4">
-          <h1 className="text-blue-600 text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
+          <h1 className="text-blue-600 text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight pl-[30px]">
             Build
           </h1>
-          <h2 className="text-gray-800 text-3xl md:text-4xl lg:text-5xl font-semibold">
+          <h2 className="text-gray-800 text-3xl md:text-4xl lg:text-5xl font-semibold pl-[30px]">
             AI models with ease
           </h2>
-          <p className="text-gray-500 text-base md:text-lg lg:text-xl leading-relaxed max-w-lg mx-auto lg:mx-0">
-            A powerful, user-friendly IDE designed to simplify, accelerate, and
-            reduce the cost of AI model development.
+          <p className="text-gray-500 text-base md:text-lg lg:text-xl leading-relaxed max-w-lg mx-auto lg:mx-0 pl-[30px] ">
+            A powerful, user-friendly IDE designed to simplify,accelerate, and reduce the cost of AI model development.
           </p>
         </div>
 
@@ -176,7 +174,7 @@ const HeroSection = () => {
         ref={imageRef}
         src={heroImage}
         alt="Sportsman performing exercises, representing strength and innovation"
-        className="w-full sm:w-3/4 md:w-1/2 lg:w-1/4 max-w-full max-h-[500px] rounded-lg mx-auto lg:mx-0 mb-10 lg:mb-0 cursor-pointer shadow-lg object-contain"
+        className="w-full sm:w-2/3 md:w-1/3 lg:w-2/5 max-w-[270px] max-h-[400px] rounded-[13px] mx-auto lg:mx-0 mb-10 lg:mb-0 cursor-pointer shadow-2xl object-contain"
         style={{
           rotateX: rotateXSpring,
           rotateY: rotateYSpring,

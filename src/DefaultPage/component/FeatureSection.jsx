@@ -80,7 +80,7 @@ function FeatureSection() {
           Designed for Every AI Journey. for Developers, Enthusiasts, and Teams
         </h2>
         <p className="text-lg text-[#555] font-semibold mb-10 max-w-2xl mx-auto">
-          Whether you{"'"}re just starting or an experienced AI professional, Model Craft adapts to support your unique needs.
+          Whether you{`'`}re just starting or an experienced AI professional, AINO adapts to support your unique needs.
         </p>
         <div className="mt-[110px] flex flex-col md:flex-row gap-5 justify-center items-center mb-[50px] max-w-5xl mx-auto">
           <div

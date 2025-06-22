@@ -43,7 +43,7 @@ const Solutions = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
         {/* Card 1 */}
         <div
-          className="bg-gradient-to-br from-[#e6f2ff] to-[#d1e8ff] p-6 rounded-xl text-center shadow-lg
+          className="bg-gradient-to-br from-[#e6f2ff] to-[#d1e8ff] p-6 rounded-3xl text-center shadow-lg
           border-2 border-[#00FFFF] transition-all duration-300 ease-out
           animate-[fadeInUp_0.8s_ease-out_0.1s_forwards]
           hover:border-[#007bff] hover:shadow-2xl hover:cursor-pointer"
@@ -64,7 +64,7 @@ const Solutions = () => {
 
         {/* Card 2 */}
         <div
-          className="bg-gradient-to-br from-[#e6f2ff] to-[#d1e8ff] p-6 rounded-xl text-center shadow-lg
+          className="bg-gradient-to-br from-[#e6f2ff] to-[#d1e8ff] p-6 rounded-3xl text-center shadow-lg
           border-2 border-[#00FFFF] transition-all duration-300 ease-out
           animate-[fadeInUp_0.8s_ease-out_0.2s_forwards]
           hover:border-[#007bff] hover:shadow-2xl hover:cursor-pointer"
@@ -85,7 +85,7 @@ const Solutions = () => {
 
         {/* Card 3 */}
         <div
-          className="bg-gradient-to-br from-[#e6f2ff] to-[#d1e8ff] p-6 rounded-xl text-center shadow-lg
+          className="bg-gradient-to-br from-[#e6f2ff] to-[#d1e8ff] p-6 rounded-3xl text-center shadow-lg
           border-2 border-[#00FFFF] transition-all duration-300 ease-out
           animate-[fadeInUp_0.8s_ease-out_0.3s_forwards]
           hover:border-[#007bff] hover:shadow-2xl hover:cursor-pointer"
@@ -106,7 +106,7 @@ const Solutions = () => {
 
         {/* Card 4 */}
         <div
-          className="bg-gradient-to-br from-[#e6f2ff] to-[#d1e8ff] p-6 rounded-xl text-center shadow-lg
+          className="bg-gradient-to-br from-[#e6f2ff] to-[#d1e8ff] p-6 rounded-3xl text-center shadow-lg
           border-2 border-[#00FFFF] transition-all duration-300 ease-out
           animate-[fadeInUp_0.8s_ease-out_0.4s_forwards]
           hover:border-[#007bff] hover:shadow-2xl hover:cursor-pointer"
@@ -127,12 +127,13 @@ const Solutions = () => {
       </div>
 
       {/* Learn More Button */}
-      <button className="mt-8 px-6 py-3 bg-gradient-to-r from-[#007bff] to-[#00FFFF] text-white rounded-lg
+      
+      {/* <button className="mt-8 px-6 py-3 bg-gradient-to-r from-[#007bff] to-[#00FFFF] text-white rounded-lg
         text-base font-semibold cursor-pointer transition-all duration-300 ease-out
         animate-[slideUpBounce_1s_ease-out_0.5s_forwards]
         hover:scale-105 hover:shadow-lg hover:from-[#0056b3] hover:to-[#00cccc]">
         Learn More
-      </button>
+      </button> */}
 
       <hr className="mt-10 border-gray-300" />
     </div>

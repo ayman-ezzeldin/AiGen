@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
-import { Activity, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@/store/auth-slice";
 import { useEffect, useRef, useState } from "react";
+import logo from "../../DefaultPage/assets/Icons/icon_aino.png" 
 
 import {
   DropdownMenu,
@@ -93,7 +94,7 @@ const MenuItems = ({open, setOpen }) => {
   }, [setOpen]);
 
   return (
-    <div className={`${open ? "flex-col": "flex-row"} flex  gap-5  `} ref={dropdownRef}>
+    <div className={`${open ? "flex-col": "flex-row"} flex items-center gap-5`} ref={dropdownRef}>
       {MenuItemsVariables.map((item) => (
         <DropdownMenu
           key={item.id}
@@ -137,7 +138,7 @@ const MenuItems = ({open, setOpen }) => {
       ))}
       <Dialog>
       <DialogTrigger asChild>
-        <Button className=" text-lg pb-4" >Chat</Button>
+        <Button className=" text-lg" >Chat</Button>
       </DialogTrigger>
       <DialogContent className=" chat-room  border-none rounded-xl ">
         <div className="w-[510px] rounded-2xl"> 
@@ -153,7 +154,7 @@ export const HeaderRightContent = ({open}) => {
   const dispatch = useDispatch();
 
   return (
-    <div className={` ${open ? "flex-col mr-6": "flex-row"} flex gap-4 items-center`}>
+    <div className={` ${open ? "flex-col mr-6": "flex-row"} w-full flex gap-4 items-center ml-7 `}>
       <h3 className=" cursor-pointer" onClick={() => dispatch(logout())}>
         LogOut
       </h3>
@@ -172,8 +173,8 @@ const Navbar = () => {
     <header className=" sticky  w-full top-0 z-40 border-b bg-white">
       <div className=" flex max-w-7xl mx-auto h-20 items-center justify-between px-4">
         <Link to={isAuthenticated ? "/user/home" : "/"} className=" flex gap-2 items-center">
-          <Activity className="h-8 w-8" />
-          <span className="font-bold text-2xl tracking-wider ">AiGen</span>
+          <img src={logo} alt="logo" className="h-10 w-10" />
+          <span className="font-bold text-2xl tracking-wider ">AINO</span>
         </Link>
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
