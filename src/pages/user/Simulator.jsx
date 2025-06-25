@@ -1,4 +1,5 @@
-import { useCallback, useState } from "react";
+""// Simulator.jsx
+import { useCallback, useEffect, useState } from "react";
 import {
   ReactFlow,
   MiniMap,
@@ -11,109 +12,69 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { useToast } from "../../hooks/use-toast";
-
-
-const initialNodes = [
-  { id: '1', position: { x: 50, y: 40 }, data: { label: 'Circle' }, type: 'circle' },
-  { id: '2', position: { x: 90, y: 120 }, data: { label: 'Rectangle' }, type: 'rectangle' },
-  { id: '3', position: { x: 400, y: 150 }, data: { label: 'Button' }, type: 'button' },
-];
-
-const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
-
-const categories = [
-  {
-    id: "shapes",
-    label: "Shapes",
-    items: [
-      { id: "rect", label: "Rectangle", type: "rectangle" },
-      { id: "circle", label: "Circle", type: "circle" },
-    ],
-  },
-  {
-    id: "inputs",
-    label: "Inputs",
-    items: [
-      { id: "button", label: "Button", type: "button" },
-      { id: "slider", label: "Slider", type: "slider" },
-    ],
-  },
-];
-
-
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const CircleNode = ({ data }) => (
   <div
     style={{
-      background: '#FF5733',
-      borderRadius: '50%',
+      background: "#FF5733",
+      borderRadius: "50%",
       width: 50,
       height: 50,
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      color: 'white',
-      fontWeight: 'bold',
-      position: 'relative',
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      color: "white",
+      fontWeight: "bold",
+      position: "relative",
     }}
   >
     {data.label}
-    {/* نقاط الاتصال */}
-    <Handle type="source" position="right" style={{ background: '#555' }} />
-    <Handle type="target" position="left" style={{ background: '#555' }} />
+    <Handle type="source" position="right" style={{ background: "#555" }} />
+    <Handle type="target" position="left" style={{ background: "#555" }} />
   </div>
 );
-
 
 const RectangleNode = ({ data }) => (
   <div
     style={{
-      background: '#33A1FF',
-      borderRadius: '8px',
+      background: "#33A1FF",
+      borderRadius: "8px",
       width: 100,
       height: 50,
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      color: 'white',
-      fontWeight: 'bold',
-      position: 'relative',
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      color: "white",
+      fontWeight: "bold",
+      position: "relative",
     }}
   >
     {data.label}
-    {/* نقاط الاتصال */}
-    <Handle type="source" position="right" style={{ background: '#555' }} />
-    <Handle type="target" position="left" style={{ background: '#555' }} />
+    <Handle type="source" position="right" style={{ background: "#555" }} />
+    <Handle type="target" position="left" style={{ background: "#555" }} />
   </div>
 );
 
-
-
 const CustomButtonNode = ({ data }) => (
-  <div
-    style={{
-      position: 'relative',
-      display: 'inline-block',
-    }}
-  >
+  <div style={{ position: "relative", display: "inline-block" }}>
     <button
       style={{
-        padding: '10px 20px',
-        background: '#28A745',
-        border: 'none',
-        borderRadius: '5px',
-        color: 'white',
-        fontWeight: 'bold',
+        padding: "10px 20px",
+        background: "#28A745",
+        border: "none",
+        borderRadius: "5px",
+        color: "white",
+        fontWeight: "bold",
       }}
     >
       {data.label}
     </button>
-    {/* نقاط الاتصال */}
-    <Handle type="source" position="bottom" style={{ background: '#555' }} />
-    <Handle type="target" position="top" style={{ background: '#555' }} />
+    <Handle type="source" position="bottom" style={{ background: "#555" }} />
+    <Handle type="target" position="top" style={{ background: "#555" }} />
   </div>
 );
-
 
 const nodeTypes = {
   circle: CircleNode,
@@ -121,19 +82,74 @@ const nodeTypes = {
   button: CustomButtonNode,
 };
 
-
 export default function Simulator() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const [isEditable, setIsEditable] = useState(true); 
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [expandedCategories, setExpandedCategories] = useState({});
   const { toast } = useToast();
+  const { user } = useSelector((state) => state.auth);
+  const { id: projectId } = useParams();
+  const { state } = useLocation();
+  const navigate = useNavigate();
+  const isCreateMode = projectId === "create";
+
+  const [projectName, setProjectName] = useState("");
+  const [projectDescription, setProjectDescription] = useState("");
+  const [option, setOption] = useState("public");
+
+  useEffect(() => {
+  const loadProject = async () => {
+    if (isCreateMode || !user?.username) return;
+
+    // Load from location.state if available
+    if (state?.projectJson) {
+      const json = state.projectJson;
+      setNodes(json.nodes || []);
+      setEdges(json.edges || []);
+      setProjectName(json.project_name || "");
+      setProjectDescription(json.project_description || "");
+      toast({ title: `Loaded project: ${json.project_name}` });
+    } else {
+      // Fetch from backend by projectId
+      try {
+        const token = localStorage.getItem("accessToken");
+        const res = await fetch(`http://127.0.0.1:8000/user-projects/my-projects/${user.username}/`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const projects = await res.json();
+        const selected = projects.find(p => String(p.project_id) === String(projectId));
+
+        if (!selected) {
+          toast({ title: "Project not found", variant: "destructive" });
+          return;
+        }
+
+        const fileUrl = `http://127.0.0.1:8000${selected.file}`.replace("c//", "/media/");
+        const fileRes = await fetch(fileUrl);
+        const json = await fileRes.json();
+
+        setNodes(json.nodes || []);
+        setEdges(json.edges || []);
+        setProjectName(json.project_name || "");
+        setProjectDescription(json.project_description || "");
+        toast({ title: `Loaded project: ${json.project_name}` });
+
+      } catch (err) {
+        console.error("❌ Failed to fetch fallback:", err);
+        toast({ title: "Load failed", variant: "destructive" });
+      }
+    }
+  };
+
+  loadProject();
+}, [projectId, user, state]);
+
 
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
-
 
   const toggleCategory = (categoryId) => {
     setExpandedCategories((prev) => ({
@@ -142,132 +158,209 @@ export default function Simulator() {
     }));
   };
 
-  
-  const resetSimulator = () => {
-    setNodes(initialNodes);
-    setEdges(initialEdges);
-    toast({ title: "State reset successfully!", variant: "destructive" });
-  };
+  const handleSaveProject = async () => {
+    if (!projectName || !projectDescription || !option) {
+      toast({ title: "Please fill in all fields", variant: "destructive" });
+      return;
+    }
 
-  const loadSimulator = () => {
-    const savedNodes = JSON.parse(localStorage.getItem("nodes"));
-    const savedEdges = JSON.parse(localStorage.getItem("edges"));
+    const project_json = {
+      project_name: projectName,
+      project_description: projectDescription,
+      export_date: new Date().toISOString(),
+      nodes,
+      edges,
+    };
+    console.log(" project as json: ",project_json);
+    
 
-    if (savedNodes && savedEdges) {
-      setNodes(savedNodes);
-      setEdges(savedEdges);
-      toast({ title: "State loaded successfully!" });
-    } else {
-      toast({ title: "No saved state found!" });
+    const file = new File(
+      [JSON.stringify(project_json, null, 2)],
+      `${projectName}.json`,
+      { type: "application/json" }
+    );
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("option", option);
+    formData.append("description", projectDescription);
+
+    const token = localStorage.getItem("accessToken");
+
+    try {
+      const res = await fetch(
+        "http://127.0.0.1:8000/user-projects/upload-project/",
+        {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData,
+        }
+      );
+
+      const result = await res.json();
+      if (res.ok) {
+        toast({ title: "✅ Project uploaded successfully!" });
+        navigate("/user/projects");
+      } else {
+        toast({
+          title: "❌ Upload failed",
+          description: JSON.stringify(result),
+          variant: "destructive",
+        });
+      }
+    } catch (err) {
+      toast({ title: "❌ Upload failed", description: err.message });
     }
   };
 
-  const saveSimulator = () => {
-    localStorage.setItem("nodes", JSON.stringify(nodes));
-    localStorage.setItem("edges", JSON.stringify(edges));
-    toast({ title: "State saved!" });
-  };
-
-  const toggleEditing = () => setIsEditable((prev) => !prev);
-
   return (
-    <div className="w-[90vw] mt-10 mx-auto flex justify-between gap-4 flex-col-reverse md:flex-row ">
-
-      <div className="flex flex-col gap-4 p-4 border items-center text-center border-gray-300 rounded-md w-[8vw]">
-        <h3 className="text-lg font-bold">Categories</h3>
-        <hr className="w-full border-gray-300" />
-        {categories.map((category) => (
-          <div key={category.id} className="mb-4 p-2 bg-gray-50 hover:bg-gray-100 shadow-md">
-            <h4
-              className="text-md font-semibold mb-2 cursor-pointer"
-              onClick={() => toggleCategory(category.id)}
+    <div className="w-[90vw] mt-10 mx-auto flex flex-col gap-6">
+      {isCreateMode && (
+        <div className="w-full max-w-4xl mx-auto mb-2 p-4 bg-white border rounded-lg shadow flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col gap-2 w-full md:w-1/3">
+            <label
+              htmlFor="projectName"
+              className="text-sm font-medium text-gray-700"
             >
-              {category.label}
-            </h4>
-            {expandedCategories[category.id] && (
-              <div className="flex flex-col items-center gap-2">
-                {category.items.map((item) => (
-                  <div
-                    key={item.id}
-                    className="bg-gray-50 text-gray-800 p-2 rounded-md shadow-md cursor-pointer hover:bg-gray-200"
-                    draggable
-                    onDragStart={(e) =>
-                      e.dataTransfer.setData(
-                        "application/reactflow",
-                        JSON.stringify(item)
-                      )
-                    }
-                  >
-                    {item.label}
-                  </div>
-                ))}
-              </div>
-            )}
+              Project Name
+            </label>
+            <input
+              id="projectName"
+              type="text"
+              value={projectName}
+              onChange={(e) => setProjectName(e.target.value)}
+              className="border p-2 rounded w-full"
+              placeholder="Enter project name"
+            />
           </div>
-        ))}
-      </div>
+          <div className="flex flex-col gap-2 w-full md:w-1/3">
+            <label
+              htmlFor="projectDesc"
+              className="text-sm font-medium text-gray-700"
+            >
+              Description
+            </label>
+            <input
+              id="projectDesc"
+              type="text"
+              value={projectDescription}
+              onChange={(e) => setProjectDescription(e.target.value)}
+              className="border p-2 rounded w-full"
+              placeholder="Short description"
+            />
+          </div>
+          <div className="flex flex-col gap-2 w-full md:w-1/6">
+            <label
+              htmlFor="visibility"
+              className="text-sm font-medium text-gray-700"
+            >
+              Visibility
+            </label>
+            <select
+              id="visibility"
+              value={option}
+              onChange={(e) => setOption(e.target.value)}
+              className="border p-2 rounded w-full"
+            >
+              <option value="public">Public</option>
+              <option value="private">Private</option>
+            </select>
+          </div>
+          <button
+            onClick={handleSaveProject}
+            className="h-fit px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            💾 Save
+          </button>
+        </div>
+      )}
 
-      <div className="border border-gray-300 md:w-[70vw] h-[70vh] rounded-lg"
-        onDrop={(e) => {
-          e.preventDefault();
-          const category = JSON.parse(
-            e.dataTransfer.getData("application/reactflow")
-          );
-          const newNode = {
-            id: `${category.id}-${Date.now()}`,
-            position: { x: e.clientX - 200, y: e.clientY - 100 },
-            data: { label: category.label },
-            type: category.type,
-          };
-          setNodes((nds) => [...nds, newNode]);
-        }}
-        onDragOver={(e) => e.preventDefault()}
-      >
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={isEditable ? onNodesChange : null}
-          onEdgesChange={isEditable ? onEdgesChange : null}
-          onConnect={isEditable ? onConnect : null}
-          nodeTypes={nodeTypes} 
-        >
-          <Controls />
-          <MiniMap />
-          <Background variant="dots" gap={12} size={1} />
-        </ReactFlow>
-      </div>
+      <div className="flex flex-row gap-4">
+        <div className="flex flex-col gap-4 p-4 border items-center text-center border-gray-300 rounded-md w-[8vw]">
+          <h3 className="text-lg font-bold">Categories</h3>
+          <hr className="w-full border-gray-300" />
+          {[
+            {
+              id: "shapes",
+              label: "Shapes",
+              items: [
+                { id: "rect", label: "Rectangle", type: "rectangle" },
+                { id: "circle", label: "Circle", type: "circle" },
+              ],
+            },
+            {
+              id: "inputs",
+              label: "Inputs",
+              items: [
+                { id: "button", label: "Button", type: "button" },
+                { id: "slider", label: "Slider", type: "slider" },
+              ],
+            },
+          ].map((category) => (
+            <div
+              key={category.id}
+              className="mb-4 p-2 bg-gray-50 hover:bg-gray-100 shadow-md"
+            >
+              <h4
+                className="text-md font-semibold mb-2 cursor-pointer"
+                onClick={() => toggleCategory(category.id)}
+              >
+                {category.label}
+              </h4>
+              {expandedCategories[category.id] && (
+                <div className="flex flex-col items-center gap-2">
+                  {category.items.map((item) => (
+                    <div
+                      key={item.id}
+                      className="bg-gray-50 text-gray-800 p-2 rounded-md shadow-md cursor-pointer hover:bg-gray-200"
+                      draggable
+                      onDragStart={(e) =>
+                        e.dataTransfer.setData(
+                          "application/reactflow",
+                          JSON.stringify(item)
+                        )
+                      }
+                    >
+                      {item.label}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
 
-      <div className="flex flex-row h-[30vh] mx-auto md:flex-col justify-around items-center z-10 gap-2 md:gap-4">
-        <button
-          className={`${
-            isEditable
-              ? "bg-blue-500 hover:bg-blue-600"
-              : "bg-gray-500 cursor-not-allowed"
-          } text-white px-6 py-3 rounded-xl text-lg shadow-md transition-all duration-300`}
-          onClick={toggleEditing}
+        <div
+          className="border border-gray-300 md:w-[70vw] h-[70vh] rounded-lg"
+          onDrop={(e) => {
+            e.preventDefault();
+            const category = JSON.parse(
+              e.dataTransfer.getData("application/reactflow")
+            );
+            const newNode = {
+              id: `${category.id}-${Date.now()}`,
+              position: { x: e.clientX - 200, y: e.clientY - 100 },
+              data: { label: category.label },
+              type: category.type,
+            };
+            setNodes((nds) => [...nds, newNode]);
+          }}
+          onDragOver={(e) => e.preventDefault()}
         >
-          {isEditable ? "Disable Editing" : "Enable Editing"}
-        </button>
-        <button
-          className="bg-red-500 text-white px-6 py-3 rounded-xl text-lg shadow-md hover:bg-red-600 transition-all duration-300"
-          onClick={resetSimulator}
-        >
-          Reset
-        </button>
-        <button
-          className="bg-green-500 text-white px-6 py-3 rounded-xl text-lg shadow-md hover:bg-green-600 transition-all duration-300"
-          onClick={saveSimulator}
-        >
-          Save
-        </button>
-        <button
-          className="bg-yellow-500 text-white px-6 py-3 rounded-xl text-lg shadow-md hover:bg-yellow-600 transition-all duration-300"
-          onClick={loadSimulator}
-        >
-          Load
-        </button>
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            nodeTypes={nodeTypes}
+          >
+            <Controls />
+            <MiniMap />
+            <Background variant="dots" gap={12} size={1} />
+          </ReactFlow>
+        </div>
       </div>
-      
     </div>
   );
 }

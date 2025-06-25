@@ -146,19 +146,33 @@ const HeroSection = () => {
         {/* Buttons Section */}
         <div className="flex flex-col sm:flex-row items-center justify-end sm:justify-end lg:justify-end gap-4 mt-8 ml-auto sm:ml-auto lg:ml-auto">
           <button
-            className="bg-black text-white px-6 py-3 rounded-lg flex items-center gap-2 w-full sm:w-auto justify-center hover:bg-gray-800 transition-colors duration-300"
+            className="bg-black text-white px-5 py-3 rounded-2xl flex items-center gap-1 w-full sm:w-auto justify-center"
             aria-label="Download from App Store"
           >
-            <img src={white} alt="App Store Icon" className="w-5 h-5" />
-            <span>Download in the App Store</span>
+            <img src={white} alt="App Store Icon" className="w-9 h-9" />
+            <span>Download in App Store</span>
           </button>
           <button
-            className="bg-black text-white px-6 py-3 rounded-lg flex items-center gap-2 w-full sm:w-auto justify-center hover:bg-gray-800 transition-colors duration-300"
+            className="bg-black text-white px-5 py-3 rounded-2xl flex items-center gap-1 w-full sm:w-auto justify-center"
+            aria-label="Download from App Store"
+          >
+            <img src={black} alt="Microsoft Icon" className="w-9 h-9" />
+            <span>Download in Microsoft</span>
+          </button>
+
+          {/* <button
+            className="bg-black text-white px-6 py-3 rounded-xl flex sm:w-auto "
             aria-label="Download from Microsoft Store"
           >
-            <img src={black} alt="Microsoft Store Icon" className="w-5 h-5" />
-            <span>Download in the Microsoft</span>
-          </button>
+            <div>
+              <h2 className=" px-2 text-start" >Download in </h2>
+              <div className="flex gap-1 items-center">
+                <img src={black} alt="Microsoft Store Icon" className="w-9 h-9" />
+                <h1 className=" text-xl">Microsoft</h1>
+              </div>
+              </div>
+          </button> */}
+
           <button
             onClick={openModal}
             className="text-blue-500 text-base md:text-lg font-medium hover:text-blue-600 transition-colors duration-300 flex items-center"

@@ -25,9 +25,9 @@ const MenuItemsVariables = [
     path: "/user/home",
   },
   {
-    id: "simulator",
-    label: "Simulator",
-    path: "/user/simulator",
+    id: "projects",
+    label: "Projects",
+    path: "/user/projects",
   },
   {
     id: "data",
@@ -162,9 +162,10 @@ export const HeaderRightContent = ({ open, user }) => {
     >
       {user ? (
         <>
-          <h3 className=" cursor-pointer" onClick={() => dispatch(logout())}>
+          <h3 className=" cursor-pointer border px-4 py-2 rounded-xl border-blue-400 hover:text-white hover:bg-blue-500 duration-300" onClick={() => dispatch(logout())}>
             LogOut
           </h3>
+          <img src={`http://127.0.0.1:8000/${user.image}`} alt={user.image} className=" w-12 h-12" />
           <Link
             to="/user/settings/profile"
             className="px-3 py-2 bg-blue-600 text-white cursor-pointer rounded-xl shadow-xl"
@@ -178,12 +179,12 @@ export const HeaderRightContent = ({ open, user }) => {
         <>
           <Link
             to="/auth/login"
-            className="px-3 py-2 bg-blue-600 text-white cursor-pointer rounded-xl shadow-xl"
+            className="cursor-pointer border px-4 py-2 rounded-xl border-blue-400 hover:text-white hover:bg-blue-500 duration-300"
           >
-            Login
+            SignIn
           </Link>
           <h3 className=" cursor-pointer bg-blue-600 text-white px-3 py-2 rounded-xl ">
-            DownLoad
+            SignUp
           </h3>
         </>
       )}
@@ -194,6 +195,8 @@ export const HeaderRightContent = ({ open, user }) => {
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { isAuthenticated, user } = useSelector((state) => state.auth);
+  console.log("User :",user);
+  
 
   return (
     <header className=" sticky  w-full top-0 z-40 border-b bg-white">

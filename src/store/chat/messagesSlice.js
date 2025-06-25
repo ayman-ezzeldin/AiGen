@@ -10,6 +10,7 @@ export const fetchMessages = createAsyncThunk(
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        withCredentials: true
       });
       return res.data;
     } catch (err) {
