@@ -92,59 +92,56 @@ export default function Simulator() {
   const { state } = useLocation();
   const navigate = useNavigate();
   const isCreateMode = projectId === "create";
+  const isEditMode = !isCreateMode;
 
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
   const [option, setOption] = useState("public");
 
   useEffect(() => {
-  const loadProject = async () => {
-    if (isCreateMode || !user?.username) return;
+    const loadProject = async () => {
+      if (isCreateMode || !user?.username) return;
 
-    // Load from location.state if available
-    if (state?.projectJson) {
-      const json = state.projectJson;
-      setNodes(json.nodes || []);
-      setEdges(json.edges || []);
-      setProjectName(json.project_name || "");
-      setProjectDescription(json.project_description || "");
-      toast({ title: `Loaded project: ${json.project_name}` });
-    } else {
-      // Fetch from backend by projectId
-      try {
-        const token = localStorage.getItem("accessToken");
-        const res = await fetch(`http://127.0.0.1:8000/user-projects/my-projects/${user.username}/`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        const projects = await res.json();
-        const selected = projects.find(p => String(p.project_id) === String(projectId));
-
-        if (!selected) {
-          toast({ title: "Project not found", variant: "destructive" });
-          return;
-        }
-
-        const fileUrl = `http://127.0.0.1:8000${selected.file}`.replace("c//", "/media/");
-        const fileRes = await fetch(fileUrl);
-        const json = await fileRes.json();
-
+      if (state?.projectJson) {
+        const json = state.projectJson;
         setNodes(json.nodes || []);
         setEdges(json.edges || []);
         setProjectName(json.project_name || "");
         setProjectDescription(json.project_description || "");
         toast({ title: `Loaded project: ${json.project_name}` });
+      } else {
+        try {
+          const token = localStorage.getItem("accessToken");
+          const res = await fetch(`http://127.0.0.1:8000/user-projects/my-projects/${user.username}/`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
 
-      } catch (err) {
-        console.error("❌ Failed to fetch fallback:", err);
-        toast({ title: "Load failed", variant: "destructive" });
+          const projects = await res.json();
+          const selected = projects.find(p => String(p.project_id) === String(projectId));
+
+          if (!selected) {
+            toast({ title: "Project not found", variant: "destructive" });
+            return;
+          }
+
+          const fileUrl = `http://127.0.0.1:8000${selected.file}`.replace("c//", "/media/");
+          const fileRes = await fetch(fileUrl);
+          const json = await fileRes.json();
+
+          setNodes(json.nodes || []);
+          setEdges(json.edges || []);
+          setProjectName(json.project_name || "");
+          setProjectDescription(json.project_description || "");
+          toast({ title: `Loaded project: ${json.project_name}` });
+        } catch (err) {
+          console.error("❌ Failed to fetch fallback:", err);
+          toast({ title: "Load failed", variant: "destructive" });
+        }
       }
-    }
-  };
+    };
 
-  loadProject();
-}, [projectId, user, state]);
-
+    loadProject();
+  }, [projectId, user, state]);
 
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
@@ -171,8 +168,6 @@ export default function Simulator() {
       nodes,
       edges,
     };
-    console.log(" project as json: ",project_json);
-    
 
     const file = new File(
       [JSON.stringify(project_json, null, 2)],
@@ -188,123 +183,104 @@ export default function Simulator() {
     const token = localStorage.getItem("accessToken");
 
     try {
-      const res = await fetch(
-        "http://127.0.0.1:8000/user-projects/upload-project/",
-        {
-          method: "POST",
-          headers: { Authorization: `Bearer ${token}` },
-          body: formData,
-        }
-      );
+      const url = isEditMode
+        ? `http://127.0.0.1:8000/user-projects/update-project/${projectId}/`
+        : "http://127.0.0.1:8000/user-projects/upload-project/";
+
+      const res = await fetch(url, {
+        method: isEditMode ? "PUT" : "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
 
       const result = await res.json();
       if (res.ok) {
-        toast({ title: "✅ Project uploaded successfully!" });
+        toast({ title: isEditMode ? "✅ Project updated!" : "✅ Project uploaded!" });
         navigate("/user/projects");
       } else {
         toast({
-          title: "❌ Upload failed",
+          title: "❌ Save failed",
           description: JSON.stringify(result),
           variant: "destructive",
         });
       }
     } catch (err) {
-      toast({ title: "❌ Upload failed", description: err.message });
+      toast({ title: "❌ Save failed", description: err.message });
     }
   };
 
   return (
     <div className="w-[90vw] mt-10 mx-auto flex flex-col gap-6">
-      {isCreateMode && (
-        <div className="w-full max-w-4xl mx-auto mb-2 p-4 bg-white border rounded-lg shadow flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex flex-col gap-2 w-full md:w-1/3">
-            <label
-              htmlFor="projectName"
-              className="text-sm font-medium text-gray-700"
-            >
-              Project Name
-            </label>
-            <input
-              id="projectName"
-              type="text"
-              value={projectName}
-              onChange={(e) => setProjectName(e.target.value)}
-              className="border p-2 rounded w-full"
-              placeholder="Enter project name"
-            />
-          </div>
-          <div className="flex flex-col gap-2 w-full md:w-1/3">
-            <label
-              htmlFor="projectDesc"
-              className="text-sm font-medium text-gray-700"
-            >
-              Description
-            </label>
-            <input
-              id="projectDesc"
-              type="text"
-              value={projectDescription}
-              onChange={(e) => setProjectDescription(e.target.value)}
-              className="border p-2 rounded w-full"
-              placeholder="Short description"
-            />
-          </div>
-          <div className="flex flex-col gap-2 w-full md:w-1/6">
-            <label
-              htmlFor="visibility"
-              className="text-sm font-medium text-gray-700"
-            >
-              Visibility
-            </label>
-            <select
-              id="visibility"
-              value={option}
-              onChange={(e) => setOption(e.target.value)}
-              className="border p-2 rounded w-full"
-            >
-              <option value="public">Public</option>
-              <option value="private">Private</option>
-            </select>
-          </div>
-          <button
-            onClick={handleSaveProject}
-            className="h-fit px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            💾 Save
-          </button>
+      <div className="w-full max-w-4xl mx-auto mb-2 p-4 bg-white border rounded-lg shadow flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="flex flex-col gap-2 w-full md:w-1/3">
+          <label htmlFor="projectName" className="text-sm font-medium text-gray-700">
+            Project Name
+          </label>
+          <input
+            id="projectName"
+            type="text"
+            value={projectName}
+            onChange={(e) => setProjectName(e.target.value)}
+            className="border p-2 rounded w-full"
+            placeholder="Enter project name"
+          />
         </div>
-      )}
+        <div className="flex flex-col gap-2 w-full md:w-1/3">
+          <label htmlFor="projectDesc" className="text-sm font-medium text-gray-700">
+            Description
+          </label>
+          <input
+            id="projectDesc"
+            type="text"
+            value={projectDescription}
+            onChange={(e) => setProjectDescription(e.target.value)}
+            className="border p-2 rounded w-full"
+            placeholder="Short description"
+          />
+        </div>
+        <div className="flex flex-col gap-2 w-full md:w-1/6">
+          <label htmlFor="visibility" className="text-sm font-medium text-gray-700">
+            Visibility
+          </label>
+          <select
+            id="visibility"
+            value={option}
+            onChange={(e) => setOption(e.target.value)}
+            className="border p-2 rounded w-full"
+          >
+            <option value="public">Public</option>
+            <option value="private">Private</option>
+          </select>
+        </div>
+        <button
+          onClick={handleSaveProject}
+          className="h-fit px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          {isEditMode ? "✏️ Update" : "💾 Save"}
+        </button>
+      </div>
 
       <div className="flex flex-row gap-4">
         <div className="flex flex-col gap-4 p-4 border items-center text-center border-gray-300 rounded-md w-[8vw]">
           <h3 className="text-lg font-bold">Categories</h3>
           <hr className="w-full border-gray-300" />
-          {[
-            {
-              id: "shapes",
-              label: "Shapes",
-              items: [
-                { id: "rect", label: "Rectangle", type: "rectangle" },
-                { id: "circle", label: "Circle", type: "circle" },
-              ],
-            },
-            {
-              id: "inputs",
-              label: "Inputs",
-              items: [
-                { id: "button", label: "Button", type: "button" },
-                { id: "slider", label: "Slider", type: "slider" },
-              ],
-            },
-          ].map((category) => (
-            <div
-              key={category.id}
-              className="mb-4 p-2 bg-gray-50 hover:bg-gray-100 shadow-md"
-            >
-              <h4
-                className="text-md font-semibold mb-2 cursor-pointer"
-                onClick={() => toggleCategory(category.id)}
-              >
+          {[{
+            id: "shapes",
+            label: "Shapes",
+            items: [
+              { id: "rect", label: "Rectangle", type: "rectangle" },
+              { id: "circle", label: "Circle", type: "circle" },
+            ],
+          }, {
+            id: "inputs",
+            label: "Inputs",
+            items: [
+              { id: "button", label: "Button", type: "button" },
+              { id: "slider", label: "Slider", type: "slider" },
+            ],
+          }].map((category) => (
+            <div key={category.id} className="mb-4 p-2 bg-gray-50 hover:bg-gray-100 shadow-md">
+              <h4 className="text-md font-semibold mb-2 cursor-pointer" onClick={() => toggleCategory(category.id)}>
                 {category.label}
               </h4>
               {expandedCategories[category.id] && (
@@ -315,10 +291,7 @@ export default function Simulator() {
                       className="bg-gray-50 text-gray-800 p-2 rounded-md shadow-md cursor-pointer hover:bg-gray-200"
                       draggable
                       onDragStart={(e) =>
-                        e.dataTransfer.setData(
-                          "application/reactflow",
-                          JSON.stringify(item)
-                        )
+                        e.dataTransfer.setData("application/reactflow", JSON.stringify(item))
                       }
                     >
                       {item.label}

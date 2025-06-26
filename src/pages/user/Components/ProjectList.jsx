@@ -38,7 +38,7 @@ const MyProjects = () => {
             const fileJson = await fileRes.json();
             return {
               ...proj,
-              ...fileJson, // Merge fields like nodes, edges, etc.
+              ...fileJson, // Merge project_name, nodes, etc.
             };
           } catch (err) {
             console.error("❌ Error reading file:", proj.file, err);
@@ -57,13 +57,13 @@ const MyProjects = () => {
     }
   };
 
-  const handleDelete = async (projectId) => {
+  const handleDelete = async (backendId) => {
     if (!window.confirm("Are you sure you want to delete this project?")) return;
 
     try {
       const token = localStorage.getItem("accessToken");
       const res = await fetch(
-        `http://127.0.0.1:8000/user-projects/delete-project/${projectId}/`,
+        `http://127.0.0.1:8000/user-projects/delete-project/${backendId}/`,
         {
           method: "DELETE",
           headers: {
@@ -73,7 +73,7 @@ const MyProjects = () => {
       );
 
       if (res.ok) {
-        setProjects((prev) => prev.filter((p) => p.project_id !== projectId));
+        setProjects((prev) => prev.filter((p) => p.id !== backendId));
       } else {
         alert("Failed to delete project");
       }
@@ -113,14 +113,14 @@ const MyProjects = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {projects.map((project) => {
-            const id = project.project_id || project.id;
-            const name = project.project_name || project.name || "Unnamed Project";
-            const desc = project.project_description || project.description || "No description";
+            const backendId = project.id; // ✅ real DB ID
+            const name = project.project_name || "Unnamed Project";
+            const desc = project.project_description || "No description";
             const visibility = project.option || "unknown";
 
             return (
               <div
-                key={id}
+                key={backendId}
                 className="p-4 rounded-md border shadow-sm bg-white hover:shadow-md transition-all duration-200"
               >
                 <h3 className="text-xl font-semibold mb-1">{name}</h3>
@@ -132,7 +132,7 @@ const MyProjects = () => {
                 <div className="mt-4 flex flex-wrap gap-2">
                   <button
                     onClick={() =>
-                      navigate(`/user/projects/${id}`, {
+                      navigate(`/user/projects/${backendId}`, {
                         state: { projectJson: project },
                       })
                     }
@@ -140,16 +140,19 @@ const MyProjects = () => {
                   >
                     Load in Simulator
                   </button>
-
                   <button
-                    onClick={() => navigate(`/user/projects/edit/${id}`)}
+                    onClick={() => navigate(`/user/projects/edit/${backendId}`, {
+                        state: { projectJson: project },
+                      })
+                    }
+                    
                     className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
                   >
                     Edit
                   </button>
 
                   <button
-                    onClick={() => handleDelete(id)}
+                    onClick={() => handleDelete(backendId)}
                     className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
                   >
                     Delete

@@ -86,6 +86,8 @@ function App() {
           </Route>
           <Route path="projects" element={<ProjectList />} />
           <Route path="projects/:id" element={<Simulator />} />
+          <Route path="projects/edit/:id" element={<Simulator />} />
+
         </Route>
 
         <Route path="*" element={<NotFound />} />
