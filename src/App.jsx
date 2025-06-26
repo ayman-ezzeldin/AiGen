@@ -28,6 +28,7 @@ import Appearance from "./profile/features/Appearance";
 import Notifications from "./profile/features/Notifications";
 import Settings from "./profile/features/Settings";
 import ProjectList from "./pages/user/Components/ProjectList";
+import CreateProject from "./pages/user/Components/CreateProject";
 
 function App() {
   const { isAuthenticated, isLoading } = useSelector(
@@ -73,7 +74,6 @@ function App() {
           <Route path="models" element={<ModelPage />} />
           <Route path="learn" element={<LearnPage />} />
           <Route path="chatbot" element={<ChatBotpage />} />
-          {/* <Route path="simulator" element={<Simulator />} /> */}
           <Route path="community" element={<Community />} />
           <Route path="community/:id" element={<CommunityGroup />} />
           <Route path="blog" element={<Blog />} />
@@ -85,6 +85,7 @@ function App() {
             <Route path="notifications" element={<Notifications />} />
           </Route>
           <Route path="projects" element={<ProjectList />} />
+          <Route path="/user/projects/create" element={<CreateProject />} />
           <Route path="projects/:id" element={<Simulator />} />
           <Route path="projects/edit/:id" element={<Simulator />} />
 
