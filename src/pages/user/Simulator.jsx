@@ -13,20 +13,10 @@ import "@xyflow/react/dist/style.css";
 import { useToast } from "../../hooks/use-toast";
 import { useParams, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { Loader2 } from "lucide-react";
 
 const CustomNode = ({ data }) => (
-  <div
-    style={{
-      background: "#007acc",
-      borderRadius: 6,
-      padding: 10,
-      color: "white",
-      fontWeight: "bold",
-      position: "relative",
-      maxWidth: 160,
-      textAlign: "center",
-    }}
-  >
+  <div className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold shadow-md max-w-[180px] text-center relative">
     {data.label}
     <Handle type="source" position="right" style={{ background: "#fff" }} />
     <Handle type="target" position="left" style={{ background: "#fff" }} />
@@ -80,7 +70,6 @@ export default function Simulator() {
     let projectJson = state?.projectJson;
 
     if (!projectJson) {
-      // 🧠 fallback: fetch manually from backend
       const token = localStorage.getItem("accessToken");
       const res = await fetch(
         `http://127.0.0.1:8000/user-projects/my-projects/${user.username}/`,
@@ -104,7 +93,7 @@ export default function Simulator() {
     const { newNodes, newEdges } = convertToReactFlow(projectJson);
     setNodes(newNodes);
     setEdges(newEdges);
-    toast({ title: `✅ Project Loaded: ${projectJson.project_name}` });
+    toast({ title: `✅ Loaded: ${projectJson.project_name}` });
   };
 
   useEffect(() => {
@@ -118,11 +107,24 @@ export default function Simulator() {
     [setEdges]
   );
 
-  if (loading) return <div className="p-4">Loading...</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-[70vh]">
+        <Loader2 className="animate-spin w-6 h-6 text-blue-600" />
+        <span className="ml-2 text-zinc-700 dark:text-white">Loading...</span>
+      </div>
+    );
+  }
 
   return (
-    <div className="w-[90vw] mt-10 mx-auto flex flex-col gap-6">
-      <div className="border border-gray-300 md:w-[70vw] h-[70vh] rounded-lg">
+    <div className="max-w-7xl mx-auto mt-10 mb-20 px-4 space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-zinc-800 dark:text-white">
+          🧠 Project Simulator
+        </h2>
+      </div>
+
+      <div className="h-[75vh] w-full border border-zinc-300 dark:border-zinc-600 rounded-xl shadow-md overflow-hidden bg-white dark:bg-zinc-900">
         <ReactFlow
           nodes={nodes}
           edges={edges}

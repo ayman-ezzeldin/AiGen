@@ -1,21 +1,21 @@
-// src/pages/user/CreateProject.jsx
 import { useState } from "react";
 import { useToast } from "../../../hooks/use-toast";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
+import { Upload } from "lucide-react";
 
 export default function CreateProject() {
   const { toast } = useToast();
-  const { user } = useSelector((state) => state.auth);
+  // const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const [projectFile, setProjectFile] = useState(null);
   const [option, setOption] = useState("public");
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
+  const [isDragging, setIsDragging] = useState(false);
 
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
+  const handleFileLoad = (file) => {
     if (!file || file.type !== "application/json") {
       toast({ title: "Only JSON files are allowed", variant: "destructive" });
       return;
@@ -25,7 +25,6 @@ export default function CreateProject() {
     reader.onload = (event) => {
       try {
         const parsed = JSON.parse(event.target.result);
-
         if (!parsed.project_name || !parsed.project_description) {
           toast({
             title: "Invalid JSON file",
@@ -38,7 +37,6 @@ export default function CreateProject() {
         setProjectFile(file);
         setProjectName(parsed.project_name);
         setProjectDescription(parsed.project_description);
-
         toast({ title: `✅ Loaded: ${parsed.project_name}` });
       } catch (error) {
         toast({
@@ -48,8 +46,19 @@ export default function CreateProject() {
         });
       }
     };
-
     reader.readAsText(file);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
+    handleFileLoad(file);
+  };
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    handleFileLoad(file);
   };
 
   const handleUpload = async () => {
@@ -93,40 +102,58 @@ export default function CreateProject() {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto mt-10 p-6 bg-white border rounded shadow space-y-6">
-      <h2 className="text-xl font-bold">Upload Project JSON</h2>
+    <div className="max-w-3xl mx-auto mt-10 p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-2xl shadow-md space-y-6">
+      <h2 className="text-2xl font-bold text-zinc-800 dark:text-white">📦 Create New Project</h2>
 
-      <input
-        type="file"
-        accept=".json"
-        onChange={handleFileUpload}
-        className="block w-full p-2 border rounded"
-      />
+      <label
+        htmlFor="fileUpload"
+        onDrop={handleDrop}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setIsDragging(true);
+        }}
+        onDragLeave={() => setIsDragging(false)}
+        className={`cursor-pointer border-2 border-dashed ${
+          isDragging ? "border-blue-500 bg-blue-50 dark:bg-zinc-800/60" : "border-zinc-300 dark:border-zinc-600"
+        } flex flex-col items-center justify-center p-6 rounded-xl bg-zinc-50 dark:bg-zinc-800 transition-all`}
+      >
+        <Upload className="w-8 h-8 mb-2 text-blue-600" />
+        <p className="font-medium text-zinc-700 dark:text-zinc-200">
+          Click or drop a <code>.json</code> file here
+        </p>
+        <input
+          id="fileUpload"
+          type="file"
+          accept=".json"
+          onChange={handleFileUpload}
+          className="hidden"
+        />
+      </label>
 
       {projectName && (
-        <div className="bg-gray-100 p-4 rounded">
-          <p><strong>Project Name:</strong> {projectName}</p>
-          <p><strong>Description:</strong> {projectDescription}</p>
+        <div className="bg-zinc-100 dark:bg-zinc-800 p-4 rounded-lg border border-zinc-300 dark:border-zinc-600">
+          <p className="text-zinc-800 dark:text-white"><strong>Project Name:</strong> {projectName}</p>
+          <p className="text-zinc-700 dark:text-zinc-300"><strong>Description:</strong> {projectDescription}</p>
         </div>
       )}
 
-      <div className="flex flex-col gap-2">
-        <label className="font-medium text-sm">Visibility</label>
+      <div className="space-y-2">
+        <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Visibility</label>
         <select
           value={option}
           onChange={(e) => setOption(e.target.value)}
-          className="border p-2 rounded"
+          className="w-full p-2 rounded-xl border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-white"
         >
-          <option value="public">Public</option>
-          <option value="private">Private</option>
+          <option value="public" >🌐 Public</option>
+          <option value="private">🔒 Private</option>
         </select>
       </div>
 
       <button
         onClick={handleUpload}
-        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all"
       >
-        🚀 Upload and Create
+        🚀 Upload and Create Project
       </button>
     </div>
   );
