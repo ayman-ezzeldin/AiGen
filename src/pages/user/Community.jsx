@@ -1,74 +1,42 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const groups = [
-  {
-    id: 1,
-    title: "React Enthusiasts",
-    description: "A group for React developers to share tips and projects.",
-    image: "https://placehold.co/400x600",
-  },
-  {
-    id: 2,
-    title: "Tailwind CSS Wizards",
-    description: "Discuss and explore Tailwind CSS techniques.",
-    image: "https://placehold.co/400x600",
-  },
-  {
-    id: 3,
-    title: "JavaScript Masters",
-    description: "JavaScript discussions and resources for all levels.",
-    image: "https://placehold.co/400x600",
-  },
-  {
-    id: 4,
-    title: "Web Design Pros",
-    description: "A place to showcase and learn web design skills.",
-    image: "https://placehold.co/400x600",
-  },
-  {
-    id: 5,
-    title: "Node.js Developers",
-    description: "Node.js discussions and backend development tips.",
-    image: "https://placehold.co/400x600",
-  },
-  {
-    id: 6,
-    title: "Frontend Gurus",
-    description: "Everything about frontend technologies and tools.",
-    image: "https://placehold.co/400x600",
-  },
-  {
-    id: 7,
-    title: "Fullstack Devs",
-    description: "Connecting fullstack developers worldwide.",
-    image: "https://placehold.co/400x600",
-  },
-  {
-    id: 8,
-    title: "UX/UI Designers",
-    description: "Discussions on UX/UI best practices and trends.",
-    image: "https://placehold.co/400x600",
-  },
-  {
-    id: 9,
-    title: "AI and ML Experts",
-    description: "Talk about AI and machine learning breakthroughs.",
-    image: "https://placehold.co/400x600",
-  },
-]
+const fetchGroups = async () => {
+  try {
+    const token = localStorage.getItem('accessToken');
+    const response = await fetch('http://127.0.0.1:8000/topics/',
+      {
+          headers: { Authorization: `Bearer ${token}` },
+      }
+    ); // Your API
+    const data = await response.json();
+    console.log('Fetched groups:', data);
+    return data;
+  } catch (error) {
+    console.error('Error fetching groups:', error);
+    return [];
+  }
+};
 
 const Community = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  // const [groups, setGroups] = useState(groups);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [groups, setGroups] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const getGroups = async () => {
+      const data = await fetchGroups();
+      setGroups(data);
+    };
+    getGroups();
+  }, []);
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
 
   const filteredGroups = groups.filter((group) =>
-    group.title.toLowerCase().includes(searchQuery.toLowerCase())
+    group.title?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -80,7 +48,7 @@ const Community = () => {
       <div className="w-3/4 mb-6 text-center">
         <input
           type="text"
-          className=" bg-white text-gray-800 font-semibold px-4 py-2 rounded-lg shadow-md w-3/4 md:w-1/2 transition-all border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200"
+          className="bg-white text-gray-800 font-semibold px-4 py-2 rounded-lg shadow-md w-3/4 md:w-1/2 transition-all border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200"
           placeholder="Search for groups..."
           value={searchQuery}
           onChange={handleSearch}
@@ -92,11 +60,11 @@ const Community = () => {
         {filteredGroups.map((group) => (
           <div
             key={group.id}
-            className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
+            className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
             onClick={() => navigate(`/user/community/${group.id}`)}
           >
             <img
-              src={group.image}
+              src={group.image || 'https://placehold.co/400x600'}
               alt={group.title}
               className="w-full h-48 object-cover"
             />

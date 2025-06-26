@@ -70,6 +70,7 @@ const MenuItemsVariables = [
 
 const MenuItems = ({ open, setOpen, user }) => {
   const [dropdownOpenId, setDropdownOpenId] = useState(null);
+  
 
   const dropdownRef = useRef(null);
 
@@ -158,21 +159,23 @@ export const HeaderRightContent = ({ open, user }) => {
     <div
       className={` ${
         open ? "flex-col mr-6" : "flex-row"
-      } w-full flex gap-4 items-center ml-7 `}
+      } w-full flex gap-3 items-center ml-7 `}
     >
       {user ? (
         <>
           <h3 className=" cursor-pointer border px-4 py-2 rounded-xl border-blue-400 hover:text-white hover:bg-blue-500 duration-300" onClick={() => dispatch(logout())}>
             LogOut
           </h3>
-          <img src={`http://127.0.0.1:8000/${user.image}`} alt={user.image} className=" w-12 h-12" />
           <Link
             to="/user/settings/profile"
-            className="px-3 py-2 bg-blue-600 text-white cursor-pointer rounded-xl shadow-xl"
+            className=" cursor-pointer"
           >
+          <img src={`http://127.0.0.1:8000/media/${user.image}`}
+            alt={user.image}
+            className=" w-12 h-12 rounded-full" />
             {/* {user.full_name.split(" ")[0][0].toUpperCase() +
               user.full_name.split(" ")[1][0].toUpperCase()} */}
-            {user.full_name.split(" ")[0]}
+            {/* {user.full_name.split(" ")[0]} */}
           </Link>
         </>
       ) : (
