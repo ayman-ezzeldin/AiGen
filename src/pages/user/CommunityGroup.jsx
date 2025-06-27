@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import NotFound from "../not-found";
-import { useSelector } from "react-redux";
 
 const CommunityGroup = () => {
   const { id } = useParams();
@@ -9,7 +8,18 @@ const CommunityGroup = () => {
   const [group, setGroup] = useState(null);
   const [posts, setPosts] = useState([]);
   const [newPost, setNewPost] = useState({ title: "", content: "" });
-  const { user } = useSelector((state) => state.auth);
+
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) return;
+
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    // setCurrentUser(payload?.user_id);
+    setCurrentUser(payload?.username);
+    console.log(currentUser);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -269,12 +279,15 @@ const CommunityGroup = () => {
                 </h4>
                 <p className="text-gray-700 mb-4">{post.content}</p>
               </div>
-              <button
-                onClick={() => handlePostDelete(post.id)}
-                className="text-red-600 text-sm hover:underline"
-              >
-                Delete Post
-              </button>
+              
+              {currentUser === post.user && (
+                <button
+                  onClick={() => handlePostDelete(post.id)}
+                  className="text-red-600 text-sm hover:underline"
+                >
+                  Delete Post
+                </button>
+              ) }
             </div>
 
             <div className="flex justify-between items-center text-sm text-gray-500 mb-2">
@@ -337,38 +350,42 @@ const CommunityGroup = () => {
                     <>
                       <span>
                         <strong>
-                          {user?.username || comment.user || "Unknown User"}
+                          {comment.user?.username ||
+                            comment.user ||
+                            "Unknown User"}
                         </strong>
                         : {comment.body}
                       </span>
-                      <div className="flex gap-2 ml-2 text-xs">
-                        <button
-                          onClick={() =>
-                            setPosts((prev) =>
-                              prev.map((p) =>
-                                p.id === post.id
-                                  ? {
-                                      ...p,
-                                      editingCommentId: comment.id,
-                                      editingCommentText: comment.body,
-                                    }
-                                  : p
+                      {currentUser === comment.user && (
+                        <div className="flex gap-2 ml-2 text-xs">
+                          <button
+                            onClick={() =>
+                              setPosts((prev) =>
+                                prev.map((p) =>
+                                  p.id === post.id
+                                    ? {
+                                        ...p,
+                                        editingCommentId: comment.id,
+                                        editingCommentText: comment.body,
+                                      }
+                                    : p
+                                )
                               )
-                            )
-                          }
-                          className="text-yellow-600"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() =>
-                            handleCommentDelete(post.id, comment.id)
-                          }
-                          className="text-red-600"
-                        >
-                          Delete
-                        </button>
-                      </div>
+                            }
+                            className="text-yellow-600"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() =>
+                              handleCommentDelete(post.id, comment.id)
+                            }
+                            className="text-red-600"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      )}
                     </>
                   )}
                 </div>

@@ -173,9 +173,6 @@ export const HeaderRightContent = ({ open, user }) => {
           <img src={`http://127.0.0.1:8000/media/${user.image}`}
             alt={user.image}
             className=" w-12 h-12 rounded-full" />
-            {/* {user.full_name.split(" ")[0][0].toUpperCase() +
-              user.full_name.split(" ")[1][0].toUpperCase()} */}
-            {/* {user.full_name.split(" ")[0]} */}
           </Link>
         </>
       ) : (
@@ -186,9 +183,9 @@ export const HeaderRightContent = ({ open, user }) => {
           >
             SignIn
           </Link>
-          <h3 className=" cursor-pointer bg-blue-600 text-white px-3 py-2 rounded-xl ">
+          <Link to="/auth/register" className=" cursor-pointer bg-blue-600 text-white px-3 py-2 rounded-xl ">
             SignUp
-          </h3>
+          </Link>
         </>
       )}
     </div>
