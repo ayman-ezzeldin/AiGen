@@ -224,208 +224,198 @@ const CommunityGroup = () => {
   if (!group) return <NotFound />;
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-6 px-4">
-      <div className="w-full max-w-3xl bg-white shadow-md rounded-lg p-4 mb-6">
-        <img
-          src={group.image || "https://placehold.co/400x600"}
-          alt={group.title}
-          className="w-full h-64 object-cover rounded-lg mb-4"
-        />
-        <h1 className="text-3xl font-bold mb-2">{group.title}</h1>
-        <p className="text-gray-700">{group.description}</p>
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-200 py-10 px-4">
+  <div className="max-w-4xl mx-auto space-y-8">
+    {/* Group Card */}
+    <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+      {/* <img
+        src={group.image || "https://placehold.co/600x300"}
+        alt={group.title}
+        className="w-full h-64 object-cover"
+      /> */}
+      <div className="p-6">
+        <h1 className="text-3xl font-bold text-gray-800">{group.title}</h1>
+        <p className="text-gray-600 mt-2">{group.description}</p>
         <button
           onClick={() => navigate(-1)}
-          className="mt-4 px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400"
+          className="mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded hover:bg-gray-300"
         >
           ← Back
         </button>
       </div>
+    </div>
 
-      {/* New Post Form */}
-      <div className="w-full max-w-3xl bg-white shadow p-4 mb-6 rounded">
-        <h3 className="text-xl font-semibold mb-2">Create Post</h3>
-        <input
-          type="text"
-          placeholder="Title"
-          value={newPost.title}
-          onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
-          className="w-full border px-3 py-2 mb-2 rounded"
-        />
-        <textarea
-          placeholder="Content"
-          value={newPost.content}
-          onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
-          className="w-full border px-3 py-2 mb-2 rounded"
-        />
-        <button
-          onClick={handleNewPostSubmit}
-          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-        >
-          Post
-        </button>
-      </div>
+    {/* Create Post */}
+    <div className="bg-white rounded-xl shadow-md p-6">
+      <h2 className="text-xl font-semibold text-gray-800 mb-4">Create New Post</h2>
+      <input
+        type="text"
+        placeholder="Post title..."
+        value={newPost.title}
+        onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
+        className="w-full px-4 py-2 mb-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400"
+      />
+      <textarea
+        placeholder="Write something amazing..."
+        value={newPost.content}
+        onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
+        className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400"
+      />
+      <button
+        onClick={handleNewPostSubmit}
+        className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-md font-semibold"
+      >
+        Post
+      </button>
+    </div>
 
-      <div className="w-full max-w-3xl space-y-6">
-        <h2 className="text-2xl font-bold mb-2">Posts</h2>
-        {posts.map((post) => (
-          <div key={post.id} className="bg-white shadow-md rounded-lg p-4">
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="text-lg font-bold mb-1">
-                  {post.user?.username || post.user}
-                </h3>
-                <h4 className="text-md font-semibold text-gray-600">
-                  {post.title}
-                </h4>
-                <p className="text-gray-700 mb-4">{post.content}</p>
-              </div>
-              
-              {currentUser === post.user && (
-                <button
-                  onClick={() => handlePostDelete(post.id)}
-                  className="text-red-600 text-sm hover:underline"
-                >
-                  Delete Post
-                </button>
-              ) }
+    {/* Posts */}
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold text-gray-800">Community Posts</h2>
+
+      {posts.map((post) => (
+        <div key={post.id} className="bg-white p-6 rounded-xl shadow relative">
+          <div className="flex justify-between items-start">
+            <div>
+              <h4 className="text-gray-700 font-bold">{post.title}</h4>
+              <p className="text-sm text-gray-500 mb-2">
+                by <span className="font-semibold">{post.user?.username || post.user}</span>
+              </p>
+              <p className="text-gray-700 mb-4">{post.content}</p>
             </div>
 
-            <div className="flex justify-between items-center text-sm text-gray-500 mb-2">
-              <div>
-                <button
-                  onClick={() => handleVote(post.id, "upvote")}
-                  className="mr-2 px-2 py-1 text-green-600 bg-gray-200 rounded hover:bg-gray-300"
-                >
-                  ▲ Upvote
-                </button>
-                <button
-                  onClick={() => handleVote(post.id, "downvote")}
-                  className="px-2 py-1 text-red-600 bg-gray-200 rounded hover:bg-gray-300"
-                >
-                  ▼ Downvote
-                </button>
-                <span className="ml-2">
-                  {post.upvotes || 0} Upvotes | {post.downvotes || 0} Downvotes
-                </span>
-              </div>
-            </div>
+            {currentUser === post.user && (
+              <button
+                onClick={() => handlePostDelete(post.id)}
+                className="text-sm text-red-500 hover:underline absolute top-4 right-4"
+              >
+                Delete
+              </button>
+            )}
+          </div>
 
-            {/* Comments */}
-            <div className="mt-4 bg-gray-50 p-3 rounded">
-              <h4 className="font-semibold mb-2">Comments</h4>
-              {post.comments?.map((comment) => (
-                <div
-                  key={comment.id}
-                  className="text-sm text-gray-700 mb-2 flex justify-between items-start"
-                >
-                  {post.editingCommentId === comment.id ? (
-                    <>
-                      <input
-                        value={post.editingCommentText}
-                        onChange={(e) =>
-                          setPosts((prev) =>
-                            prev.map((p) =>
-                              p.id === post.id
-                                ? { ...p, editingCommentText: e.target.value }
-                                : p
-                            )
+          {/* Votes */}
+          <div className="flex items-center gap-2 text-sm mb-4">
+            <button
+              onClick={() => handleVote(post.id, "upvote")}
+              className="bg-gray-100 hover:bg-green-100 px-3 py-1 rounded text-green-600"
+            >
+              ▲ {post.upvotes || 0}
+            </button>
+            <button
+              onClick={() => handleVote(post.id, "downvote")}
+              className="bg-gray-100 hover:bg-red-100 px-3 py-1 rounded text-red-600"
+            >
+              ▼ {post.downvotes || 0}
+            </button>
+          </div>
+
+          {/* Comments */}
+          <div className="bg-gray-50 border rounded p-4">
+            <h5 className="font-semibold text-gray-700 mb-3">Comments</h5>
+
+            {post.comments?.map((comment) => (
+              <div key={comment.id} className="mb-2 flex justify-between text-sm">
+                {post.editingCommentId === comment.id ? (
+                  <>
+                    <input
+                      value={post.editingCommentText}
+                      onChange={(e) =>
+                        setPosts((prev) =>
+                          prev.map((p) =>
+                            p.id === post.id
+                              ? { ...p, editingCommentText: e.target.value }
+                              : p
                           )
-                        }
-                        className="flex-1 mr-2 border px-2 py-1 rounded"
-                      />
-                      <button
-                        onClick={() =>
-                          handleCommentEdit(
-                            post.id,
-                            comment.id,
-                            post.editingCommentText
-                          )
-                        }
-                        className="text-blue-600 font-medium mr-1"
-                      >
-                        Save
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <span>
-                        <strong>
-                          {comment.user?.username ||
-                            comment.user ||
-                            "Unknown User"}
-                        </strong>
-                        : {comment.body}
-                      </span>
-                      {currentUser === comment.user && (
-                        <div className="flex gap-2 ml-2 text-xs">
-                          <button
-                            onClick={() =>
-                              setPosts((prev) =>
-                                prev.map((p) =>
-                                  p.id === post.id
-                                    ? {
-                                        ...p,
-                                        editingCommentId: comment.id,
-                                        editingCommentText: comment.body,
-                                      }
-                                    : p
-                                )
+                        )
+                      }
+                      className="flex-1 border px-2 py-1 mr-2 rounded"
+                    />
+                    <button
+                      onClick={() =>
+                        handleCommentEdit(post.id, comment.id, post.editingCommentText)
+                      }
+                      className="text-blue-500 font-medium"
+                    >
+                      Save
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <span>
+                      <strong className="text-gray-800">
+                        {comment.user?.username || comment.user || "User"}
+                      </strong>
+                      : {comment.body}
+                    </span>
+                    {currentUser === comment.user && (
+                      <div className="flex gap-2 ml-4">
+                        <button
+                          onClick={() =>
+                            setPosts((prev) =>
+                              prev.map((p) =>
+                                p.id === post.id
+                                  ? {
+                                      ...p,
+                                      editingCommentId: comment.id,
+                                      editingCommentText: comment.body,
+                                    }
+                                  : p
                               )
-                            }
-                            className="text-yellow-600"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            onClick={() =>
-                              handleCommentDelete(post.id, comment.id)
-                            }
-                            className="text-red-600"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      )}
-                    </>
-                  )}
-                </div>
-              ))}
-
-              {/* Comment Input */}
-              <div className="mt-4 flex items-center gap-2">
-                <input
-                  type="text"
-                  value={post.newComment}
-                  onChange={(e) =>
-                    setPosts((prev) =>
-                      prev.map((p) =>
-                        p.id === post.id
-                          ? { ...p, newComment: e.target.value }
-                          : p
-                      )
-                    )
-                  }
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault(); // prevents form submission or newline
-                      handleCommentSubmit(post.id);
-                    }
-                  }}
-                  placeholder="Write a comment..."
-                  className="w-full px-3 py-2 border border-gray-300 rounded"
-                />
-                <button
-                  onClick={() => handleCommentSubmit(post.id)}
-                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                >
-                  Post
-                </button>
+                            )
+                          }
+                          className="text-yellow-600 text-xs"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleCommentDelete(post.id, comment.id)}
+                          className="text-red-600 text-xs"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
+            ))}
+
+            {/* Comment input */}
+            <div className="mt-3 flex gap-2">
+              <input
+                type="text"
+                value={post.newComment}
+                onChange={(e) =>
+                  setPosts((prev) =>
+                    prev.map((p) =>
+                      p.id === post.id ? { ...p, newComment: e.target.value } : p
+                    )
+                  )
+                }
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleCommentSubmit(post.id);
+                  }
+                }}
+                placeholder="Write a comment..."
+                className="flex-1 border px-3 py-2 rounded"
+              />
+              <button
+                onClick={() => handleCommentSubmit(post.id)}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+              >
+                Post
+              </button>
             </div>
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
+  </div>
+</div>
+
   );
 };
 

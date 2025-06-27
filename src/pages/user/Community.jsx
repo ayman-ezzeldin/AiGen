@@ -67,11 +67,11 @@ const Community = () => {
             className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
             onClick={() => navigate(`/user/community/${group.id}`)}
           >
-            <img
+            {/* <img
               src={group.image || 'https://placehold.co/400x600'}
               alt={group.title}
               className="w-full h-48 object-cover"
-            />
+            /> */}
             <div className="p-4">
               <h2 className="text-lg font-bold mb-2">{group.title}</h2>
               <p className="text-gray-700">{group.description}</p>
