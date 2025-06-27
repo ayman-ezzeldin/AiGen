@@ -13,6 +13,8 @@ export default function CreateProject() {
   const [option, setOption] = useState("public");
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
+  const [ProjectModel, setProjectModel] = useState("");
+  const [ProjectDataset, setProjectDataset] = useState("");
   const [isDragging, setIsDragging] = useState(false);
 
   const handleFileLoad = (file) => {
@@ -37,6 +39,8 @@ export default function CreateProject() {
         setProjectFile(file);
         setProjectName(parsed.project_name);
         setProjectDescription(parsed.project_description);
+        setProjectModel(parsed.model);
+        setProjectDataset(parsed.dataset);
         toast({ title: `✅ Loaded: ${parsed.project_name}` });
       } catch (error) {
         toast({
@@ -74,6 +78,8 @@ export default function CreateProject() {
     formData.append("file", projectFile);
     formData.append("option", option);
     formData.append("description", projectDescription);
+    formData.append("model",ProjectModel );
+    formData.append("dataset", ProjectDataset);
 
     const token = localStorage.getItem("accessToken");
 
@@ -134,6 +140,8 @@ export default function CreateProject() {
         <div className="bg-zinc-100 dark:bg-zinc-800 p-4 rounded-lg border border-zinc-300 dark:border-zinc-600">
           <p className="text-zinc-800 dark:text-white"><strong>Project Name:</strong> {projectName}</p>
           <p className="text-zinc-700 dark:text-zinc-300"><strong>Description:</strong> {projectDescription}</p>
+          <p className="text-zinc-700 dark:text-zinc-300"><strong>Model:</strong> {ProjectModel}</p>
+          <p className="text-zinc-700 dark:text-zinc-300"><strong>Dataset:</strong> {ProjectDataset}</p>
         </div>
       )}
 
