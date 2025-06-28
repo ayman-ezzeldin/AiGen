@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Plus, Loader2, Trash2, Play, X } from "lucide-react";
+import API_URL from "../../../utils/api";
 
 const MyProjects = () => {
   const { user } = useSelector((state) => state.auth);
@@ -16,7 +17,7 @@ const MyProjects = () => {
     try {
       const token = localStorage.getItem("accessToken");
       const res = await fetch(
-        `http://127.0.0.1:8000/user-projects/my-projects/${user.username}/`,
+        `${API_URL}user-projects/my-projects/${user.username}/`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -61,7 +62,7 @@ const MyProjects = () => {
     try {
       const token = localStorage.getItem("accessToken");
       const res = await fetch(
-        `http://127.0.0.1:8000/user-projects/delete-project/${projectToDelete.id}/`,
+        `${API_URL}user-projects/delete-project/${projectToDelete.id}/`,
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },

@@ -1,14 +1,15 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import API_URL from "../../utils/api";
 
 // Async thunk to fetch rooms with authorization
 export const fetchRooms = createAsyncThunk(
-  'rooms/fetchRooms',
+  "rooms/fetchRooms",
   async (_, thunkAPI) => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem("accessToken");
 
-      const res = await axios.get('http://127.0.0.1:8000/chat/rooms/', {
+      const res = await axios.get(`${API_URL}chat/rooms/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -18,23 +19,25 @@ export const fetchRooms = createAsyncThunk(
 
       // Validate that data is an array
       if (!Array.isArray(data)) {
-        return thunkAPI.rejectWithValue('Invalid rooms format from server');
+        return thunkAPI.rejectWithValue("Invalid rooms format from server");
       }
 
       return data;
     } catch (err) {
       // Optional: log error to console for debugging
-      console.error('fetchRooms error:', err);
+      console.error("fetchRooms error:", err);
 
       // You can also include the error message for better debugging
-      return thunkAPI.rejectWithValue(err.response?.data?.detail || 'Failed to fetch rooms');
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.detail || "Failed to fetch rooms"
+      );
     }
   }
 );
 
 // Rooms slice
 const roomsSlice = createSlice({
-  name: 'rooms',
+  name: "rooms",
   initialState: {
     rooms: [],
     loading: false,

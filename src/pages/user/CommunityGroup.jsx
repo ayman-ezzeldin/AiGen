@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import NotFound from "../not-found";
 import { useSelector } from "react-redux";
+import API_URL from "../../utils/api";
 
 const CommunityGroup = () => {
   const { id } = useParams();
@@ -30,7 +31,7 @@ const CommunityGroup = () => {
         const token = localStorage.getItem("accessToken");
         const headers = { Authorization: `Bearer ${token}` };
 
-        const groupRes = await fetch(`http://127.0.0.1:8000/topics/${id}`, {
+        const groupRes = await fetch(`${API_URL}topics/${id}`, {
           headers,
         });
 
@@ -45,7 +46,7 @@ const CommunityGroup = () => {
         setGroup(groupData);
 
         const postsRes = await fetch(
-          `http://127.0.0.1:8000/posts/?topic=${id}`,
+          `${API_URL}posts/?topic=${id}`,
           { headers }
         );
         const postsData = await postsRes.json();
@@ -53,7 +54,7 @@ const CommunityGroup = () => {
         const postsWithComments = await Promise.all(
           postsData.map(async (post) => {
             const commentsRes = await fetch(
-              `http://127.0.0.1:8000/posts/${post.id}/comments/`,
+              `${API_URL}posts/${post.id}/comments/`,
               { headers }
             );
             const comments = await commentsRes.json();
@@ -88,12 +89,12 @@ const CommunityGroup = () => {
 
   const handleVote = async (postId, type) => {
     try {
-      await fetch(`http://127.0.0.1:8000/posts/${postId}/${type}/`, {
+      await fetch(`${API_URL}posts/${postId}/${type}/`, {
         method: "POST",
         headers,
       });
 
-      const res = await fetch(`http://127.0.0.1:8000/posts/${postId}/`, {
+      const res = await fetch(`${API_URL}posts/${postId}/`, {
         headers,
       });
       const updatedPost = await res.json();
@@ -123,7 +124,7 @@ const CommunityGroup = () => {
 
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/posts/${postId}/comments/`,
+        `${API_URL}posts/${postId}/comments/`,
         {
           method: "POST",
           headers,
@@ -147,7 +148,7 @@ const CommunityGroup = () => {
   const handleCommentEdit = async (postId, commentId, text) => {
     try {
       await fetch(
-        `http://127.0.0.1:8000/posts/${postId}/comments/${commentId}/`,
+        `${API_URL}posts/${postId}/comments/${commentId}/`,
         {
           method: "PATCH",
           headers,
@@ -176,7 +177,7 @@ const CommunityGroup = () => {
   const handleCommentDelete = async (postId, commentId) => {
     try {
       await fetch(
-        `http://127.0.0.1:8000/posts/${postId}/comments/${commentId}/`,
+        `${API_URL}posts/${postId}/comments/${commentId}/`,
         {
           method: "DELETE",
           headers,
@@ -200,7 +201,7 @@ const CommunityGroup = () => {
 
   const handlePostDelete = async (postId) => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/posts/${postId}/`, {
+      const res = await fetch(`${API_URL}posts/${postId}/`, {
         method: "DELETE",
         headers,
       });
@@ -218,7 +219,7 @@ const CommunityGroup = () => {
     if (!newPost.title.trim() || !newPost.content.trim()) return;
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/posts/`, {
+      const res = await fetch(`${API_URL}posts/`, {
         method: "POST",
         headers,
         body: JSON.stringify({

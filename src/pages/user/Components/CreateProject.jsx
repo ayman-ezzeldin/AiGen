@@ -3,6 +3,7 @@ import { useToast } from "../../../hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 // import { useSelector } from "react-redux";
 import { Upload } from "lucide-react";
+import API_URL from "../../../utils/api";
 
 export default function CreateProject() {
   const { toast } = useToast();
@@ -78,13 +79,13 @@ export default function CreateProject() {
     formData.append("file", projectFile);
     formData.append("option", option);
     formData.append("description", projectDescription);
-    formData.append("model",ProjectModel );
+    formData.append("model", ProjectModel);
     formData.append("dataset", ProjectDataset);
 
     const token = localStorage.getItem("accessToken");
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/user-projects/upload-project/", {
+      const res = await fetch(`${API_URL}user-projects/upload-project/`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
@@ -109,7 +110,9 @@ export default function CreateProject() {
 
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-2xl shadow-md space-y-6">
-      <h2 className="text-2xl font-bold text-zinc-800 dark:text-white">📦 Create New Project</h2>
+      <h2 className="text-2xl font-bold text-zinc-800 dark:text-white">
+        📦 Create New Project
+      </h2>
 
       <label
         htmlFor="fileUpload"
@@ -120,7 +123,9 @@ export default function CreateProject() {
         }}
         onDragLeave={() => setIsDragging(false)}
         className={`cursor-pointer border-2 border-dashed ${
-          isDragging ? "border-blue-500 bg-blue-50 dark:bg-zinc-800/60" : "border-zinc-300 dark:border-zinc-600"
+          isDragging
+            ? "border-blue-500 bg-blue-50 dark:bg-zinc-800/60"
+            : "border-zinc-300 dark:border-zinc-600"
         } flex flex-col items-center justify-center p-6 rounded-xl bg-zinc-50 dark:bg-zinc-800 transition-all`}
       >
         <Upload className="w-8 h-8 mb-2 text-blue-600" />
@@ -138,21 +143,31 @@ export default function CreateProject() {
 
       {projectName && (
         <div className="bg-zinc-100 dark:bg-zinc-800 p-4 rounded-lg border border-zinc-300 dark:border-zinc-600">
-          <p className="text-zinc-800 dark:text-white"><strong>Project Name:</strong> {projectName}</p>
-          <p className="text-zinc-700 dark:text-zinc-300"><strong>Description:</strong> {projectDescription}</p>
-          <p className="text-zinc-700 dark:text-zinc-300"><strong>Model:</strong> {ProjectModel}</p>
-          <p className="text-zinc-700 dark:text-zinc-300"><strong>Dataset:</strong> {ProjectDataset}</p>
+          <p className="text-zinc-800 dark:text-white">
+            <strong>Project Name:</strong> {projectName}
+          </p>
+          <p className="text-zinc-700 dark:text-zinc-300">
+            <strong>Description:</strong> {projectDescription}
+          </p>
+          <p className="text-zinc-700 dark:text-zinc-300">
+            <strong>Model:</strong> {ProjectModel}
+          </p>
+          <p className="text-zinc-700 dark:text-zinc-300">
+            <strong>Dataset:</strong> {ProjectDataset}
+          </p>
         </div>
       )}
 
       <div className="space-y-2">
-        <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Visibility</label>
+        <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+          Visibility
+        </label>
         <select
           value={option}
           onChange={(e) => setOption(e.target.value)}
           className="w-full p-2 rounded-xl border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-white"
         >
-          <option value="public" >🌐 Public</option>
+          <option value="public">🌐 Public</option>
           <option value="private">🔒 Private</option>
         </select>
       </div>

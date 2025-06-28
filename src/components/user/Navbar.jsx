@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import ChatRoom from "../../pages/user/ChatRoom";
+import API_URL from "../../utils/api";
 
 const MenuItemsVariables = [
   {
@@ -70,7 +71,6 @@ const MenuItemsVariables = [
 
 const MenuItems = ({ open, setOpen, user }) => {
   const [dropdownOpenId, setDropdownOpenId] = useState(null);
-  
 
   const dropdownRef = useRef(null);
 
@@ -136,7 +136,7 @@ const MenuItems = ({ open, setOpen, user }) => {
           )}
         </DropdownMenu>
       ))}
-      { user && (
+      {user && (
         <Dialog>
           <DialogTrigger asChild>
             <Button className=" text-lg">Chat</Button>
@@ -154,8 +154,31 @@ const MenuItems = ({ open, setOpen, user }) => {
 
 export const HeaderRightContent = ({ open, user }) => {
   const dispatch = useDispatch();
+  const [profile, setProfile ] = useState({})
+  const [loadingProfile, setLoadingProfile ] = useState(false)
   console.log(user);
-  
+
+  useEffect(() => {
+    const fetchprofile = async () => {
+      setLoadingProfile(true)
+      try {
+        const token = localStorage.getItem("accessToken");
+        const response = await fetch(`${API_URL}profile/`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const data = await response.json();
+        console.log("Fetched profile:", data.profile.image);
+        setProfile(data.profile.image)
+        setLoadingProfile(false)
+        return data;
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+        return [];
+      }
+    };
+    fetchprofile();
+  }, []);
 
   return (
     <div
@@ -165,17 +188,23 @@ export const HeaderRightContent = ({ open, user }) => {
     >
       {user ? (
         <>
-          <Link to={"/"} className=" cursor-pointer border px-4 py-2 rounded-xl border-blue-400 hover:text-white hover:bg-blue-500 duration-300" onClick={() => dispatch(logout())}>
+          <Link
+            to={"/"}
+            className=" cursor-pointer border px-4 py-2 rounded-xl border-blue-400 hover:text-white hover:bg-blue-500 duration-300"
+            onClick={() => dispatch(logout())}
+          >
             LogOut
           </Link>
-          <Link
-            to="/user/settings/profile"
-            className=" cursor-pointer"
-          >
-          <img src={`http://127.0.0.1:8000/media/${user.image}`}
-            alt={user.image}
-            className=" w-12 h-12 rounded-full" />
-          </Link>
+          { loadingProfile ? 
+          <div className=" bg-gray-300 w-12 h-12 rounded-full animate-pulse" ></div>
+          :
+          <Link to="/user/settings/profile" className=" cursor-pointer">
+            <img
+              src={profile}
+              alt={user.image}
+              className=" w-12 h-12 rounded-full"
+            />
+          </Link>}
         </>
       ) : (
         <>
@@ -185,7 +214,10 @@ export const HeaderRightContent = ({ open, user }) => {
           >
             SignIn
           </Link>
-          <Link to="/auth/register" className=" cursor-pointer bg-blue-600 text-white px-3 py-2 rounded-xl ">
+          <Link
+            to="/auth/register"
+            className=" cursor-pointer bg-blue-600 text-white px-3 py-2 rounded-xl "
+          >
             SignUp
           </Link>
         </>
@@ -197,8 +229,7 @@ export const HeaderRightContent = ({ open, user }) => {
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { isAuthenticated, user } = useSelector((state) => state.auth);
-  console.log("User :",user);
-  
+  console.log("User :", user);
 
   return (
     <header className=" sticky  w-full top-0 z-40 border-b bg-white">

@@ -14,6 +14,7 @@ import { useToast } from "../../hooks/use-toast";
 import { useParams, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Loader2 } from "lucide-react";
+import API_URL from "../../utils/api";
 
 const CustomNode = ({ data }) => (
   <div className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold shadow-md max-w-[180px] text-center relative">
@@ -39,29 +40,33 @@ export default function Simulator() {
   const [loading, setLoading] = useState(true);
 
   const convertToReactFlow = (projectData) => {
-    const newNodes = projectData.nodes?.map((node) => ({
-      id: node.node_id?.toString() || node.id?.toString(),
-      type: "default",
-      data: { label: node.displayed_name || node.node_name },
-      position: {
-        x: node.location_x || 0,
-        y: node.location_y || 0,
-      },
-    })) || [];
+    const newNodes =
+      projectData.nodes?.map((node) => ({
+        id: node.node_id?.toString() || node.id?.toString(),
+        type: "default",
+        data: { label: node.displayed_name || node.node_name },
+        position: {
+          x: node.location_x || 0,
+          y: node.location_y || 0,
+        },
+      })) || [];
 
-    const newEdges = projectData.nodes?.flatMap((node) => {
-      if (!Array.isArray(node.input_ports)) return [];
-      return node.input_ports.map((port) => {
-        const sourceId = port.connectedNode?.nodeData?.toString();
-        const targetId = node.node_id?.toString();
-        if (!sourceId || !targetId) return null;
-        return {
-          id: `e-${sourceId}-${targetId}`,
-          source: sourceId,
-          target: targetId,
-        };
-      });
-    }).filter(Boolean) || [];
+    const newEdges =
+      projectData.nodes
+        ?.flatMap((node) => {
+          if (!Array.isArray(node.input_ports)) return [];
+          return node.input_ports.map((port) => {
+            const sourceId = port.connectedNode?.nodeData?.toString();
+            const targetId = node.node_id?.toString();
+            if (!sourceId || !targetId) return null;
+            return {
+              id: `e-${sourceId}-${targetId}`,
+              source: sourceId,
+              target: targetId,
+            };
+          });
+        })
+        .filter(Boolean) || [];
 
     return { newNodes, newEdges };
   };
@@ -72,7 +77,7 @@ export default function Simulator() {
     if (!projectJson) {
       const token = localStorage.getItem("accessToken");
       const res = await fetch(
-        `http://127.0.0.1:8000/user-projects/my-projects/${user.username}/`,
+        `${API_URL}user-projects/my-projects/${user.username}/`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -85,7 +90,7 @@ export default function Simulator() {
         return;
       }
 
-      const fileUrl = `http://127.0.0.1:8000${selected.file}`.replace("c//", "/media/");
+      const fileUrl = `${API_URL}${selected.file}`.replace("c//", "/media/");
       const fileRes = await fetch(fileUrl);
       projectJson = await fileRes.json();
     }

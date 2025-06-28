@@ -1,16 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import API_URL from "../../utils/api";
 
 export const fetchMessages = createAsyncThunk(
   "messages/fetchMessages",
   async (roomName, thunkAPI) => {
     try {
       const token = localStorage.getItem("accessToken");
-      const res = await axios.get(`http://127.0.0.1:8000/chat/messages/${roomName}/`, {
+      const res = await axios.get(`${API_URL}chat/messages/${roomName}/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        withCredentials: true
+        withCredentials: true,
       });
       return res.data;
     } catch (err) {
@@ -25,7 +26,7 @@ const messagesSlice = createSlice({
     messages: [],
     loading: false,
     error: null,
-    selectedRoom: null, 
+    selectedRoom: null,
   },
   reducers: {
     addMessage(state, action) {
@@ -37,7 +38,7 @@ const messagesSlice = createSlice({
     },
     clearMessages(state) {
       state.messages = [];
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -56,5 +57,6 @@ const messagesSlice = createSlice({
   },
 });
 
-export const { addMessage, setSelectedRoom, clearMessages } = messagesSlice.actions;
+export const { addMessage, setSelectedRoom, clearMessages } =
+  messagesSlice.actions;
 export default messagesSlice.reducer;
