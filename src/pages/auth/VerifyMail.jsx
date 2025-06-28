@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { verifyMail } from '@/store/auth-slice';
 import { useNavigate } from 'react-router-dom';
+import { SendHorizontal } from 'lucide-react';
 
 const VerifyMailPage = () => {
   const [otpMessage, setOtpMessage] = useState('');
@@ -28,21 +29,31 @@ const VerifyMailPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Verify Your Email</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
+      <div className="p-8 rounded-2xl shadow-lg md:w-[636px] max-w-lg bg-white">
+        <div className="flex flex-col items-center justify-center gap-2 ">
+          <h2 className="text-3xl font-bold text-center text-zinc-800 ">
+            Welcome Back!
+          </h2>
+          <p className="text-sm text-center text-[#52525B]">
+            Check your email for the verification code.
+          </p>
+        </div>
+        <form onSubmit={handleSubmit} className="space-y-4 mt-6">
+          <div className="p-4 border border-[#12121214] rounded-xl w-full flex items-center gap-1 bg-gray-100 col-span-2">
+            <input
+              type="text"
             name="otpMessage"
             value={otpMessage}
             onChange={handleChange}
-            placeholder="Your OTP from email"
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right"
-            required
-          />
+            placeholder="Your OTP "
+              className="w-full outline-none bg-transparent text-sm font-semibold placeholder:text-zinc-600 text-zinc-700"
+              required
+            />
+            <SendHorizontal color="#12121261" size={20} />
+          </div>
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition duration-300"
+            className="w-full bg-blue-500/90 font-bold text-gray-100 p-3 rounded-[8px] hover:bg-blue-600 transition duration-300"
           >
             Verify OTP
           </button>

@@ -154,6 +154,8 @@ const MenuItems = ({ open, setOpen, user }) => {
 
 export const HeaderRightContent = ({ open, user }) => {
   const dispatch = useDispatch();
+  console.log(user);
+  
 
   return (
     <div
@@ -163,9 +165,9 @@ export const HeaderRightContent = ({ open, user }) => {
     >
       {user ? (
         <>
-          <h3 className=" cursor-pointer border px-4 py-2 rounded-xl border-blue-400 hover:text-white hover:bg-blue-500 duration-300" onClick={() => dispatch(logout())}>
+          <Link to={"/"} className=" cursor-pointer border px-4 py-2 rounded-xl border-blue-400 hover:text-white hover:bg-blue-500 duration-300" onClick={() => dispatch(logout())}>
             LogOut
-          </h3>
+          </Link>
           <Link
             to="/user/settings/profile"
             className=" cursor-pointer"
