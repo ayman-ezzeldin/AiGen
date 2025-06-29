@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import NotFound from "../not-found";
 import { useSelector } from "react-redux";
 import API_URL from "../../utils/api";
-import { MoveLeft } from "lucide-react";
+import { MoveLeft, PenLine, SendHorizontal, Trash } from "lucide-react";
 
 const CommunityGroup = () => {
   const { id } = useParams();
@@ -16,7 +16,9 @@ const CommunityGroup = () => {
   const { user } = useSelector((state) => state.auth);
   const [showDialog, setShowDialog] = useState(false);
 
-  const [currentUser, setCurrentUser] = useState("nu");
+  const [currentUser, setCurrentUser] = useState("");
+  const [profile, setProfile] = useState({});
+  const [loadingProfile, setLoadingProfile] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -83,6 +85,28 @@ const CommunityGroup = () => {
 
     fetchData();
   }, [id]);
+
+  useEffect(() => {
+    const fetchprofile = async () => {
+      setLoadingProfile(true);
+      try {
+        const token = localStorage.getItem("accessToken");
+        const response = await fetch(`${API_URL}profile/`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const data = await response.json();
+        console.log("Fetched profile:", data.profile.image);
+        setProfile(data.profile.image);
+        setLoadingProfile(false);
+        return data;
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+        return [];
+      }
+    };
+    fetchprofile();
+  }, []);
 
   const token = localStorage.getItem("accessToken");
   const headers = {
@@ -251,8 +275,30 @@ const CommunityGroup = () => {
     return <NotFound />;
   }
 
-  console.log(posts);
-  console.log(currentUser);
+  const timeAgo = (timestamp) => {
+    const now = new Date();
+    const past = new Date(timestamp);
+    const diffInMs = now - past;
+
+    const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
+    const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+
+    if (diffInMinutes < 1) {
+      return "Just now";
+    } else if (diffInMinutes < 60) {
+      return `${diffInMinutes} minute${diffInMinutes > 1 ? "s" : ""} ago`;
+    } else if (diffInHours < 24) {
+      return `${diffInHours} hour${diffInHours > 1 ? "s" : ""} ago`;
+    } else {
+      return `${diffInDays} day${diffInDays > 1 ? "s" : ""} ago`;
+    }
+  };
+
+  // Example usage
+  console.log(timeAgo("2025-06-28T23:21:57.782768Z"));
+
+  console.log("Posts:", posts);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 to-blue-100 py-12 px-6">
@@ -260,7 +306,13 @@ const CommunityGroup = () => {
         {/* Group Info */}
         <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden border border-blue-200">
           <div className="p-8 text-center">
-            <span className=" bg-transparent animate-pulse cursor-pointer"><MoveLeft onClick={() => navigate(-1)} color="#12121261" size={24} /></span>
+            <span className=" bg-transparent animate-pulse cursor-pointer">
+              <MoveLeft
+                onClick={() => navigate(-1)}
+                color="#12121261"
+                size={24}
+              />
+            </span>
             <h1 className="text-4xl font-extrabold text-blue-950 mb-2">
               {group.title}
             </h1>
@@ -281,7 +333,9 @@ const CommunityGroup = () => {
 
         {/* Posts Section */}
         <div className="space-y-10">
-          <h2 className="text-3xl font-bold text-blue-900">📢 Community Posts</h2>
+          <h2 className="text-3xl font-bold text-blue-900">
+            📢 Community Posts
+          </h2>
 
           {posts.map((post) => (
             <div
@@ -289,16 +343,32 @@ const CommunityGroup = () => {
               className="bg-white p-6 rounded-3xl shadow-md border border-gray-200 relative"
             >
               <div className="flex justify-between">
-                <div>
-                  <h3 className="text-2xl font-bold text-blue-800 mb-1">
-                    {post.title}
-                  </h3>
-                  <p className="text-gray-500 text-sm mb-2">
-                    👤 <span className="font-medium">{post.user?.username || post.user}</span>
-                  </p>
-                  <p className="text-gray-800 text-base leading-relaxed">
-                    {post.content}
-                  </p>
+                <div className=" w-full">
+                  <div className="text-gray-500 text-sm mb-2 flex items-center gap-2">
+                    <img
+                      src={profile}
+                      alt={user.image}
+                      className=" w-12 h-12 rounded-full select-none"
+                      draggable="false"
+                    />
+                    <p className="flex flex-col text-center select-none">
+                      <span className="font-bold text-xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-700 hover:from-blue-500 hover:to-blue-800 ">
+                        {post.user?.username || post.user}
+                      </span>
+                      <p className="text-gray-600 text-sm">
+                        {timeAgo(post.updated_at)}
+                      </p>
+                    </p>
+                  </div>
+
+                  <div className="p-3">
+                    <h3 className="text-md mb-1 text-gray-600">{post.title}</h3>
+                    <div className="w-full min-h-[200px] bg-gray-100  flex items-center justify-center">
+                      <p className="text-gray-800 text-lg font-semibold p-6 text-center leading-relaxed ">
+                        {post.content}
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
                 {currentUser === (post.user?.username || post.user) && (
@@ -306,7 +376,7 @@ const CommunityGroup = () => {
                     onClick={() => handlePostDelete(post.id)}
                     className="text-red-500 hover:text-red-700 absolute top-4 right-4 text-sm"
                   >
-                    🗑 Delete
+                    <Trash size={16} />
                   </button>
                 )}
               </div>
@@ -315,21 +385,31 @@ const CommunityGroup = () => {
                 <button
                   onClick={() => handleVote(post.id, "upvote")}
                   className={`px-4 py-2 rounded-full text-sm font-semibold transition shadow-sm 
-                    ${post.userVote === "upvote" ? "bg-green-500 text-white" : "bg-gray-100 text-green-700 hover:bg-green-100"}`}
+                    ${
+                      post.userVote === "upvote"
+                        ? "bg-green-500 text-white"
+                        : "bg-gray-100 text-green-700 hover:bg-green-100"
+                    }`}
                 >
                   👍 {post.upvotes || 0}
                 </button>
                 <button
                   onClick={() => handleVote(post.id, "downvote")}
                   className={`px-4 py-2 rounded-full text-sm font-semibold transition shadow-sm 
-                    ${post.userVote === "downvote" ? "bg-red-500 text-white" : "bg-gray-100 text-red-600 hover:bg-red-100"}`}
+                    ${
+                      post.userVote === "downvote"
+                        ? "bg-red-500 text-white"
+                        : "bg-gray-100 text-red-600 hover:bg-red-100"
+                    }`}
                 >
                   👎 {post.downvotes || 0}
                 </button>
               </div>
 
               <div className="mt-6 bg-gray-50 border rounded-2xl p-4">
-                <h5 className="font-bold text-gray-800 mb-3 text-sm">💬 Comments</h5>
+                <h5 className="font-bold text-gray-800 mb-3 text-sm">
+                  💬 Comments
+                </h5>
 
                 {post.comments?.map((comment) => (
                   <div
@@ -338,6 +418,11 @@ const CommunityGroup = () => {
                   >
                     {post.editingCommentId === comment.id ? (
                       <>
+                        <img
+                          src={profile}
+                          alt={user.image}
+                          className=" w-8 h-8 rounded-full"
+                        />
                         <input
                           value={post.editingCommentText}
                           onChange={(e) =>
@@ -351,7 +436,11 @@ const CommunityGroup = () => {
                           }
                           onKeyDown={(e) => {
                             if (e.key === "Enter") {
-                              handleCommentEdit(post.id, comment.id, post.editingCommentText);
+                              handleCommentEdit(
+                                post.id,
+                                comment.id,
+                                post.editingCommentText
+                              );
                             }
                           }}
                           type="text"
@@ -360,7 +449,11 @@ const CommunityGroup = () => {
                         />
                         <button
                           onClick={() =>
-                            handleCommentEdit(post.id, comment.id, post.editingCommentText)
+                            handleCommentEdit(
+                              post.id,
+                              comment.id,
+                              post.editingCommentText
+                            )
                           }
                           className="text-blue-500 font-medium ml-2"
                         >
@@ -369,10 +462,24 @@ const CommunityGroup = () => {
                       </>
                     ) : (
                       <>
-                        <span>
-                          <strong>{comment.user?.username || comment.user || user.username || "User"}</strong>: {comment.body}
+                        <span className="flex items-center gap-3">
+                          <img
+                            src={profile}
+                            alt={user.image}
+                            className=" w-8 h-8 rounded-full"
+                          />
+                          <span>
+                            <strong>
+                            {comment.user?.username ||
+                              comment.user ||
+                              user.username ||
+                              "User"}
+                          </strong>
+                          : {comment.body}
+                          </span>
                         </span>
-                        {currentUser === (comment.user?.username || comment.user) && (
+                        {currentUser ===
+                          (comment.user?.username || comment.user) && (
                           <div className="flex gap-2 ml-4">
                             <button
                               onClick={() =>
@@ -388,15 +495,17 @@ const CommunityGroup = () => {
                                   )
                                 )
                               }
-                              className="text-yellow-600 text-xs"
+                              className="text-green-600 text-xs"
                             >
-                              Edit
+                              <PenLine size={16} />
                             </button>
                             <button
-                              onClick={() => handleCommentDelete(post.id, comment.id)}
+                              onClick={() =>
+                                handleCommentDelete(post.id, comment.id)
+                              }
                               className="text-red-600 text-xs"
                             >
-                              Delete
+                              <Trash size={16} />
                             </button>
                           </div>
                         )}
@@ -412,7 +521,9 @@ const CommunityGroup = () => {
                     onChange={(e) =>
                       setPosts((prev) =>
                         prev.map((p) =>
-                          p.id === post.id ? { ...p, newComment: e.target.value } : p
+                          p.id === post.id
+                            ? { ...p, newComment: e.target.value }
+                            : p
                         )
                       )
                     }
@@ -429,7 +540,7 @@ const CommunityGroup = () => {
                     onClick={() => handleCommentSubmit(post.id)}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl focus:outline-none"
                   >
-                    Post
+                  <SendHorizontal size={20} />
                   </button>
                 </div>
               </div>
@@ -448,13 +559,17 @@ const CommunityGroup = () => {
               type="text"
               placeholder="Post title..."
               value={newPost.title}
-              onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
+              onChange={(e) =>
+                setNewPost({ ...newPost, title: e.target.value })
+              }
               className="w-full px-4 py-3 mb-3 border border-gray-300 rounded-xl focus:outline-none"
             />
             <textarea
               placeholder="Write something amazing..."
               value={newPost.content}
-              onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
+              onChange={(e) =>
+                setNewPost({ ...newPost, content: e.target.value })
+              }
               className="w-full px-4 py-3 mb-4 border border-gray-300 rounded-xl resize-none focus:outline-none"
             />
 

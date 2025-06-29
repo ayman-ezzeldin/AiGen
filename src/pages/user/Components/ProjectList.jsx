@@ -75,7 +75,7 @@ const MyProjects = () => {
         alert("Failed to delete project");
       }
     } catch (err) {
-      alert("Error deleting project");
+      alert("Error deleting project: ",err);
     } finally {
       setShowModal(false);
       setProjectToDelete(null);
@@ -99,6 +99,8 @@ const MyProjects = () => {
       </div>
     );
 
+    console.log("projects : ",projects);
+    
   return (
     <>
       <div className="max-w-7xl mx-auto px-4 py-10 space-y-6">
@@ -122,7 +124,7 @@ const MyProjects = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects.map((project) => {
-              const { id, project_name, project_description, option } = project;
+              const { id, project_name, description, option } = project;
 
               return (
                 <div
@@ -134,7 +136,7 @@ const MyProjects = () => {
                       {project_name || "Unnamed Project"}
                     </h3>
                     <p className="text-sm text-zinc-500 mt-1">
-                      {project_description || "No description provided."}
+                      {description || "No description provided."}
                     </p>
                     <p className="text-sm text-zinc-400 mt-1 capitalize">
                       Visibility: {option || "unknown"}

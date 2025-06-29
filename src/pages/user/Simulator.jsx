@@ -13,7 +13,7 @@ import "@xyflow/react/dist/style.css";
 import { useToast } from "../../hooks/use-toast";
 import { useParams, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Loader2 } from "lucide-react";
+import { Download, Loader2 } from "lucide-react";
 import API_URL from "../../utils/api";
 
 const CustomNode = ({ data }) => (
@@ -38,6 +38,7 @@ export default function Simulator() {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [loading, setLoading] = useState(true);
+  const [projectJson, setProjectJson] = useState(null);
 
   const convertToReactFlow = (projectData) => {
     const newNodes =
@@ -73,6 +74,7 @@ export default function Simulator() {
 
   const loadProject = async () => {
     let projectJson = state?.projectJson;
+    setProjectJson(projectJson);
 
     if (!projectJson) {
       const token = localStorage.getItem("accessToken");
@@ -101,6 +103,19 @@ export default function Simulator() {
     toast({ title: `✅ Loaded: ${projectJson.project_name}` });
   };
 
+  const handleDownload = () => {
+  if (!projectJson) return;
+  const fileName = projectJson.project_name || "project";
+  const file = new Blob([JSON.stringify(projectJson, null, 2)], { type: "application/json" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(file);
+  link.download = `${fileName}.json`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+
   useEffect(() => {
     if (user?.username && projectId) {
       loadProject().finally(() => setLoading(false));
@@ -124,10 +139,17 @@ export default function Simulator() {
   return (
     <div className="max-w-7xl mx-auto mt-10 mb-20 px-4 space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-zinc-800 dark:text-white">
-          🧠 Project Simulator
-        </h2>
-      </div>
+  <h2 className="text-2xl font-bold text-zinc-800 dark:text-white">
+    🧠 Project Simulator
+  </h2>
+  <button
+    onClick={handleDownload}
+    className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 rounded-l-full text-white shadow transition"
+  >
+    <Download  />
+  </button>
+</div>
+
 
       <div className="h-[75vh] w-full border border-zinc-300 dark:border-zinc-600 rounded-xl shadow-md overflow-hidden bg-white dark:bg-zinc-900">
         <ReactFlow
