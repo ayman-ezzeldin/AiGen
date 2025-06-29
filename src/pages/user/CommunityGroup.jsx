@@ -18,7 +18,6 @@ const CommunityGroup = () => {
 
   const [currentUser, setCurrentUser] = useState("");
   const [profile, setProfile] = useState({});
-  const [loadingProfile, setLoadingProfile] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -88,7 +87,6 @@ const CommunityGroup = () => {
 
   useEffect(() => {
     const fetchprofile = async () => {
-      setLoadingProfile(true);
       try {
         const token = localStorage.getItem("accessToken");
         const response = await fetch(`${API_URL}profile/`, {
@@ -98,7 +96,6 @@ const CommunityGroup = () => {
         const data = await response.json();
         console.log("Fetched profile:", data.profile.image);
         setProfile(data.profile.image);
-        setLoadingProfile(false);
         return data;
       } catch (error) {
         console.error("Error fetching profile:", error);
@@ -295,14 +292,9 @@ const CommunityGroup = () => {
     }
   };
 
-  // Example usage
-  console.log(timeAgo("2025-06-28T23:21:57.782768Z"));
-
-  console.log("Posts:", posts);
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 to-blue-100 py-12 px-6">
-      <div className="max-w-5xl mx-auto space-y-12">
+      <div className="max-w-5xl mx-auto space-y-8">
         {/* Group Info */}
         <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden border border-blue-200">
           <div className="p-8 text-center">
@@ -332,7 +324,7 @@ const CommunityGroup = () => {
         </div>
 
         {/* Posts Section */}
-        <div className="space-y-10">
+        <div className="space-y-5">
           <h2 className="text-3xl font-bold text-blue-900">
             📢 Community Posts
           </h2>
@@ -463,19 +455,25 @@ const CommunityGroup = () => {
                     ) : (
                       <>
                         <span className="flex items-center gap-3">
-                          <img
-                            src={profile}
-                            alt={user.image}
-                            className=" w-8 h-8 rounded-full"
-                          />
+                          {currentUser !==
+                          (comment.user?.username || comment.user) ? (
+                                      <div className=" bg-gray-300 w-8 h-8 rounded-full animate-pulse" ></div>
+
+                          ) : (
+                            <img
+                              src={profile}
+                              alt={user.image}
+                              className=" w-8 h-8 rounded-full"
+                            />
+                          )}
                           <span>
                             <strong>
-                            {comment.user?.username ||
-                              comment.user ||
-                              user.username ||
-                              "User"}
-                          </strong>
-                          : {comment.body}
+                              {comment.user?.username ||
+                                comment.user ||
+                                user.username ||
+                                "User"}
+                            </strong>
+                            : {comment.body}
                           </span>
                         </span>
                         {currentUser ===
@@ -540,7 +538,7 @@ const CommunityGroup = () => {
                     onClick={() => handleCommentSubmit(post.id)}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl focus:outline-none"
                   >
-                  <SendHorizontal size={20} />
+                    <SendHorizontal size={20} />
                   </button>
                 </div>
               </div>

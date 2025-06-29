@@ -19,7 +19,7 @@ import Community from "./pages/user/Community";
 import CommunityGroup from "./pages/user/CommunityGroup";
 import Default from "./DefaultPage/Default";
 import LearnPage from "./pages/user/Components/LearnPage/LearnPage";
-import { DatasetPage } from "./pages/user/Components/DatasetPage/DatasetPage";
+import DatasetPage from "./pages/user/Components/DatasetPage/DatasetPage";
 import ModelPage from "./pages/user/Components/ModelPage/ModelPage";
 import ChatBotpage from "./DefaultPage/ChatPage";
 import Profile from "./profile/features/Profile";

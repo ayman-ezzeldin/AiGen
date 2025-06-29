@@ -28,12 +28,10 @@ const Sidebar = () => {
         {/* Sidebar Menu */}
         <nav className="flex flex-col space-y-4 w-full">
           <NavItem icon={<Home />} path="/user/home" label="Home" isOpen={isOpen} />
-          <NavItem icon={<Layers />} path="/user/architecture" label="Architecture" isOpen={isOpen} />
           <NavItem icon={<Network />} path="/user/models" label="Models" isOpen={isOpen} />
           <NavItem icon={<Package />} path="/user/dataset" label="Dataset" isOpen={isOpen} />
-          <NavItem icon={<FileText />} label="Reports" isOpen={isOpen} />
           <NavItem icon={<GraduationCap />} path="/user/learn" label="Learning" isOpen={isOpen} />
-          <NavItem icon={<Settings />} label="Settings" isOpen={isOpen} />
+          <NavItem icon={<Settings />} label="Settings" path={"/user/settings/profile"} isOpen={isOpen} />
         </nav>
       </motion.div>
     </div>
