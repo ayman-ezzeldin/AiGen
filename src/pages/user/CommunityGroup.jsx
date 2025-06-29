@@ -13,6 +13,7 @@ const CommunityGroup = () => {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const { user } = useSelector((state) => state.auth);
+  const [showDialog, setShowDialog] = useState(false);
 
   const [currentUser, setCurrentUser] = useState("nu");
 
@@ -233,6 +234,9 @@ const CommunityGroup = () => {
       }
     } catch (error) {
       console.error("Post creation failed:", error);
+    } finally {
+      setNewPost({ title: "", content: "" });
+      setShowDialog(false);
     }
   };
 
@@ -266,33 +270,13 @@ const CommunityGroup = () => {
           </div>
         </div>
 
-        {/* Create New Post */}
-        <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
-          <h2 className="text-2xl font-semibold text-blue-800 mb-4">
-            📝 Create New Post
-          </h2>
-          <input
-            type="text"
-            placeholder="Post title..."
-            value={newPost.title}
-            onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
-            className="w-full px-4 py-3 mb-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
-          />
-          <textarea
-            placeholder="Write something amazing..."
-            value={newPost.content}
-            onChange={(e) =>
-              setNewPost({ ...newPost, content: e.target.value })
-            }
-            className="w-full px-4 py-3 mb-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
-          />
-          <button
-            onClick={handleNewPostSubmit}
-            className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-2 rounded-lg font-semibold shadow-md transition"
-          >
-            ✨ Post
-          </button>
-        </div>
+        <button
+          className="flex justify-end bg-blue-400 py-2 px-4 rounded"
+          onClick={() => setShowDialog(true)}
+        >
+          {" "}
+          +Create Post
+        </button>
 
         {/* Posts Section */}
         <div className="space-y-6">
@@ -319,7 +303,7 @@ const CommunityGroup = () => {
                   <p className="text-gray-700">{post.content}</p>
                 </div>
 
-                {currentUser === post.user && (
+                {currentUser === (post.user?.username || post.user) && (
                   <button
                     onClick={() => handlePostDelete(post.id)}
                     className="text-sm text-red-500 font-semibold hover:underline absolute top-4 right-4"
@@ -403,7 +387,8 @@ const CommunityGroup = () => {
                           </strong>
                           : {comment.body}
                         </span>
-                        {currentUser === comment.user && (
+                        {currentUser ===
+                          (comment.user?.username || comment.user) && (
                           <div className="flex gap-2 ml-4">
                             <button
                               onClick={() =>
@@ -473,6 +458,47 @@ const CommunityGroup = () => {
           ))}
         </div>
       </div>
+      {showDialog && (
+        <div className="fixed inset-0 h-screen bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl border border-blue-100">
+            <h2 className="text-2xl font-semibold text-blue-800 mb-4">
+              📝 Create New Post
+            </h2>
+            <input
+              type="text"
+              placeholder="Post title..."
+              value={newPost.title}
+              onChange={(e) =>
+                setNewPost({ ...newPost, title: e.target.value })
+              }
+              className="w-full px-4 py-3 mb-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-400"
+            />
+            <textarea
+              placeholder="Write something amazing..."
+              value={newPost.content}
+              onChange={(e) =>
+                setNewPost({ ...newPost, content: e.target.value })
+              }
+              className="w-full px-4 py-3 mb-4 border resize-none border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-400"
+            />
+
+            <div className="flex justify-end gap-2">
+              <button
+                className="px-5 py-2 bg-gray-100 rounded-xl hover:bg-gray-200 transition"
+                onClick={() => setShowDialog(false)}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleNewPostSubmit}
+                className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-2 rounded-xl font-semibold shadow-md transition"
+              >
+                ✨ Post
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
