@@ -81,12 +81,12 @@ const WhatsAppButton = () => {
                   href="https://wa.me/201129330746"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 px-4 py-3 bg-green-500 text-white rounded-lg font-semibold transition-all duration-300 ease-in-out hover:bg-green-600 hover:shadow-lg hover:scale-105 active:scale-95"
+                  className="flex-1 px-4 py-3 bg-green-500 text-white rounded-xl font-semibold transition-all duration-300 ease-in-out hover:bg-green-600 hover:shadow-xl hover:scale-105 active:scale-95"
                 >
                   Open WhatsApp
                 </a>
                 <button
-                  className="flex-1 px-4 py-3 bg-red-500 text-white rounded-lg font-semibold transition-all duration-300 ease-in-out hover:bg-red-600 hover:shadow-lg hover:scale-105 active:scale-95"
+                  className="flex-1 px-4 py-3 bg-red-500 text-white rounded-xl font-semibold transition-all duration-300 ease-in-out hover:bg-red-600 hover:shadow-xl hover:scale-105 active:scale-95"
                   onClick={closePopup}
                 >
                   Close

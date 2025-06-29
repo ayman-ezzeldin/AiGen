@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@/store/auth-slice";
 import { useEffect, useRef, useState } from "react";
-import logo from "../../DefaultPage/assets/Icons/icon_aino.png";
+import logo from "../../DefaultPage/assets/Icons/logo.png";
 
 import {
   DropdownMenu,

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { 
-  Home, Layers, Settings, FileText, GraduationCap, Package, Network, 
+  Home,Settings, GraduationCap, Package, Network, 
   ChevronsRight, 
   ChevronsLeft
 } from "lucide-react";

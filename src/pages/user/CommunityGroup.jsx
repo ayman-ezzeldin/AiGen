@@ -317,7 +317,7 @@ const CommunityGroup = () => {
         <div className="flex justify-end">
           <button
             onClick={() => setShowDialog(true)}
-            className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white px-6 py-2 rounded-full font-semibold shadow-lg transition"
+            className="bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-600 hover:to-blue-800 text-white px-6 py-2 rounded-full font-semibold shadow-lg transition"
           >
             ＋ Create Post
           </button>
