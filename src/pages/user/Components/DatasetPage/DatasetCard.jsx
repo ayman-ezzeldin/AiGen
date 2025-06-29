@@ -28,16 +28,11 @@ const DatasetCard = ({
   profilePic,
   imageSrc,
 }) => (
-  <motion.div
+  <div
     className="border border-blue-200 rounded-lg shadow-md p-4 bg-white hover:shadow-lg transition-all"
-    initial="hidden"
-    whileInView="visible"
-    whileHover="hover"
-    viewport={{ once: true, amount: 0.3 }}
-    variants={cardVariants}
   >
     {/* Image */}
-    <img src={imageSrc} alt={title} className="w-full h-40 object-cover rounded-md mb-4" />
+    {/* <img src={imageSrc} alt={title} className="w-full h-40 object-cover rounded-md mb-4" /> */}
 
     {/* Title */}
     <h3 className="text-lg font-semibold">{title}</h3>
@@ -71,7 +66,7 @@ const DatasetCard = ({
         className="w-8 h-8 rounded-full border border-gray-300"
       />
     </div>
-  </motion.div>
+  </div>
 );
 
 export default DatasetCard;
