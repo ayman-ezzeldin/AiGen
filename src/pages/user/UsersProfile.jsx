@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import API_URL from "../../utils/api";
 import { Play } from "lucide-react";
 
@@ -28,6 +28,7 @@ const UserProfile = () => {
   const [user, setUser] = useState(null);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   // Get the user based on the username param
   useEffect(() => {
@@ -130,7 +131,7 @@ const UserProfile = () => {
                   <div className="mt-4 flex flex-wrap gap-2">
                     <button
                       onClick={() =>
-                        Navigate(`/user/projects/${id}`, {
+                        navigate(`/user/projects/${id}`, {
                           state: { projectJson: project },
                         })
                       }
