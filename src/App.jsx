@@ -29,6 +29,7 @@ import Notifications from "./profile/features/Notifications";
 import Settings from "./profile/features/Settings";
 import ProjectList from "./pages/user/Components/ProjectList";
 import CreateProject from "./pages/user/Components/CreateProject";
+import UsersProfile from "./pages/user/UsersProfile";
 
 function App() {
   const { isAuthenticated, isLoading } = useSelector(
@@ -88,9 +89,8 @@ function App() {
           <Route path="/user/projects/create" element={<CreateProject />} />
           <Route path="projects/:id" element={<Simulator />} />
           <Route path="projects/edit/:id" element={<Simulator />} />
-
+          <Route path="profile/:username" element={<UsersProfile />} />
         </Route>
-
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>

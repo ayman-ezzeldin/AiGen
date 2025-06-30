@@ -29,19 +29,17 @@ const MyProjects = () => {
 
       const enrichedProjects = await Promise.all(
         rawProjects.map(async (proj) => {
-          const fileUrl = `http://127.0.0.1:8000${proj.file}`.replace(
-            "c//",
-            "/media/"
-          );
+          if (!proj.file) return proj;
+
           try {
+            const fileUrl = `${API_URL.replace(/\/$/, "")}${proj.file}`;
             const fileRes = await fetch(fileUrl);
             if (!fileRes.ok) return proj;
+
             const fileJson = await fileRes.json();
-            return {
-              ...proj,
-              ...fileJson,
-            };
-          } catch {
+            return { ...proj, ...fileJson };
+          } catch (err) {
+            console.warn("❌ Failed to load file for project:", proj.id, err);
             return proj;
           }
         })
@@ -71,11 +69,9 @@ const MyProjects = () => {
 
       if (res.ok) {
         setProjects((prev) => prev.filter((p) => p.id !== projectToDelete.id));
-      } else {
-        alert("Failed to delete project");
       }
     } catch (err) {
-      alert("Error deleting project: ",err);
+      alert("Error deleting project: " + err.message);
     } finally {
       setShowModal(false);
       setProjectToDelete(null);
@@ -99,8 +95,6 @@ const MyProjects = () => {
       </div>
     );
 
-    console.log("projects : ",projects);
-    
   return (
     <>
       <div className="max-w-7xl mx-auto px-4 py-10 space-y-6">
@@ -118,7 +112,7 @@ const MyProjects = () => {
         </div>
 
         {projects.length === 0 ? (
-          <div className="text-yellow-600">
+          <div className="text-gray-600">
             You don’t have any projects yet.
           </div>
         ) : (
@@ -156,6 +150,18 @@ const MyProjects = () => {
                       Simulator
                     </button>
 
+                    {/* {project.file && (
+                      <a
+                        href={`${API_URL.replace(/\/$/, "")}${project.file}`}
+                        download
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-700 text-white text-sm rounded hover:bg-gray-800 transition"
+                      >
+                        ⬇️ Download
+                      </a>
+                    )} */}
+
                     <button
                       onClick={() => {
                         setShowModal(true);
@@ -173,6 +179,7 @@ const MyProjects = () => {
           </div>
         )}
       </div>
+
       <DeleteModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
