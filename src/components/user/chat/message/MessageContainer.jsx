@@ -25,7 +25,7 @@ const MessageContainer = () => {
   const url = new URL(API_URL);
 
     if (selectedRoom && accessToken) {
-      return `wss://${url.host}/ws/chat/${selectedRoom}/?token=${accessToken}`;
+      return `ws://${url.host}/ws/chat/${selectedRoom}/?token=${accessToken}`;
     }
     return null;
   }, [selectedRoom, accessToken]);

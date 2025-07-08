@@ -29,58 +29,60 @@ const CommunityGroup = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
-      try {
-        const token = localStorage.getItem("accessToken");
-        const headers = { Authorization: `Bearer ${token}` };
+  setLoading(true);
+  try {
+    const token = localStorage.getItem("accessToken");
+    const headers = { Authorization: `Bearer ${token}` };
 
-        const groupRes = await fetch(`${API_URL}topics/${id}`, {
+    const groupRes = await fetch(`${API_URL}topics/${id}`, {
+      headers,
+    });
+
+    if (groupRes.status === 404) {
+      setNotFound(true);
+      return;
+    }
+
+    if (!groupRes.ok) throw new Error("Group fetch failed");
+
+    const groupData = await groupRes.json();
+    setGroup(groupData);
+
+    const postsRes = await fetch(`${API_URL}posts/`, {
+      headers,
+    });
+
+    const postsData = await postsRes.json();
+    const votes = JSON.parse(localStorage.getItem("postVotes") || "{}");
+
+    const postsWithComments = await Promise.all(
+      postsData.map(async (post) => {
+        const commentsRes = await fetch(`${API_URL}posts/${post.id}/comments/`, {
           headers,
         });
+        const comments = await commentsRes.json();
+        return {
+          ...post,
+          comments,
+          newComment: "",
+          editingCommentId: null,
+          editingCommentText: "",
+          userVote: votes[post.id] || null,
+        };
+      })
+    );
 
-        if (groupRes.status === 404) {
-          setNotFound(true);
-          return;
-        }
+    // ✅ Frontend filtering based on topic
+    const filteredPosts = postsWithComments.filter((post) => post.topic == id);
+    setPosts(filteredPosts);
+  } catch (error) {
+    console.error("Error:", error);
+    setNotFound(true);
+  } finally {
+    setLoading(false);
+  }
+};
 
-        if (!groupRes.ok) throw new Error("Group fetch failed");
-
-        const groupData = await groupRes.json();
-        setGroup(groupData);
-
-        const postsRes = await fetch(`${API_URL}posts/?topic=${id}`, {
-          headers,
-        });
-        const postsData = await postsRes.json();
-
-        const votes = JSON.parse(localStorage.getItem("postVotes") || "{}");
-
-        const postsWithComments = await Promise.all(
-          postsData.map(async (post) => {
-            const commentsRes = await fetch(
-              `${API_URL}posts/${post.id}/comments/`,
-              { headers }
-            );
-            const comments = await commentsRes.json();
-            return {
-              ...post,
-              comments,
-              newComment: "",
-              editingCommentId: null,
-              editingCommentText: "",
-              userVote: votes[post.id] || null,
-            };
-          })
-        );
-
-        setPosts(postsWithComments);
-      } catch (error) {
-        console.error("Error:", error);
-        setNotFound(true);
-      } finally {
-        setLoading(false);
-      }
-    };
 
     fetchData();
   }, [id]);
