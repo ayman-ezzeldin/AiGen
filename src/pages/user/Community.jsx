@@ -7,9 +7,20 @@ const Community = () => {
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showDialog, setShowDialog] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [topicToDelete, setTopicToDelete] = useState(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [currentUser, setCurrentUser] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      setCurrentUser(payload?.username);
+    }
+  }, []);
 
   const fetchGroups = async () => {
     try {
@@ -31,9 +42,7 @@ const Community = () => {
       }
 
       const data = await response.json();
-      if (!Array.isArray(data)) return [];
-
-      return data;
+      return Array.isArray(data) ? data : [];
     } catch (error) {
       console.error("Fetch error:", error);
       return null;
@@ -83,17 +92,42 @@ const Community = () => {
     }
   };
 
-  const filteredGroups = Array.isArray(groups)
-    ? groups.filter((group) => {
-        const titleMatch = group.title
-          ?.toLowerCase()
-          .includes(searchQuery.toLowerCase());
-        const userMatch = group.user?.username
-          ?.toLowerCase()
-          .includes(searchQuery.toLowerCase());
-        return titleMatch || userMatch;
-      })
-    : [];
+  const confirmDeleteTopic = (topicId, e) => {
+    e.stopPropagation();
+    setTopicToDelete(topicId);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirmed = async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      const res = await fetch(`${API_URL}topics/${topicToDelete}/`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (res.ok) {
+        setGroups((prev) => prev.filter((g) => g.id !== topicToDelete));
+      } else {
+        console.error("Failed to delete topic");
+      }
+    } catch (err) {
+      console.error("Error deleting topic:", err);
+    } finally {
+      setShowDeleteModal(false);
+      setTopicToDelete(null);
+    }
+  };
+
+  const filteredGroups = groups.filter((group) => {
+    const titleMatch = group.title
+      ?.toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const userMatch = group.user?.username
+      ?.toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    return titleMatch || userMatch;
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#f0f4ff] to-[#e8f0fe] flex flex-col items-center py-10 px-4">
@@ -105,7 +139,7 @@ const Community = () => {
         developers ✨
       </p>
 
-      {/* Search and Create */}
+      {/* Search + Create */}
       <div className="w-full max-w-4xl flex flex-col sm:flex-row justify-center items-center gap-7 mb-10">
         <input
           type="text"
@@ -122,7 +156,7 @@ const Community = () => {
         </button>
       </div>
 
-      {/* Content */}
+      {/* Topics */}
       {loading ? (
         <p className="text-gray-500 text-lg">Loading community groups...</p>
       ) : filteredGroups.length === 0 ? (
@@ -132,7 +166,7 @@ const Community = () => {
           {filteredGroups.map((group) => (
             <div
               key={group.id}
-              className="bg-white shadow-lg rounded-xl p-6 hover:shadow-2xl transition-all cursor-pointer border border-transparent hover:border-blue-200"
+              className="relative bg-white shadow-lg rounded-xl p-6 hover:shadow-2xl transition-all cursor-pointer border border-transparent hover:border-blue-200"
               onClick={() => navigate(`/user/community/${group.id}`)}
             >
               <h2 className="text-xl font-semibold text-blue-800 mb-2">
@@ -144,15 +178,24 @@ const Community = () => {
               <p className="text-sm text-gray-500">
                 👤 Created by:{" "}
                 <span className="font-medium">
-                  {group.user?.username || group?.creator || group?.host ||"Unknown"}
+                  {group.user?.username || group.creator || group.host || "Unknown"}
                 </span>
               </p>
+
+              {currentUser === (group.user?.username || group.creator || group.host) && (
+                <button
+                  onClick={(e) => confirmDeleteTopic(group.id, e)}
+                  className="absolute top-4 right-4 text-red-500 hover:text-red-700"
+                >
+                  🗑️
+                </button>
+              )}
             </div>
           ))}
         </div>
       )}
 
-      {/* Dialog Modal */}
+      {/* Create Topic Modal */}
       {showDialog && (
         <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50 px-4">
           <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl border border-blue-100">
@@ -185,6 +228,34 @@ const Community = () => {
                 onClick={handleCreateTopic}
               >
                 Create
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50 px-4">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl border border-red-100">
+            <h2 className="text-2xl font-bold text-center text-red-600 mb-4">
+              ⚠️ Confirm Delete
+            </h2>
+            <p className="text-gray-700 text-center mb-6">
+              Are you sure you want to delete this topic? This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-2">
+              <button
+                className="px-5 py-2 bg-gray-100 rounded-xl hover:bg-gray-200 transition"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-5 py-2 bg-gradient-to-r from-red-400 to-red-700 hover:from-red-500 hover:to-red-800 rounded-xl text-white transition"
+                onClick={handleDeleteConfirmed}
+              >
+                Delete
               </button>
             </div>
           </div>
