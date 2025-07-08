@@ -9,10 +9,14 @@ const MessageInput = ({ sendJsonMessage, readyState }) => {
   const { selectedRoom } = useSelector((state) => state.messages);
 
   const handleSend = () => {
-    if (!message.trim() || !selectedRoom || readyState !== 1) return;
+    console.log("📤 Sending message:", message);
+    
+    if (!message.trim() || !selectedRoom) return;
+    console.log("✅ Sending message to WebSocket");
+    
 
-    sendJsonMessage({message});
-    console.log("Message sent:", message);
+    const payload = { message }; // ✅ this is what works in Postman
+    sendJsonMessage(payload);
     setMessage("");
   };
 
@@ -21,7 +25,7 @@ const MessageInput = ({ sendJsonMessage, readyState }) => {
   };
 
   return (
-    <div className="p-4 bg-transparent border-t flex items-center gap-2">
+    <div className="p-4 border-t flex items-center gap-2">
       <Input
         type="text"
         placeholder={
@@ -30,7 +34,7 @@ const MessageInput = ({ sendJsonMessage, readyState }) => {
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         onKeyDown={handleKeyDown}
-        className="p-4 focus:ring-indigo-500 border border-gray-300 text-gray-700 font-semibold focus:ring-2 rounded-2xl"
+        className="p-4 border text-gray-700 font-semibold rounded-2xl"
       />
       <Button onClick={handleSend} disabled={!message.trim()} className="rounded-2xl">
         <Send className="text-white" />
