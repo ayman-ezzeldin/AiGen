@@ -9,9 +9,10 @@ import API_URL from "../../../../utils/api"
 const MessageContainer = () => {
   const dispatch = useDispatch();
   const { selectedRoom } = useSelector((state) => state.messages);
-  const { accessToken } = useSelector((state) => state.auth);
+  // const { accessToken } = useSelector((state) => state.auth);
 
   // 👇 تحميل الرسائل لما الغرفة تتغير
+  const accessToken = localStorage.getItem("accessToken");
   useEffect(() => {
     if (selectedRoom) {
       dispatch(fetchMessages(selectedRoom));
@@ -24,7 +25,7 @@ const MessageContainer = () => {
   const url = new URL(API_URL);
 
     if (selectedRoom && accessToken) {
-      return `ws://${url.host}/ws/chat/${selectedRoom}/?token=${accessToken}`;
+      return `wss://${url.host}/ws/chat/${selectedRoom}/?token=${accessToken}`;
     }
     return null;
   }, [selectedRoom, accessToken]);

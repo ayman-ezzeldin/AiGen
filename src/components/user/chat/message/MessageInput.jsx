@@ -10,6 +10,7 @@ const MessageInput = ({ sendJsonMessage, readyState }) => {
 
   const handleSend = () => {
     console.log("📤 Sending message:", message);
+    console.log("WebSocket readyState:", readyState);
     
     if (!message.trim() || !selectedRoom) return;
     console.log("✅ Sending message to WebSocket");
