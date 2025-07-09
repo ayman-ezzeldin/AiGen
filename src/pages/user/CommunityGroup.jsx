@@ -10,6 +10,7 @@ const CommunityGroup = () => {
   const navigate = useNavigate();
   const [group, setGroup] = useState(null);
   const [posts, setPosts] = useState([]);
+  const [users, setUsers] = useState([]);
   const [newPost, setNewPost] = useState({ title: "", content: "" });
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -29,60 +30,64 @@ const CommunityGroup = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-  setLoading(true);
-  try {
-    const token = localStorage.getItem("accessToken");
-    const headers = { Authorization: `Bearer ${token}` };
+      setLoading(true);
+      try {
+        const token = localStorage.getItem("accessToken");
+        const headers = { Authorization: `Bearer ${token}` };
 
-    const groupRes = await fetch(`${API_URL}topics/${id}`, {
-      headers,
-    });
-
-    if (groupRes.status === 404) {
-      setNotFound(true);
-      return;
-    }
-
-    if (!groupRes.ok) throw new Error("Group fetch failed");
-
-    const groupData = await groupRes.json();
-    setGroup(groupData);
-
-    const postsRes = await fetch(`${API_URL}posts/`, {
-      headers,
-    });
-
-    const postsData = await postsRes.json();
-    const votes = JSON.parse(localStorage.getItem("postVotes") || "{}");
-
-    const postsWithComments = await Promise.all(
-      postsData.map(async (post) => {
-        const commentsRes = await fetch(`${API_URL}posts/${post.id}/comments/`, {
+        const groupRes = await fetch(`${API_URL}topics/${id}`, {
           headers,
         });
-        const comments = await commentsRes.json();
-        return {
-          ...post,
-          comments,
-          newComment: "",
-          editingCommentId: null,
-          editingCommentText: "",
-          userVote: votes[post.id] || null,
-        };
-      })
-    );
 
-    // ✅ Frontend filtering based on topic
-    const filteredPosts = postsWithComments.filter((post) => post.topic == id);
-    setPosts(filteredPosts);
-  } catch (error) {
-    console.error("Error:", error);
-    setNotFound(true);
-  } finally {
-    setLoading(false);
-  }
-};
+        if (groupRes.status === 404) {
+          setNotFound(true);
+          return;
+        }
 
+        if (!groupRes.ok) throw new Error("Group fetch failed");
+
+        const groupData = await groupRes.json();
+        setGroup(groupData);
+
+        const postsRes = await fetch(`${API_URL}posts/`, {
+          headers,
+        });
+
+        const postsData = await postsRes.json();
+        const votes = JSON.parse(localStorage.getItem("postVotes") || "{}");
+
+        const postsWithComments = await Promise.all(
+          postsData.map(async (post) => {
+            const commentsRes = await fetch(
+              `${API_URL}posts/${post.id}/comments/`,
+              {
+                headers,
+              }
+            );
+            const comments = await commentsRes.json();
+            return {
+              ...post,
+              comments,
+              newComment: "",
+              editingCommentId: null,
+              editingCommentText: "",
+              userVote: votes[post.id] || null,
+            };
+          })
+        );
+
+        // ✅ Frontend filtering based on topic
+        const filteredPosts = postsWithComments.filter(
+          (post) => post.topic == id
+        );
+        setPosts(filteredPosts);
+      } catch (error) {
+        console.error("Error:", error);
+        setNotFound(true);
+      } finally {
+        setLoading(false);
+      }
+    };
 
     fetchData();
   }, [id]);
@@ -106,6 +111,36 @@ const CommunityGroup = () => {
     };
     fetchprofile();
   }, []);
+
+  useEffect(() => {
+    const fetchAllUsers = async () => {
+      let allUsers = [];
+      let nextUrl = `${API_URL}users/`;
+
+      while (nextUrl) {
+        try {
+          const res = await fetch(nextUrl);
+          const data = await res.json();
+          allUsers.push(...data.results);
+          nextUrl = data.next;
+        } catch (err) {
+          console.warn("❌ Failed to fetch users:", err);
+          break;
+        }
+      }
+
+      return allUsers;
+    };
+
+    const fetchData = async () => {
+      const users = await fetchAllUsers();
+      setUsers(users);
+    };
+
+    fetchData();
+  }, []);
+
+  console.log("all users : ", users);
 
   const token = localStorage.getItem("accessToken");
   const headers = {
@@ -294,6 +329,9 @@ const CommunityGroup = () => {
     }
   };
 
+  console.log("user: ", user);
+  console.log("posts: ", posts);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 to-blue-100 py-12 px-6">
       <div className="max-w-5xl mx-auto space-y-8">
@@ -339,13 +377,22 @@ const CommunityGroup = () => {
               <div className="flex justify-between">
                 <div className=" w-full">
                   <div className="text-gray-500 text-sm mb-2 flex items-center gap-2">
-                    <img
-                      src={profile}
-                      alt={user.image}
-                      className=" w-12 h-12 rounded-full select-none"
-                      draggable="false"
-                    />
-                    <p className="flex flex-col text-center select-none">
+                    {(() => {
+                      const author = users.find(
+                        (u) => u.username === (post.user?.username || post.user)
+                      );
+                      console.log("author: ", author);
+
+                      return (
+                        <img
+                          src={author?.profile?.image || "/default-user.png"}
+                          alt={author?.username}
+                          className="w-12 h-12 rounded-full"
+                        />
+                      );
+                    })()}
+
+                    <p className="flex flex-col  select-none">
                       <span className="font-bold text-xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-700 hover:from-blue-500 hover:to-blue-800 ">
                         {post.user?.username || post.user}
                       </span>
@@ -412,11 +459,24 @@ const CommunityGroup = () => {
                   >
                     {post.editingCommentId === comment.id ? (
                       <>
-                        <img
-                          src={profile}
-                          alt={user.image}
-                          className=" w-8 h-8 rounded-full"
-                        />
+                        {(() => {
+                          const commenter = users.find(
+                            (u) =>
+                              u.username ===
+                              (comment.user?.username || comment.user)
+                          );
+
+                          return commenter ? (
+                            <img
+                              src={commenter?.profile?.image}
+                              alt={commenter.username}
+                              className="w-8 h-8 rounded-full"
+                            />
+                          ) : (
+                            <div className="bg-gray-300 w-8 h-8 rounded-full animate-pulse"></div>
+                          );
+                        })()}
+
                         <input
                           value={post.editingCommentText}
                           onChange={(e) =>
@@ -459,8 +519,7 @@ const CommunityGroup = () => {
                         <span className="flex items-center gap-3">
                           {currentUser !==
                           (comment.user?.username || comment.user) ? (
-                                      <div className=" bg-gray-300 w-8 h-8 rounded-full animate-pulse" ></div>
-
+                            <div className=" bg-gray-300 w-8 h-8 rounded-full animate-pulse"></div>
                           ) : (
                             <img
                               src={profile}

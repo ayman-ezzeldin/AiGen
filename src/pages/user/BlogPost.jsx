@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import NotFound from "../not-found";
 import ReactMarkdown from "react-markdown";
-
+import API_URL from "../../utils/api";
 
 const BlogPost = () => {
   const { id } = useParams();
@@ -13,7 +13,7 @@ const BlogPost = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await fetch(`http://34.45.126.157/blogs/${id}/`);
+        const response = await fetch(`${API_URL}blogs/${id}/`);
         if (!response.ok) {
           setNotFound(true);
           return;

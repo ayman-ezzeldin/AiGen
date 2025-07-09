@@ -35,6 +35,7 @@ const MenuItemsVariables = [
       { id: "models", label: "Models", path: "/user/models" },
       { id: "dataset", label: "Dataset", path: "/user/dataset" },
       { id: "learn", label: "Learn", path: "/user/learn" },
+      { id: "arch", label: "Arch", path: "/user/arch" },
     ],
   },
   {

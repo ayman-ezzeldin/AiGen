@@ -30,6 +30,7 @@ import Settings from "./profile/features/Settings";
 import ProjectList from "./pages/user/Components/ProjectList";
 import CreateProject from "./pages/user/Components/CreateProject";
 import UsersProfile from "./pages/user/UsersProfile";
+import ArchPage from "./pages/user/Components/ArchPage/ArchPage";
 
 function App() {
   const { isAuthenticated, isLoading } = useSelector(
@@ -74,6 +75,7 @@ function App() {
           <Route path="dataset" element={<DatasetPage />} />
           <Route path="models" element={<ModelPage />} />
           <Route path="learn" element={<LearnPage />} />
+          <Route path="arch" element={<ArchPage />} />
           <Route path="chatbot" element={<ChatBotpage />} />
           <Route path="community" element={<Community />} />
           <Route path="community/:id" element={<CommunityGroup />} />

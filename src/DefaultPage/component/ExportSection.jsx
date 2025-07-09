@@ -1,4 +1,6 @@
 import { useRef } from "react";
+import aicon from '../assets/Icons/AICON.png'
+import json from '../assets/Icons/1320-json.svg'
 
 const ExportSection = () => {
   // Card component with tilt effect
@@ -50,27 +52,27 @@ const ExportSection = () => {
       <div className="max-w-4xl mx-auto">
         <div className="grid md:grid-cols-2 grid-cols-1 gap-8 mb-8">
           <Card
-            imgSrc="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Tensorflow_logo.svg/768px-Tensorflow_logo.svg.png"
-            alt="TensorFlow Lite"
-            title="TensorFlow Lite"
-            description="used for saving model as weights or architecture"
+            imgSrc={aicon}
+            alt="AInoprj"
+            title="AInoprj"
+            description="an AINO extension dedicated to save AINO projects with passwords for security manner."
             descriptionColor="text-orange-500"
           />
           <Card
-            imgSrc="https://upload.wikimedia.org/wikipedia/commons/3/38/Jupyter_logo.svg"
-            alt="Jupyter notebook"
-            title="Jupyter notebook"
-            description="exports a notebook of the code."
+            imgSrc={json}
+            alt="Json"
+            title="Json"
+            description="Mapping for AINO nodes connections"
             descriptionColor="text-orange-700"
           />
         </div>
         <div className="grid md:grid-cols-2 grid-cols-1 gap-8">
-          <Card
-            imgSrc="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg"
-            alt="Python"
-            title="Python"
-            description="exports (Preprocessing.py, ModelBuilding.py, ModelTraining.py)"
-            descriptionColor="text-blue-600"
+       <Card
+            imgSrc="https://upload.wikimedia.org/wikipedia/commons/1/10/PyTorch_logo_icon.svg"
+            alt="PyTorch"
+            title="PyTorch"
+            description="exports models as serialized objects or scripts for dynamic computation"
+            descriptionColor="text-red-600"
           />
           <Card
             imgSrc="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Tensorflow_logo.svg/768px-Tensorflow_logo.svg.png"
@@ -79,6 +81,7 @@ const ExportSection = () => {
             description="used for saving model as weights or architecture SKlearn"
             descriptionColor="text-orange-500"
           />
+         
         </div>
       </div>
     </section>
