@@ -74,7 +74,7 @@ const Blog = () => {
                 </span>
                 <h2 className="text-xl font-bold text-gray-800 mb-2">{post.title}</h2>
                 <p className="text-gray-600 text-sm">
-                  {post.summary || "No summary provided."}
+                  {post.description || "No summary provided."}
                 </p>
               </div>
               <div className="mt-4 text-blue-500 font-medium text-sm">
