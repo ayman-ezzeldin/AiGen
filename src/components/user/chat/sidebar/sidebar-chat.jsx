@@ -22,7 +22,7 @@ const Sidebar = () => {
   }
 
   if (error) {
-    return <p className="text-red-500 p-4">{error}</p>;
+    return <p className="text-red-500 p-4 max-w-28">{error}</p>;
   }
 
   if (!Array.isArray(rooms)) {
@@ -35,7 +35,7 @@ const Sidebar = () => {
 
   return (
     <div className=" p-1 pt-4 border-r-2 border-gray-400 w-[110px]">
-      <h2 className="text-md font-bold text-white text-center mb-4">Available Chat Rooms</h2>
+      <h2 className="text-md font-bold text-white text-center mb-4">Chat Rooms</h2>
 
       <div className="space-y-2">
         {rooms.map((room) => (

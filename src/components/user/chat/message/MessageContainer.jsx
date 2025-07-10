@@ -43,16 +43,11 @@ const MessageContainer = () => {
     share: false,
     filter: () => true,
   }, Boolean(socketUrl)); // connect only if socketUrl is not null
-
-  console.log("readyState:", readyState);
-  console.log("lastJsonMessage:", lastJsonMessage);
-  
   
 
   // 👇 استقبال الرسائل من WebSocket
   useEffect(() => {
     if (lastJsonMessage) {
-      console.log("📩 WebSocket message received:", lastJsonMessage);
       dispatch(addMessage(lastJsonMessage));
     }
   }, [lastJsonMessage, dispatch]);

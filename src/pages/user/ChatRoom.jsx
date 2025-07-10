@@ -7,5 +7,5 @@ export default function ChatRoom() {
         <Sidebar />
         <MessageContainer />
       </div>
-  );
+  ); 
 }

@@ -140,8 +140,6 @@ const CommunityGroup = () => {
     fetchData();
   }, []);
 
-  console.log("all users : ", users);
-
   const token = localStorage.getItem("accessToken");
   const headers = {
     Authorization: `Bearer ${token}`,
@@ -328,9 +326,6 @@ const CommunityGroup = () => {
       return `${diffInDays} day${diffInDays > 1 ? "s" : ""} ago`;
     }
   };
-
-  console.log("user: ", user);
-  console.log("posts: ", posts);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 to-blue-100 py-12 px-6">
