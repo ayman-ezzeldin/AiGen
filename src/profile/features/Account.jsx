@@ -34,7 +34,6 @@ const Account = () => {
       );
       return;
     }
-    console.log("Password changed:", passwordData);
   };
 
   return (

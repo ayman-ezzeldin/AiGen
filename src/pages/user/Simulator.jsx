@@ -34,7 +34,6 @@ export default function Simulator() {
   const { id: projectId } = useParams();
   const location = useLocation();
   const state = location.state;
-  console.log("Received state:", state);
 
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -42,7 +41,6 @@ export default function Simulator() {
   const [projectJson, setProjectJson] = useState(null);
 
   const convertToReactFlow = (projectData) => {
-    console.log("Converting project data:", projectData);
 
     if (!projectData || !Array.isArray(projectData.nodes)) {
       console.warn("No valid nodes found in projectData.");
@@ -82,15 +80,11 @@ export default function Simulator() {
         .filter(Boolean);
     });
 
-    console.log("Generated nodes:", newNodes);
-    console.log("Generated edges:", newEdges);
-
     return { newNodes, newEdges };
   };
 
   const loadProject = async () => {
     let projectMeta = state?.projectJson;
-    console.log("Received project metadata:", projectMeta);
 
     if (!projectMeta?.file) {
       // fallback: fetch project metadata from API
@@ -112,7 +106,6 @@ export default function Simulator() {
 
     // Fetch the actual file content
     const fileUrl = `${API_URL}${projectMeta.file}`.replace("c//", "/media/");
-    console.log("Fetching file from:", fileUrl);
     const fileRes = await fetch(fileUrl);
     const fileContent = await fileRes.json();
     setProjectJson(fileContent);

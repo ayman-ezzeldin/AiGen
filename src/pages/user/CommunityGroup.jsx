@@ -101,7 +101,6 @@ const CommunityGroup = () => {
         });
 
         const data = await response.json();
-        console.log("Fetched profile:", data.profile.image);
         setProfile(data.profile.image);
         return data;
       } catch (error) {
@@ -376,7 +375,6 @@ const CommunityGroup = () => {
                       const author = users.find(
                         (u) => u.username === (post.user?.username || post.user)
                       );
-                      console.log("author: ", author);
 
                       return (
                         <img

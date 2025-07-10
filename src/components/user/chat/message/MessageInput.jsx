@@ -8,12 +8,8 @@ const MessageInput = ({ sendJsonMessage, readyState }) => {
   const [message, setMessage] = useState("");
   const { selectedRoom } = useSelector((state) => state.messages);
 
-  const handleSend = () => {
-    console.log("📤 Sending message:", message);
-    console.log("WebSocket readyState:", readyState);
-    
+  const handleSend = () => {    
     if (!message.trim() || !selectedRoom) return;
-    console.log("✅ Sending message to WebSocket");
     
 
     const payload = { message }; // ✅ this is what works in Postman

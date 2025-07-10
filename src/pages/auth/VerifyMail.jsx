@@ -20,7 +20,6 @@ const VerifyMailPage = () => {
 
     try {
       const result = await dispatch(verifyMail({ otp: otpMessage })).unwrap();
-      console.log('OTP verified:', result);
       navigate('/user/home'); 
     } catch (error) {
       console.error('Verification error:', error);

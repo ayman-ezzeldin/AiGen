@@ -119,8 +119,8 @@ const MenuItems = ({ open, setOpen, user }) => {
           <DialogTrigger asChild>
             <Button className="text-lg">Chat</Button>
           </DialogTrigger>
-          <DialogContent className="chat-room border-none rounded-xl">
-            <div className="w-[510px] rounded-2xl">
+          <DialogContent className="border-none rounded-2xl">
+            <div className="w-[710px] chat-room rounded-2xl">
               <ChatRoom />
             </div>
           </DialogContent>

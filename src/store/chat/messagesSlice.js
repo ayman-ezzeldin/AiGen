@@ -14,7 +14,6 @@ export const fetchMessages = createAsyncThunk(
         },
         withCredentials: true,
       });
-      console.log("✅ Messages fetched from API:", res.data);
       return res.data;
     } catch (err) {
       console.error("❌ Error fetching messages:", err);
@@ -36,13 +35,10 @@ const messagesSlice = createSlice({
     // ✅ Add single message (from WebSocket OR manually)
     addMessage(state, action) {
       const payload = action.payload;
-      console.log("📥 Incoming payload to addMessage:", payload);
 
       if (payload?.type === "message" && payload?.data) {
-        console.log("🧪 Message from WebSocket");
         state.messages.push(payload.data);
       } else {
-        console.log("🧪 Message from API or direct dispatch");
         state.messages.push(payload);
       }
     },
@@ -63,17 +59,14 @@ const messagesSlice = createSlice({
       .addCase(fetchMessages.pending, (state) => {
         state.loading = true;
         state.error = null;
-        console.log("⏳ Fetching messages...");
       })
       .addCase(fetchMessages.fulfilled, (state, action) => {
         state.loading = false;
         state.messages = action.payload;
-        console.log("✅ Messages loaded into store:", action.payload);
       })
       .addCase(fetchMessages.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-        console.log("❌ Failed to fetch messages:", action.payload);
       });
   },
 });

@@ -18,7 +18,6 @@ const Profile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Data:", user);
   };
 
   const handleImageChange = (file) => {

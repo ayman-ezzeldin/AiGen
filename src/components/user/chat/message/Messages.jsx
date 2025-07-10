@@ -15,7 +15,6 @@ const Messages = () => {
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-    console.log("📨 Messages updated:", messages);
   }, [messages]);
 
   const filteredMessages = messages.filter(
@@ -51,9 +50,6 @@ const Messages = () => {
   }, []);
 
 
-  console.log(" messages : ", messages);
-  
-
   return (
     <div className="flex-1 p-6 overflow-y-auto space-y-4 bg-muted/50">
       {filteredMessages.map((msg) => {
@@ -74,7 +70,7 @@ const Messages = () => {
               isCurrentUser ? "justify-end" : "justify-start"
             }`}
           >
-            <div className="  h-20 " >
+            <div className="h-16 " >
             {!isCurrentUser && (
               <img
                 src={senderImage || "/default-avatar.png"}
@@ -83,12 +79,12 @@ const Messages = () => {
               />
             )}
             </div>
-            <div className={`max-w-[70%] rounded-xl flex flex-col ${isCurrentUser ? "items-end bg-[#21548f] p-1" : "items-start px-3 py-1 bg-[#102E50]"} `}>
+            <div className={`max-w-[70%] rounded-[7px] flex flex-col ${isCurrentUser ? "items-end bg-[#21548f] p-1" : "items-start px-3 py-1 bg-[#102E50]"} `}>
               {!isCurrentUser && (
-                <span className="text-xs text-emerald-400 font-semibold ml-1">{msg.sender}</span>
+                <span className="text-xs text-emerald-400 font-semibold w-full -ml-1 ">{msg.sender}</span>
               )}
               <div
-                className={`px-4 py-2 rounded-2xl break-words ${
+                className={`px-4 py-[1px] rounded-2xl break-words ${
                   isCurrentUser
                     ? "text-white rounded-br-none"
                     : "text-white rounded-bl-none"
