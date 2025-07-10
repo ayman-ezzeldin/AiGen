@@ -83,7 +83,7 @@ const Messages = () => {
               />
             )}
             </div>
-            <div className={`max-w-[70%] p-2 rounded-xl flex flex-col ${isCurrentUser ? "items-end bg-[#21548f]" : "items-start bg-[#102E50]"} `}>
+            <div className={`max-w-[70%] rounded-xl flex flex-col ${isCurrentUser ? "items-end bg-[#21548f] p-1" : "items-start px-3 py-1 bg-[#102E50]"} `}>
               {!isCurrentUser && (
                 <span className="text-xs text-emerald-400 font-semibold ml-1">{msg.sender}</span>
               )}

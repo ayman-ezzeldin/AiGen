@@ -34,7 +34,7 @@ const Sidebar = () => {
   }
 
   return (
-    <div className=" p-1 pt-4 border-r-2 border-gray-400 w-[110px]">
+    <div className=" p-1 pt-4 border-r-2 border-gray-400 w-[160px]">
       <h2 className="text-md font-bold text-white text-center mb-4">Chat Rooms</h2>
 
       <div className="space-y-2">
@@ -42,12 +42,12 @@ const Sidebar = () => {
           <div
           key={room.id}
           onClick={() => handleSelectRoom(room.room_name)}
-          className="flex items-center justify-center gap-2 relative overflow-hidden p-4 rounded-xl  border-b-2 text-white border-gray-300 shadow-sm hover:shadow-xl hover:border-blue-600 cursor-pointer"
+          className="flex items-center justify-center mx-3 gap-2 relative overflow-hidden p-4 rounded-xl border-b-2 text-white border-gray-300 shadow-sm hover:shadow-xl hover:border-blue-600 cursor-pointer"
         >
           {/* <img src='/bg.png' alt="bg"
             className=" w-8 h-8 rounded-full object-cover"
           /> */}
-          <div className="text-sm font-semibold  transition">
+          <div className="text-sm font-semibold transition">
             {room.room_name}
           </div>
         </div>

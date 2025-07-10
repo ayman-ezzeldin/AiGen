@@ -54,15 +54,15 @@ const MessageContainer = () => {
 
   if (!selectedRoom || !accessToken) {
     return (
-      <div className="flex items-center justify-center h-full text-white">
-        Please select a room and ensure you{"'"}re logged in.
+      <div className="flex items-center justify-center w-full h-full text-white">
+        Please select a room 
       </div>
     );
   }
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden">
-      <div className="p-4 border-b border-gray-400 shadow-sm">
+    <div className="flex-1 flex flex-col w-full overflow-hidden">
+      <div className="p-4 border-b w-full border-gray-400 shadow-sm">
         <h2 className="text-xl font-semibold text-white">
           Chat with {selectedRoom}
         </h2>
