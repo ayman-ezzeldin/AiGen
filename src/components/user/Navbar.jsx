@@ -51,6 +51,9 @@ const MenuItemsVariables = [
 const MenuItems = ({ open, setOpen, user }) => {
   const [dropdownOpenId, setDropdownOpenId] = useState(null);
   const dropdownRef = useRef(null);
+  const { isVerified } = useSelector(
+    (state) => state.auth
+  );
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -114,7 +117,7 @@ const MenuItems = ({ open, setOpen, user }) => {
         </DropdownMenu>
       ))}
 
-      {user && (
+      {user && isVerified && (
         <Dialog>
           <DialogTrigger asChild>
             <Button className="text-lg">Chat</Button>

@@ -33,10 +33,14 @@ import UsersProfile from "./pages/user/UsersProfile";
 import ArchPage from "./pages/user/Components/ArchPage/ArchPage";
 
 function App() {
-  const { isAuthenticated, isLoading } = useSelector(
+  const { isAuthenticated, isLoading, isVerified } = useSelector(
     (state) => state.auth
   );
   const dispatch = useDispatch();
+  console.log("App isAuthenticated:", isAuthenticated);
+  console.log("App isLoading:", isLoading);
+  console.log("App isVerified:", isVerified);
+  
 
   useEffect(() => {
     dispatch(checkAuth());
@@ -52,7 +56,7 @@ function App() {
         <Route
           path="/auth"
           element={
-            <CheckAuth isAuthenticated={isAuthenticated} >
+            <CheckAuth isAuthenticated={isAuthenticated} isVerified={isVerified}> 
               <AuthLayout />
             </CheckAuth>
           }
@@ -65,7 +69,7 @@ function App() {
         <Route
           path="/user"
           element={
-            <CheckAuth isAuthenticated={isAuthenticated} >
+            <CheckAuth isAuthenticated={isAuthenticated} isVerified={isVerified}> 
               <UserLayout />
             </CheckAuth>
           }

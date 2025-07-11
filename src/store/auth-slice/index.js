@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import API_URL from "../../utils/api";
+import AuthAxiosInstance from "./AuthAxiosInstance";
 
 
 // ✅ Helper: Decode JWT token
@@ -57,59 +58,52 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const checkAuth = createAsyncThunk(
+  "auth/checkauth",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await AuthAxiosInstance.get("check-auth/");
+      return { success: true, user: response.data };
+    } catch (error) {
+      return rejectWithValue({ success: false });
+    }
+  }
+);
+
+// For verifyMail, use axiosInstance too
 export const verifyMail = createAsyncThunk(
   "auth/verify-email",
-  async (userData, { getState, rejectWithValue }) => {
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await AuthAxiosInstance.post("verify-email/", userData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || { message: error.message });
+    }
+  }
+);
+
+export const requestOtp = createAsyncThunk(
+  "auth/request-otp",
+  async (_, { getState, rejectWithValue }) => {
     try {
       const state = getState();
       const token =
         state.auth.accessToken || localStorage.getItem("accessToken");
 
-      if (!token) {
-        throw new Error("No access token available");
-      }
-
-      const response = await axios.post(`${API_URL}verify-email/`, userData, {
+      const response = await axios.post(`${API_URL}request-otp/`, {}, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+
       return response.data;
     } catch (error) {
-      console.error(
-        "Verification error:",
-        error.response?.data || error.message
-      );
-      return rejectWithValue(
-        error.response?.data || { message: error.message }
-      );
+      return rejectWithValue(error.response?.data || { message: error.message });
     }
   }
 );
 
-// ✅✅ ✅ UPDATED checkAuth: uses token from localStorage
-export const checkAuth = createAsyncThunk(
-  "auth/checkauth",
-  async (_, { rejectWithValue }) => {
-    try {
-      const token = localStorage.getItem("accessToken");
-      if (!token) throw new Error("No token in localStorage");
-
-      const response = await axios.get(`${API_URL}check-auth/`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Cache-Control":
-            "no-store, no-cache, must-revalidate, proxy-revalidate",
-        },
-      });
-
-      return { success: true, user: response.data };
-    } catch (error) {
-      console.error("checkAuth error:", error);
-      return rejectWithValue({ success: false });
-    }
-  }
-);
 
 // ============ 🧠 Slice ============
 

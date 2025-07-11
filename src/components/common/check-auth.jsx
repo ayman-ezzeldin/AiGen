@@ -1,30 +1,37 @@
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation } from "react-router-dom";
 
-const CheckAuth = ({ isAuthenticated, children }) => {
+const CheckAuth = ({ isAuthenticated, isVerified, children }) => {
   const location = useLocation();
-  // const isAdmin = user?.role === 'admin';
 
-  // Allow access to the Home page without authentication
-
-  if (location.pathname === '/') {
+  if (location.pathname === "/") {
     return <>{children}</>;
   }
 
-  
-
+  // لو المستخدم مش مسجّل دخول
   if (!isAuthenticated) {
-    // Redirect unauthenticated users away from protected pages (except login and register)
-    if (!(location.pathname.includes('login') || location.pathname.includes('register'))) {
+    if (
+      !(
+        location.pathname.includes("login") ||
+        location.pathname.includes("register")
+      )
+    ) {
       return <Navigate to="/auth/login" />;
     }
-  } 
-  // If the user is authenticated
-  else {
-    // Redirect authenticated users to their appropriate home based on role when accessing login or register pages
-    if (location.pathname.includes('login') || location.pathname.includes('register')) {
-      return <Navigate to= "/user/home" />;
+  } else {
+    // ✅ لو المستخدم مسجّل دخول بس مش مفعّل
+    if (!isVerified && !location.pathname.includes("verify")) {
+      return <Navigate to="/auth/verify" />;
     }
 
+    // ✅ لو مفعّل الإيميل وداخل على login أو register نرجعه للصفحة الرئيسية
+    if (
+      isVerified &&
+      (location.pathname.includes("login") ||
+        location.pathname.includes("register") ||
+        location.pathname.includes("verify"))
+    ) {
+      return <Navigate to="/user/home" />;
+    }
   }
 
   return <>{children}</>;
