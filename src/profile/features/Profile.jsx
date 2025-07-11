@@ -2,41 +2,106 @@ import { useDispatch, useSelector } from "react-redux";
 import Label from "../components/Label";
 import Input from "../components/Input";
 import SubmitButton from "../components/SubmitButton";
-import defaultProfile from "../../profile/assets/me.jpeg";
 import ProfileImageUploader from "../components/ProfileImageUploader";
-import { updateUser, updateProfileImage } from "../../store/profile/settingsSlice";
-import { User } from "lucide-react";
+import defaultProfile from "../assets/me.jpeg";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+
+import {
+  updateUser,
+  updateProfileImage,
+  getProfileData,
+  editProfileData,
+  deleteImage,
+  resetEditStatus,
+} from "../../store/profile/settingsSlice";
+import { Mails } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const Profile = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.settings.user);
+  const { user, status, error } = useSelector((state) => state.settings);
+  const [imageFile, setImageFile] = useState(null);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-    dispatch(updateUser({ [id]: value }));
+    const profileFields = ["fullName", "bio", "image"];
+    if (profileFields.includes(id)) {
+      dispatch(updateUser({ profile: { [id]: value } }));
+    } else {
+      dispatch(updateUser({ [id]: value }));
+    }
+  };
+
+  const handleImageChange = (file) => {
+    setImageFile(file);
+    const url = file ? URL.createObjectURL(file) : user.profile.image;
+    dispatch(updateProfileImage({ url }));
+  };
+
+  const handleImageDelete = () => {
+    setImageFile(null);
+    dispatch(updateProfileImage({ url: defaultProfile }));
+
+    const formData = new FormData();
+    formData.append("profile.image", "");
+
+    dispatch(deleteImage(formData));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("username", user.username);
+    formData.append("first_name", user.first_name);
+    formData.append("last_name", user.last_name);
+    formData.append("email", user.email);
+    formData.append("profile.full_name", user.profile.full_name);
+    formData.append("profile.bio", user.profile.bio);
+
+    if (imageFile) {
+      formData.append("profile.image", imageFile);
+    }
+
+    dispatch(editProfileData(formData));
   };
 
-  const handleImageChange = (file) => {
-    const url = file ? URL.createObjectURL(file) : defaultProfile;
-    dispatch(updateProfileImage({ file, url }));
-  };
+  useEffect(() => {
+    dispatch(getProfileData());
+  }, [dispatch]);
 
-  const handleImageDelete = () => {
-    dispatch(updateProfileImage({ file: null, url: defaultProfile }));
-  };
+  useEffect(() => {
+    if (status.getProfile === "failed") {
+      toast.error(error.getProfile);
+    }
+  }, [status.getProfile, error.getProfile]);
+
+  useEffect(() => {
+    if (status.editProfile === "succeeded") {
+      toast.success("The data has been updated successfully");
+      dispatch(resetEditStatus());
+    } else if (status.editProfile === "failed") {
+      toast.error(error.editProfile);
+      dispatch(resetEditStatus());
+    }
+  }, [status.editProfile, error.editProfile]);
+
+  if (status.getProfile === "loading") {
+    return (
+      <div className="flex h-64 items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-blue-600 md:h-12 md:w-12" />
+      </div>
+    );
+  }
 
   return (
-    <div>
+    <div className="animate-in fade-in duration-800">
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
         {/* profile picture */}
         <div className="grid gap-3 md:grid-cols-3">
-          <p className="md:mb-20 col-span-1 font-medium">Profile picture</p>
+          <p className="col-span-1 font-medium md:mb-20">Profile picture</p>
           <ProfileImageUploader
-            imageUrl={user.profileImage}
+            imageUrl={user.profile.image}
             onImageChange={handleImageChange}
             onImageDelete={handleImageDelete}
           />
@@ -45,11 +110,15 @@ const Profile = () => {
         {/* Name */}
         <div className="grid gap-3 md:grid-cols-3">
           <Label id="name" label="Name:" />
-          <div className="flex gap-2 md:gap-8 flex-1 col-span-2">
-            <Input id="name" value={user.name} onChange={handleChange} />
+          <div className="col-span-2 flex flex-1 gap-2 md:gap-8">
             <Input
-              id="lastName"
-              value={user.lastName}
+              id="first_name"
+              value={user.first_name}
+              onChange={handleChange}
+            />
+            <Input
+              id="last_name"
+              value={user.last_name}
               onChange={handleChange}
             />
           </div>
@@ -69,24 +138,7 @@ const Profile = () => {
             type="email"
             value={user.email}
             onChange={handleChange}
-            icon={User}
-          />
-        </div>
-
-        {/* Job Title */}
-        <div className="grid gap-3 md:grid-cols-3">
-          <Label id="jobTitle" label="Job Title:" />
-          <Input id="jobTitle" value={user.jobTitle} onChange={handleChange} />
-        </div>
-
-        {/* Country */}
-        <div className="grid gap-3 md:grid-cols-3">
-          <Label id="country" label="Country:" />
-          <Input
-            id="country"
-            value={user.country}
-            onChange={handleChange}
-            icon={User}
+            icon={Mails}
           />
         </div>
 
@@ -95,15 +147,17 @@ const Profile = () => {
           <Label id="bio" label="Bio:" />
           <textarea
             id="bio"
-            value={user.bio}
+            value={user.profile.bio}
             onChange={handleChange}
-            className="w-full mt-2 p-4 border resize-none border-gray-200 rounded h-24 outline-none bg-white col-span-2"
+            className="col-span-2 mt-2 h-24 w-full resize-none rounded border border-gray-200 bg-white p-4 text-[#12121261] outline-none"
             placeholder="Write about yourself"
           ></textarea>
         </div>
 
         {/* Submit */}
-        <SubmitButton>Save changes</SubmitButton>
+        <SubmitButton isLoading={status.editProfile === "loading"}>
+          Save changes
+        </SubmitButton>
       </form>
     </div>
   );

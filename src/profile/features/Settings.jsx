@@ -6,6 +6,7 @@ import {
   ListboxOptions,
 } from "@headlessui/react";
 import { CheckIcon, ChevronDown } from "lucide-react";
+import { Toaster } from "../components/ui/sonner"
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -27,18 +28,19 @@ const Settings = () => {
   };
 
   return (
-    <div className="pl-6 md:pl-36 pt-14 pr-6 md:pr-16 pb-14 bg-[#f2f2f2] min-h-screen">
-      <h2 className="font-bold text-2xl md:text-4xl">Settings</h2>
-      <p className="pt-2 max-md:text-sm ">Manage your account settings</p>
+    <div className="min-h-screen bg-[#f2f2f2] pt-14 pr-6 pb-14 pl-6 md:pr-16 md:pl-36">
+      <h2 className="text-2xl font-bold md:text-4xl">Settings</h2>
+      <p className="pt-2 max-md:text-sm">Manage your account settings</p>
+      <Toaster />
 
       {/* Tabs for medium and large screens */}
-      <ul className="hidden md:flex pt-8 items-center gap-x-12 font-semibold text-lg border-b-2 border-[#CCCCCC]">
+      <ul className="hidden items-center gap-x-12 border-b-2 border-[#CCCCCC] pt-8 text-lg font-semibold md:flex">
         {tabs.map((tab) => (
           <NavLink
             key={tab.path}
             to={tab.path}
             className={({ isActive }) =>
-              `p-2 ${isActive ? "border-b-2 border-black -mb-px" : ""}`
+              `p-2 ${isActive ? "-mb-px border-b-2 border-black" : ""}`
             }
           >
             {tab.label}
@@ -47,11 +49,11 @@ const Settings = () => {
       </ul>
 
       {/* Dropdown for small screens */}
-      <div className="block md:hidden mt-6">
+      <div className="mt-6 block md:hidden">
         <Listbox value={selectedTab} onChange={handleSelectChange}>
           {({ open }) => (
             <div className="relative">
-              <ListboxButton className="flex justify-between w-full border border-gray-300 rounded p-2 bg-white font-semibold cursor-pointer text-left outline-none">
+              <ListboxButton className="flex w-full cursor-pointer justify-between rounded border border-gray-300 bg-white p-2 text-left font-semibold outline-none">
                 <span>{selectedTab.label}</span>
                 <ChevronDown
                   className={`transition-transform duration-200 ${
@@ -60,13 +62,13 @@ const Settings = () => {
                 />
               </ListboxButton>
 
-              <ListboxOptions className="absolute mt-1 w-full bg-white border border-gray-200 rounded shadow-md z-50 outline-none">
+              <ListboxOptions className="absolute z-50 mt-1 w-full rounded border border-gray-200 bg-white shadow-md outline-none">
                 {tabs.map((tab) => (
                   <ListboxOption
                     key={tab.path}
                     value={tab}
                     className={({ active, selected }) =>
-                      `flex items-center px-4 py-2 text-sm cursor-pointer ${
+                      `flex cursor-pointer items-center px-4 py-2 text-sm ${
                         active ? "bg-blue-100" : ""
                       } ${selected ? "font-semibold" : ""}`
                     }
@@ -74,7 +76,7 @@ const Settings = () => {
                     {({ selected }) => (
                       <>
                         {selected && (
-                          <CheckIcon className="w-4 h-4 mr-2 text-blue-600" />
+                          <CheckIcon className="mr-2 h-4 w-4 text-blue-600" />
                         )}
                         {tab.label}
                       </>

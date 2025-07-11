@@ -7,7 +7,7 @@ const PasswordInput = ({ id, value, onChange }) => {
   const toggleVisibility = () => setShow((prev) => !prev);
 
   return (
-    <div className="p-2 border bg-white border-gray-200 rounded shadow-[0_4px_15px_rgba(18, 18, 18, 0.08)] w-full flex items-center gap-2 col-span-2">
+    <div className="shadow-[0_4px_15px_rgba(18, 18, 18, 0.08)] col-span-2 flex w-full items-center gap-2 rounded border border-gray-200 bg-white p-2">
       <input
         type={show ? "text" : "password"}
         id={id}

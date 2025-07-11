@@ -11,7 +11,7 @@ const Notifications = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="animate-in fade-in space-y-6 duration-800">
       <ToggleSwitch
         label="Allow in-app notificationsh"
         description="These are notifications that are delivered within the app."
