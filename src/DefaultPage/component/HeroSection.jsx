@@ -1,70 +1,10 @@
-import { useState, useRef, useCallback } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
-import Modal from "react-modal";
-import white from '../assets/Icons/white.png';
-import black from '../assets/Icons/black.png';
-import heroImage from '../assets/Images/ai-nuclear-energy-future-innovation-disruptive-technology.jpg';
-// ربط Modal بـ root لتجنب مشاكل الوصول
-Modal.setAppElement('#root');
+import React, { useState, useRef } from 'react';
+import Modal from 'react-modal';
+import hero from '../assets/Images/hero.png';
 
 const HeroSection = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [borderDirection, setBorderDirection] = useState(null);
   const imageRef = useRef(null);
-
-  // قيم Motion للتحكم في الميل والتكبير
-  const rotateX = useMotionValue(0);
-  const rotateY = useMotionValue(0);
-  const scale = useMotionValue(1);
-  const springConfig = { damping: 30, stiffness: 300 };
-  const rotateXSpring = useSpring(rotateX, springConfig);
-  const rotateYSpring = useSpring(rotateY, springConfig);
-  const scaleSpring = useSpring(scale, springConfig);
-
-  // تحديد اتجاه المؤشر وتحديث الحدود
-  const handleMouseMove = useCallback((e) => {
-    if (!imageRef.current) return;
-
-    const rect = imageRef.current.getBoundingClientRect();
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-
-    // حساب أقرب اتجاه للمؤشر
-    const threshold = 0.2;
-    let direction = null;
-
-    if (mouseX < rect.width * threshold) {
-      direction = 'left';
-    } else if (mouseX > rect.width * (1 - threshold)) {
-      direction = 'right';
-    } else if (mouseY < rect.height * threshold) {
-      direction = 'top';
-    } else if (mouseY > rect.height * (1 - threshold)) {
-      direction = 'bottom';
-    }
-
-    setBorderDirection(direction);
-
-    // حساب الميل
-    const maxTilt = 20;
-    const tiltX = -((mouseY - centerY) / centerY) * maxTilt;
-    const tiltY = ((mouseX - centerX) / centerX) * maxTilt;
-
-    rotateX.set(tiltX);
-    rotateY.set(tiltY);
-    scale.set(1.02);
-  }, [rotateX, rotateY, scale]);
-
-  // إعادة الحالة الافتراضية
-  const handleMouseLeave = useCallback(() => {
-    rotateX.set(0);
-    rotateY.set(0);
-    scale.set(1);
-    setBorderDirection(null);
-  }, [rotateX, rotateY, scale]);
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -74,137 +14,72 @@ const HeroSection = () => {
     setModalIsOpen(false);
   };
 
-  // تحديد أنماط الحدود بناءً على الاتجاه
-  const getBorderStyle = () => {
-    const borderWidth = '4px';
-    const borderColor = '#3b82f6';
-    const transition = 'border 0.3s ease';
+  // Handle mouse move for tilt effect
+  const handleMouseMove = (e) => {
+    const image = imageRef.current;
+    const rect = image.getBoundingClientRect();
+    const x = e.clientX - rect.left; // Mouse X position relative to image
+    const y = e.clientY - rect.top; // Mouse Y position relative to image
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
 
-    switch (borderDirection) {
-      case 'left':
-        return {
-          borderLeft: `${borderWidth} solid ${borderColor}`,
-          borderRight: 'none',
-          borderTop: 'none',
-          borderBottom: 'none',
-          transition,
-        };
-      case 'right':
-        return {
-          borderRight: `${borderWidth} solid ${borderColor}`,
-          borderLeft: 'none',
-          borderTop: 'none',
-          borderBottom: 'none',
-          transition,
-        };
-      case 'top':
-        return {
-          borderTop: `${borderWidth} solid ${borderColor}`,
-          borderLeft: 'none',
-          borderRight: 'none',
-          borderBottom: 'none',
-          transition,
-        };
-      case 'bottom':
-        return {
-          borderBottom: `${borderWidth} solid ${borderColor}`,
-          borderLeft: 'none',
-          borderRight: 'none',
-          borderTop: 'none',
-          transition,
-        };
-      default:
-        return {
-          border: 'none',
-          transition,
-        };
-    }
+    // Calculate tilt angles (adjust 0.05 for tilt intensity)
+    const tiltX = (centerY - y) * 0.05; // Tilt around X-axis
+    const tiltY = (x - centerX) * 0.05; // Tilt around Y-axis
+
+    // Apply transform
+    image.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+  };
+
+  // Reset transform when mouse leaves
+  const handleMouseLeave = () => {
+    const image = imageRef.current;
+    image.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
   };
 
   return (
-    <section className="flex flex-col-reverse lg:flex-row items-center justify-between px-4 py-16 md:px-16 lg:px-32 bg-gray-100 min-h-[70vh]">
-      {/* Left Section (Text and Buttons) */}
-      <motion.div
-        className="w-full lg:w-1/2 text-center lg:text-left mb-12 lg:mb-0 space-y-6"
-        initial={{ y: -50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-      >
-        {/* Text Section */}
-        <div className="space-y-4">
-          <h1 className="text-blue-600 text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight pl-[30px]">
-            Build
+    <div className="min-h-screen bg-gradient-to-b from-white to-blue-50 flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 mt-4 sm:mt-6 md:mt-8">
+      <div className="flex flex-col-reverse md:flex-col items-center w-full">
+        {/* النص */}
+        <div className="text-center w-full">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-blue-600">
+            Build AI models with ease
           </h1>
-          <h2 className="text-gray-800 text-3xl md:text-4xl lg:text-5xl font-semibold pl-[30px]">
-            AI models with ease
-          </h2>
-          <p className="text-gray-500 text-base md:text-lg lg:text-xl leading-relaxed max-w-lg mx-auto lg:mx-0 pl-[30px] ">
-            A powerful, user-friendly IDE designed to simplify,accelerate, and reduce the cost of AI model development.
+          <p className="mt-2 sm:mt-4 text-gray-600 max-w-xs sm:max-w-md md:max-w-lg mx-auto">
+            A powerful, user-friendly IDE designed to simplify, accelerate, and reduce the cost of AI model development.
           </p>
+          <div className="mt-4 sm:mt-6 flex flex-col font-semibold font-mono sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+            <button className="bg-blue-600/90 hover:bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl  flex items-center justify-center w-full sm:w-auto">
+              Download 
+            </button>
+            <button
+              onClick={openModal}
+              className="text-blue-600 text-base sm:text-lg self-center cursor-pointer mt-2 sm:mt-0 hover:text-blue-700"
+            >
+              Watch demo
+            </button>
+          </div>
         </div>
 
-        {/* Buttons Section */}
-        <div className="flex flex-col sm:flex-row items-center justify-end sm:justify-end lg:justify-end gap-4 mt-8 ml-auto sm:ml-auto lg:ml-auto">
-          <button
-            className="bg-black text-white px-5 py-3 rounded-2xl flex items-center gap-1 w-full sm:w-auto justify-center"
-            aria-label="Download from App Store"
-          >
-            <img src={white} alt="App Store Icon" className="w-9 h-9" />
-            <span>Download in App Store</span>
-          </button>
-          <button
-            className="bg-black text-white px-5 py-3 rounded-2xl flex items-center gap-1 w-full sm:w-auto justify-center"
-            aria-label="Download from App Store"
-          >
-            <img src={black} alt="Microsoft Icon" className="w-9 h-9" />
-            <span>Download in Microsoft</span>
-          </button>
-
-          {/* <button
-            className="bg-black text-white px-6 py-3 rounded-xl flex sm:w-auto "
-            aria-label="Download from Microsoft Store"
-          >
-            <div>
-              <h2 className=" px-2 text-start" >Download in </h2>
-              <div className="flex gap-1 items-center">
-                <img src={black} alt="Microsoft Store Icon" className="w-9 h-9" />
-                <h1 className=" text-xl">Microsoft</h1>
+        {/* الصورة */}
+                <div
+                className="mt-4 sm:mt-6 md:mt-8 mb-6 sm:mb-0 rounded-lg sm:rounded-xl w-full max-w-xs sm:max-w-md md:max-w-2xl bg-transparent"
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+              >
+                <div className="relative">
+                  <img
+                    ref={imageRef}
+                    src={hero}
+                    alt="Workflow diagram"
+                    className="w-full h-auto rounded-lg sm:rounded-xl transition-transform duration-100 cursor-pointer"
+                    style={{ transformStyle: 'preserve-3d' }}
+                  />
+                </div>
               </div>
-              </div>
-          </button> */}
+      </div>
 
-          <button
-            onClick={openModal}
-            className="text-blue-500 text-base md:text-lg font-medium hover:text-blue-600 transition-colors duration-300 flex items-center"
-            aria-label="Watch demo video"
-          >
-            Watch demo
-          </button>
-        </div>
-      </motion.div>
-
-      {/* Right Section (Image) */}
-      <motion.img
-        ref={imageRef}
-        src={heroImage}
-        alt="Sportsman performing exercises, representing strength and innovation"
-        className="w-full sm:w-2/3 md:w-1/3 lg:w-2/5 max-w-[270px] max-h-[400px] rounded-[13px] mx-auto lg:mx-0 mb-10 lg:mb-0 cursor-pointer shadow-2xl object-contain"
-        style={{
-          rotateX: rotateXSpring,
-          rotateY: rotateYSpring,
-          scale: scaleSpring,
-          perspective: 1000,
-          ...getBorderStyle(),
-        }}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        initial={{ x: 150, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-        loading="lazy"
-      />
-
-      {/* Modal for Video */}
+      {/* المودال */}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -217,7 +92,7 @@ const HeroSection = () => {
             marginRight: '-50%',
             transform: 'translate(-50%, -50%)',
             width: '90%',
-            maxWidth: '800px',
+            maxWidth: '600px',
             padding: '0',
             border: 'none',
             background: 'transparent',
@@ -237,25 +112,29 @@ const HeroSection = () => {
         <div className="relative">
           <button
             onClick={closeModal}
-            className="absolute top-4 right-4 text-white bg-red-500 rounded-full w-10 h-10 flex items-center justify-center hover:bg-red-600 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="absolute top-4 right-4 text-white bg-red-500 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center hover:bg-red-600 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-red-500"
             aria-label="Close video modal"
           >
             X
           </button>
           <iframe
             width="100%"
-            height="450"
+            height="250"
+            className="sm:h-80 md:h-96 rounded-lg"
             src="https://www.youtube.com/embed/w-m8p-o65UA?si=1ZpI5LMNZJmSaj81"
-            title="Demo Video"
+            title="YouTube video player"
             frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
             allowFullScreen
-            className="rounded-lg"
           ></iframe>
         </div>
       </Modal>
-    </section>
+    </div>
   );
 };
 
 export default HeroSection;
+
+// لازم تربط المودال بعنصر الجذر في الصفحة
+Modal.setAppElement('#root');

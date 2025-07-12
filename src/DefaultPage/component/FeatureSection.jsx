@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import Modal from 'react-modal';
 import img8 from '../assets/Icons/light-bulb.png';
 import img9 from '../assets/Icons/education.png';
@@ -80,7 +80,7 @@ function FeatureSection() {
           Designed for Every AI Journey. for Developers, Enthusiasts, and Teams
         </h2>
         <p className="text-lg text-[#555] font-semibold mb-10 max-w-2xl mx-auto">
-          Whether you{`'`}re just starting or an experienced AI professional, AINO adapts to support your unique needs.
+          Whether you're just starting or an experienced AI professional, AINO adapts to support your unique needs.
         </p>
         <div className="mt-[110px] flex flex-col md:flex-row gap-5 justify-center items-center mb-[50px] max-w-5xl mx-auto">
           <div
@@ -95,12 +95,12 @@ function FeatureSection() {
               Start your AI journey with guided workflows, tutorials, an intuitive interface that demystifies AI development and helps you build skills as you go.
             </p>
             <div className="mt-5">
-              <button
-                onClick={() => openModal('https://www.youtube.com/embed/ytDBZW-1K50')}
+              {/* <button
+                onClick={() => openModal('https://www.youtube.com/embed/w-m8p-o65UA?si=1ZpI5LMNZJmSaj81')}
                 className="text-[#007bff] font-semibold hover:underline"
               >
                 Watch demo →
-              </button>
+              </button> */}
             </div>
           </div>
           <div
@@ -115,12 +115,12 @@ function FeatureSection() {
               Begin your AI journey with guided workflows, tutorials, and an intuitive interface that demystifies AI development and helps you build skills as you go.
             </p>
             <div className="mt-5">
-              <button
-                onClick={() => openModal('https://www.youtube.com/embed/ytDBZW-1K50')}
+              {/* <button
+                onClick={() => openModal('https://www.youtube.com/embed/w-m8p-o65UA?si=1ZpI5LMNZJmSaj81')}
                 className="text-[#007bff] font-semibold hover:underline"
               >
                 Watch demo →
-              </button>
+              </button> */}
             </div>
           </div>
           <div
@@ -135,12 +135,12 @@ function FeatureSection() {
               Accelerate your team’s AI projects with scalable solutions and collaborative tools, ensuring quick, impactful results for your organization.
             </p>
             <div className="mt-5">
-              <button
-                onClick={() => openModal('https://www.youtube.com/embed/ytDBZW-1K50')}
+              {/* <button
+                onClick={() => openModal('https://www.youtube.com/embed/w-m8p-o65UA?si=1ZpI5LMNZJmSaj81')}
                 className="text-[#007bff] font-semibold hover:underline"
               >
                 Watch demo →
-              </button>
+              </button> */}
             </div>
           </div>
         </div>

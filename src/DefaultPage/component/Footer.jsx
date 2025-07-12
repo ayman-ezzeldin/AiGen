@@ -1,4 +1,5 @@
-import logo from "../assets/Images/Screenshot 2024-11-04 193746.png";
+import React from "react";
+import logo from "../assets/Icons/AICON.png";
 import appleIcon from "../assets/Icons/mac-os-logo.png";
 import windowsIcon from "../assets/Icons/menu.png";
 
@@ -55,10 +56,10 @@ const FooterAbout = () => (
     <p className="footer-description text-gray-600 text-sm sm:text-base mb-4">
       AINO   makes building, training, and deploying AI models accessible to everyone.
     </p>
-    <div className="footer-icons flex justify-center sm:justify-start gap-4">
+    {/* <div className="footer-icons flex justify-center sm:justify-start gap-4">
       <img src={appleIcon} alt="Apple App Store" className="footer-icon-image w-6 h-6 object-contain" />
       <img src={windowsIcon} alt="Windows Store" className="footer-icon-image w-6 h-6 object-contain" />
-    </div>
+    </div> */}
     </div>
 );
 
@@ -91,7 +92,7 @@ const FooterLinksColumn = ({ title, links }) => (
 const FooterBottom = () => (
   <div className="footer-bottom max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center border-t border-gray-300 pt-6">
     <p className="footer-copyright text-gray-600 text-sm sm:text-base">
-      @AINO Craft 2025. All Rights Reserved.
+      @AINO  2025. All Rights Reserved.
     </p>
     <SocialIcons />
   </div>
@@ -101,12 +102,12 @@ const SocialIcons = () => (
   <div className="footer-social-icons flex gap-4 mt-4 sm:mt-0">
     <SocialIcon
       iconClass="github"
-      href="https://github.com/AINO" // Placeholder, replace with actual URL
+      href="https://github.com/AINO" 
       label="GitHub"
     />
     <SocialIcon
       iconClass="linkedin"
-      href="https://linkedin.com/company/AINO" // Placeholder, replace with actual URL
+      href="https://linkedin.com/company/AINO" 
       label="LinkedIn"
     />
     <SocialIcon

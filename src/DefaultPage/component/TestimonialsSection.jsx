@@ -72,7 +72,7 @@ const TestimonialsSection = () => {
   // Auto-slide every 10 seconds
   useEffect(() => {
     if (!isPaused) {
-      const id = setInterval(() => setActiveIndex((i) => (i + 1) % testimonials.length), 10000);
+      const id = setInterval(() => setActiveIndex((i) => (i + 1) % testimonials.length), 1000);
       return () => clearInterval(id);
     }
   }, [isPaused]);

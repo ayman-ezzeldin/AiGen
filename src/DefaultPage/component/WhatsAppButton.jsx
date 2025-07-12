@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { FaWhatsapp } from "react-icons/fa";
 
 const WhatsAppButton = () => {
@@ -8,48 +8,48 @@ const WhatsAppButton = () => {
   const closePopup = () => setIsPopupOpen(false);
 
   return (
-    <>
-      <style>{`
-        @keyframes whatsappFadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        @keyframes whatsappSlideUp {
-          from { transform: translateY(20px); opacity: 0; }
-          to { transform: translateY(0); opacity: 1; }
-        }
-        @keyframes rippleEffect {
-          0% { transform: scale(0); opacity: 0.8; }
-          50% { transform: scale(2); opacity: 0.4; }
-          100% { transform: scale(4); opacity: 0; }
-        }
-        .whatsapp-button.clicked::before {
-          content: "";
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          width: 15px;
-          height: 15px;
-          background-color: #ff7f50;
-          border-radius: 50%;
-          transform: translate(-50%, -50%);
-          animation: rippleEffect 0.8s ease-out forwards;
-          opacity: 0.8;
-        }
-        .whatsapp-button.clicked::after {
-          content: "";
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          width: 25px;
-          height: 25px;
-          background-color: #ff7f50;
-          border-radius: 50%;
-          transform: translate(-50%, -50%);
-          animation: rippleEffect 0.8s ease-out 0.2s forwards;
-          opacity: 0.6;
-        }
-      `}</style>
+    // <>
+    //   <style>{`
+    //     @keyframes whatsappFadeIn {
+    //       from { opacity: 0; }
+    //       to { opacity: 1; }
+    //     }
+    //     @keyframes whatsappSlideUp {
+    //       from { transform: translateY(20px); opacity: 0; }
+    //       to { transform: translateY(0); opacity: 1; }
+    //     }
+    //     @keyframes rippleEffect {
+    //       0% { transform: scale(0); opacity: 0.8; }
+    //       50% { transform: scale(2); opacity: 0.4; }
+    //       100% { transform: scale(4); opacity: 0; }
+    //     }
+    //     .whatsapp-button.clicked::before {
+    //       content: "";
+    //       position: absolute;
+    //       top: 50%;
+    //       left: 50%;
+    //       width: 15px;
+    //       height: 15px;
+    //       background-color: #ff7f50;
+    //       border-radius: 50%;
+    //       transform: translate(-50%, -50%);
+    //       animation: rippleEffect 0.8s ease-out forwards;
+    //       opacity: 0.8;
+    //     }
+    //     .whatsapp-button.clicked::after {
+    //       content: "";
+    //       position: absolute;
+    //       top: 50%;
+    //       left: 50%;
+    //       width: 25px;
+    //       height: 25px;
+    //       background-color: #ff7f50;
+    //       border-radius: 50%;
+    //       transform: translate(-50%, -50%);
+    //       animation: rippleEffect 0.8s ease-out 0.2s forwards;
+    //       opacity: 0.6;
+    //     }
+    //   `}</style>
 
       <div>
         {/* زر واتساب */}
@@ -81,12 +81,12 @@ const WhatsAppButton = () => {
                   href="https://wa.me/201129330746"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 px-4 py-3 bg-green-500 text-white rounded-xl font-semibold transition-all duration-300 ease-in-out hover:bg-green-600 hover:shadow-xl hover:scale-105 active:scale-95"
+                  className="flex-1 px-4 py-3 bg-green-500 text-white rounded-lg font-semibold transition-all duration-300 ease-in-out hover:bg-green-600 hover:shadow-lg hover:scale-105 active:scale-95"
                 >
                   Open WhatsApp
                 </a>
                 <button
-                  className="flex-1 px-4 py-3 bg-red-500 text-white rounded-xl font-semibold transition-all duration-300 ease-in-out hover:bg-red-600 hover:shadow-xl hover:scale-105 active:scale-95"
+                  className="flex-1 px-4 py-3 bg-red-500 text-white rounded-lg font-semibold transition-all duration-300 ease-in-out hover:bg-red-600 hover:shadow-lg hover:scale-105 active:scale-95"
                   onClick={closePopup}
                 >
                   Close
@@ -96,7 +96,7 @@ const WhatsAppButton = () => {
           </div>
         )}
       </div>
-    </>
+    // </>
   );
 };
 
