@@ -1,13 +1,28 @@
+import { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 
 const CheckAuth = ({ isAuthenticated, isVerified, children }) => {
   const location = useLocation();
+  const [shouldRedirect, setShouldRedirect] = useState(false);
+
+  useEffect(() => {
+    let timeout;
+
+    if (isAuthenticated && !isVerified) {
+      timeout = setTimeout(() => {
+        setShouldRedirect(true);
+      }, 1000); // 1 second delay
+    } else {
+      setShouldRedirect(false); // Reset on verification or logout
+    }
+
+    return () => clearTimeout(timeout); // Clean up on unmount or re-run
+  }, [isAuthenticated, isVerified]);
 
   if (location.pathname === "/") {
     return <>{children}</>;
   }
 
-  // لو المستخدم مش مسجّل دخول
   if (!isAuthenticated) {
     if (
       !(
@@ -18,12 +33,10 @@ const CheckAuth = ({ isAuthenticated, isVerified, children }) => {
       return <Navigate to="/auth/login" />;
     }
   } else {
-    // ✅ لو المستخدم مسجّل دخول بس مش مفعّل
-    if (!isVerified && !location.pathname.includes("verify")) {
+    if (shouldRedirect && !location.pathname.includes("verify")) {
       return <Navigate to="/auth/verify" />;
     }
 
-    // ✅ لو مفعّل الإيميل وداخل على login أو register نرجعه للصفحة الرئيسية
     if (
       isVerified &&
       (location.pathname.includes("login") ||
