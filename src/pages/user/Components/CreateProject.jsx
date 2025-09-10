@@ -1,13 +1,11 @@
 import { useState } from "react";
 import { useToast } from "../../../hooks/use-toast";
 import { useNavigate } from "react-router-dom";
-// import { useSelector } from "react-redux";
 import { Upload } from "lucide-react";
 import API_URL from "../../../utils/api";
 
 export default function CreateProject() {
   const { toast } = useToast();
-  // const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const [projectFile, setProjectFile] = useState(null);
@@ -28,21 +26,18 @@ export default function CreateProject() {
     reader.onload = (event) => {
       try {
         const parsed = JSON.parse(event.target.result);
-        if (!parsed.project_name || !parsed.project_description) {
-          toast({
-            title: "Invalid JSON file",
-            description: "Missing 'project_name' or 'project_description'",
-            variant: "destructive",
-          });
-          return;
-        }
+
+        // Fallbacks
+        const name = parsed.project_name || file.name.replace(/\.[^/.]+$/, "");
+        const description = parsed.project_description || "AINO Project";
 
         setProjectFile(file);
-        setProjectName(parsed.project_name);
-        setProjectDescription(parsed.project_description);
-        setProjectModel(parsed.model);
-        setProjectDataset(parsed.dataset);
-        toast({ title: `✅ Loaded: ${parsed.project_name}` });
+        setProjectName(name);
+        setProjectDescription(description);
+        setProjectModel(parsed.model || "");
+        setProjectDataset(parsed.dataset || "");
+
+        toast({ title: `✅ Loaded: ${name}` });
       } catch (error) {
         toast({
           title: "❌ Error parsing JSON",
@@ -67,7 +62,7 @@ export default function CreateProject() {
   };
 
   const handleUpload = async () => {
-    if (!projectFile || !projectDescription || !option) {
+    if (!projectFile || !option) {
       toast({
         title: "Please select a file and ensure data is valid",
         variant: "destructive",
@@ -147,13 +142,13 @@ export default function CreateProject() {
             <strong>Project Name:</strong> {projectName}
           </p>
           <p className="text-zinc-700 dark:text-zinc-300">
-            <strong>Description:</strong> {projectDescription}
+            <strong>Description:</strong> {projectDescription || "—"}
           </p>
           <p className="text-zinc-700 dark:text-zinc-300">
-            <strong>Model:</strong> {ProjectModel}
+            <strong>Model:</strong> {ProjectModel || "—"}
           </p>
           <p className="text-zinc-700 dark:text-zinc-300">
-            <strong>Dataset:</strong> {ProjectDataset}
+            <strong>Dataset:</strong> {ProjectDataset || "—"}
           </p>
         </div>
       )}

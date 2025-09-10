@@ -13,7 +13,6 @@ import { Link } from "react-router-dom";
 const UserHome = () => {
   return (
     <div>
-      <Link to="/user/converter" className="bg-blue-500 text-white px-4 py-2 rounded">Converter</Link>
       <HeroSection />
       <ScrollToTop />
       <ChallengesSection />
