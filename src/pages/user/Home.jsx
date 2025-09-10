@@ -8,7 +8,6 @@ import TestimonialsSection from "../../DefaultPage/component/TestimonialsSection
 import Footer from "../../DefaultPage/component/Footer";
 import WhatsAppButton from "../../DefaultPage/component/WhatsAppButton";
 import Chatbot from "../../DefaultPage/component/ChatBot";
-import { Link } from "react-router-dom";
 
 const UserHome = () => {
   return (
