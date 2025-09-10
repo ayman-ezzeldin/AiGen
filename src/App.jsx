@@ -31,6 +31,7 @@ import ProjectList from "./pages/user/Components/ProjectList";
 import CreateProject from "./pages/user/Components/CreateProject";
 import UsersProfile from "./pages/user/UsersProfile";
 import ArchPage from "./pages/user/Components/ArchPage/ArchPage";
+import Converter from "./pages/user/Converter";
 
 function App() {
   const { isAuthenticated, isLoading, isVerified } = useSelector(
@@ -75,6 +76,7 @@ function App() {
           }
         >
           <Route path="home" element={<UserHome />} />
+          <Route path="converter" element={<Converter />} />
           <Route path="docs" element={<NotFound />} />
           <Route path="dataset" element={<DatasetPage />} />
           <Route path="models" element={<ModelPage />} />
