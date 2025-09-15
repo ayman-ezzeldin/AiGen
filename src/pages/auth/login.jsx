@@ -88,15 +88,25 @@ const AuthLogin = () => {
             Sign In
           </button>
         </form>
-        <p className="text-center text-sm text-gray-500 mt-4">
-          Don{"'"}t have an account?{" "}
-          <span
-            onClick={() => navigate("/auth/register")}
-            className="text-blue-500 hover:underline text-sm font-semibold cursor-pointer"
-          >
-            Create free account
-          </span>{" "}
-        </p>
+        <div className="text-center text-sm text-gray-500 mt-4 space-y-2">
+          <p>
+            Don{"'"}t have an account?{" "}
+            <span
+              onClick={() => navigate("/auth/register")}
+              className="text-blue-500 hover:underline text-sm font-semibold cursor-pointer"
+            >
+              Create free account
+            </span>
+          </p>
+          <p>
+            <span
+              onClick={() => navigate("/auth/forgot-password")}
+              className="text-blue-500 hover:underline text-sm font-semibold cursor-pointer"
+            >
+              Forgot your password?
+            </span>
+          </p>
+        </div>
       </div>
     </div>
   );

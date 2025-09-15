@@ -3,7 +3,6 @@ import axios from "axios";
 import API_URL from "../../utils/api";
 import AuthAxiosInstance from "./AuthAxiosInstance";
 
-
 // ✅ Helper: Decode JWT token
 const decodeToken = (token) => {
   try {
@@ -30,6 +29,12 @@ const initialState = {
   isVerified: false,
   verificationError: null,
   isLoading: false,
+  forgotPasswordMessage: null,
+  forgotPasswordError: null,
+  verifyOtpMessage: null,
+  verifyOtpError: null,
+  resetPasswordMessage: null,
+  resetPasswordError: null,
 };
 
 // ============ 🔐 Thunks ============
@@ -78,7 +83,9 @@ export const verifyMail = createAsyncThunk(
       const response = await AuthAxiosInstance.post("verify-email/", userData);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || { message: error.message });
+      return rejectWithValue(
+        error.response?.data || { message: error.message }
+      );
     }
   }
 );
@@ -91,19 +98,78 @@ export const requestOtp = createAsyncThunk(
       const token =
         state.auth.accessToken || localStorage.getItem("accessToken");
 
-      const response = await axios.post(`${API_URL}request-otp/`, {}, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.post(
+        `${API_URL}request-otp/`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || { message: error.message });
+      return rejectWithValue(
+        error.response?.data || { message: error.message }
+      );
     }
   }
 );
 
+export const forgotPassword = createAsyncThunk(
+  "auth/forgot-password",
+  async (email, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${API_URL}forgot-password/request/`, {
+        email: email,
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { message: error.message }
+      );
+    }
+  }
+);
+
+export const verifyPasswordOtp = createAsyncThunk(
+  "auth/verify-password-otp",
+  async ({ email, otp }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}forgot-password/verify-otp/`,
+        {
+          email: email,
+          otp: otp,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { message: error.message }
+      );
+    }
+  }
+);
+
+export const resetPassword = createAsyncThunk(
+  "auth/reset-password",
+  async ({ email, new_password, confirm_password }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${API_URL}forgot-password/reset/`, {
+        email: email,
+        new_password: new_password,
+        confirm_password: confirm_password,
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { message: error.message }
+      );
+    }
+  }
+);
 
 // ============ 🧠 Slice ============
 
@@ -260,6 +326,47 @@ const authSlice = createSlice({
           state.isAuthenticated = false;
           state.isVerified = false;
         }
+      })
+      .addCase(forgotPassword.pending, (state) => {
+        state.forgotPasswordMessage = null;
+        state.forgotPasswordError = null;
+      })
+      .addCase(forgotPassword.fulfilled, (state, action) => {
+        state.forgotPasswordMessage =
+          action.payload.message || "OTP sent to your email successfully";
+        state.forgotPasswordError = null;
+      })
+      .addCase(forgotPassword.rejected, (state, action) => {
+        state.forgotPasswordError =
+          action.payload?.message || "Failed to send OTP";
+        state.forgotPasswordMessage = null;
+      })
+      .addCase(verifyPasswordOtp.pending, (state) => {
+        state.verifyOtpMessage = null;
+        state.verifyOtpError = null;
+      })
+      .addCase(verifyPasswordOtp.fulfilled, (state, action) => {
+        state.verifyOtpMessage =
+          action.payload.message || "OTP verified successfully";
+        state.verifyOtpError = null;
+      })
+      .addCase(verifyPasswordOtp.rejected, (state, action) => {
+        state.verifyOtpError = action.payload?.message || "Invalid OTP";
+        state.verifyOtpMessage = null;
+      })
+      .addCase(resetPassword.pending, (state) => {
+        state.resetPasswordMessage = null;
+        state.resetPasswordError = null;
+      })
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        state.resetPasswordMessage =
+          action.payload.message || "Password reset successfully";
+        state.resetPasswordError = null;
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
+        state.resetPasswordError =
+          action.payload?.message || "Failed to reset password";
+        state.resetPasswordMessage = null;
       });
   },
 });

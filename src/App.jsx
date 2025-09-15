@@ -32,6 +32,9 @@ import CreateProject from "./pages/user/Components/CreateProject";
 import UsersProfile from "./pages/user/UsersProfile";
 import ArchPage from "./pages/user/Components/ArchPage/ArchPage";
 import Converter from "./pages/user/Converter";
+import ForgetPassword from "./pages/auth/ForgetPassword";
+import VerifyPasswordOtp from "./pages/auth/VerifyPasswordOtp";
+import NewPassword from "./pages/auth/NewPassword";
 
 function App() {
   const { isAuthenticated, isLoading, isVerified } = useSelector(
@@ -65,6 +68,9 @@ function App() {
           <Route path="login" element={<AuthLogin />} />
           <Route path="register" element={<AuthRegister />} />
           <Route path="verify" element={<VerifyMailPage />} />
+          <Route path="forgot-password" element={<ForgetPassword />} />
+          <Route path="VerifyPasswordOtp" element={<VerifyPasswordOtp />} />
+          <Route path="NewPassword" element={<NewPassword />} />
         </Route>
 
         <Route
